@@ -14,7 +14,7 @@ func GetEnvElseError(key string) string {
 	return ""
 }
 
-func GetEnv(key string, defaultVal string) string {
+func GetEnv(key, defaultVal string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value
 	}
@@ -43,7 +43,7 @@ func GetBoolEnv(key string, defaultVal bool) bool {
 	return defaultVal
 }
 
-func GetEnvInDev(key string, defaultVal string) string {
+func GetEnvInDev(key, defaultVal string) string {
 	b := GetBoolEnv("PRODUCTION", false)
 
 	if b {
