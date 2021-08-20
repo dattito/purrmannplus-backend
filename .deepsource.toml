@@ -1,0 +1,16 @@
+version = 1
+
+[[analyzers]]
+name = "go"
+enabled = true
+
+  [analyzers.meta]
+  import_root = "github.com/datti-to/purrmannplus-backend"
+
+[[analyzers]]
+name = "docker"
+enabled = true
+
+[[transformers]]
+name = "gofmt"
+enabled = true
