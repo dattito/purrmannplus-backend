@@ -3,7 +3,7 @@
 FROM golang:1.16-alpine AS builder
 
 # Move to working directory (/build).
-RUN apk --no-cache add ca-certificates
+RUN apk --no-cache add ca-certificates=20161130-r0 
 
 WORKDIR /build
 
