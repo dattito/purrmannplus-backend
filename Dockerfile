@@ -1,6 +1,6 @@
 # ./Dockerfile
 
-FROM golang:1.16-alpine AS builder
+FROM golang:1.17-alpine AS builder
 
 # Move to working directory (/build).
 RUN apk --no-cache add ca-certificates=20161130-r0 
@@ -12,7 +12,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 # Copy the code into the container.
-COPY . .
+COPY ./src .
 
 # Set necessary environment variables needed for our image 
 # and build the API server.
