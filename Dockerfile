@@ -8,7 +8,7 @@ RUN apk --no-cache add ca-certificates=20161130-r0
 WORKDIR /build
 
 # Copy and download dependency using go mod.
-COPY go.mod go.sum ./
+COPY src/go.mod src/go.sum ./
 RUN go mod download
 
 # Copy the code into the container.
