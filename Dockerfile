@@ -3,7 +3,7 @@
 FROM golang:1.17-alpine AS builder
 
 # Move to working directory (/build).
-RUN apk --no-cache add ca-certificates=20191127-r5
+RUN apk --no-cache add ca-certificates=20191127-r5 build-base=0.5-r2
 
 WORKDIR /build
 
@@ -16,7 +16,7 @@ COPY ./src .
 
 # Set necessary environment variables needed for our image 
 # and build the API server.
-RUN CGO_ENABLED=1 go build -o app .
+RUN go build -o app .
 
 FROM scratch
 
@@ -26,8 +26,9 @@ FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /build/app /
 
+
 # Necessary environment variables
 ENV SUBSTITUTIONS_UPDATECRON="*/10 6-23 * * *" MOODLE_UPDATECRON="0 6-23 * * *" DATABASE_URI="db.sqlite" DATABASE_TYPE="SQLITE" SIGNAL_CLI_GRPC_API_URL="localhost:9000" DATABASE_AUTOMIGRATE=1
 
 # Command to run when starting the container.
-ENTRYPOINT ["/app"]
+CMD ["/app"]

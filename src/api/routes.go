@@ -8,5 +8,5 @@ import (
 func InitRoutes(app *fiber.App) {
 	app.Get("/health", controllers.GetHealth)
 
-	app.Post("/signal-code-message", nil)
+	app.Post("/accounts", controllers.AddAccount)
 }
