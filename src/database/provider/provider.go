@@ -6,6 +6,7 @@ import (
 )
 
 type Provider interface {
+	CreateTables() error
 	CloseDB() error
 	AddAccount(account *models.Account) error
 	GetAccount(id string) (models.Account, error)

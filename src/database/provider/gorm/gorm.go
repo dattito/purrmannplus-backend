@@ -40,6 +40,12 @@ func NewGormProvider() (*GormProvider, error) {
 	return &GormProvider{DB: db}, nil
 }
 
+func (g *GormProvider) CreateTables() error {
+
+	g.DB.AutoMigrate(&db_models.AccountDB{})
+	return nil
+}
+
 func (g *GormProvider) CloseDB() error {
 	dialect, err := g.DB.DB()
 	if err != nil {

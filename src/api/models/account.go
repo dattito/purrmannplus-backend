@@ -3,8 +3,8 @@ package models
 import app_models "github.com/datti-to/purrmannplus-backend/app/models"
 
 type PostAccountRequest struct {
-	AuthId string `json:"auth_id"`
-	AuthPw string `json:"auth_pw"`
+	AuthId string `json:"auth_id" form:"auth_id"`
+	AuthPw string `json:"auth_pw" form:"auth_pw"`
 }
 
 type PostAccountResponse struct {
