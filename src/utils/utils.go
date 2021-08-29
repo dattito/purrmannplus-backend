@@ -1,17 +1,16 @@
 package utils
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"strconv"
 )
 
-func GetEnvElseError(key string) string {
+func GetEnvElseError(key string) (string, error) {
 	if value, exists := os.LookupEnv(key); exists {
-		return value
+		return value, nil
 	}
-	log.Fatalf("environment variable not set: %v", key)
-	return ""
+	return "", fmt.Errorf("environment variable not set: %v", key)
 }
 
 func GetEnv(key, defaultVal string) string {
@@ -21,34 +20,38 @@ func GetEnv(key, defaultVal string) string {
 	return defaultVal
 }
 
-func GetIntEnv(key string, defaultVal int) int {
+func GetIntEnv(key string, defaultVal int) (int, error) {
 	if value, exists := os.LookupEnv(key); exists {
 		intValue, err := strconv.Atoi(value)
 		if err != nil {
-			log.Fatalf("can't convert enviroment variable to int: %v (Value: %v)", key, value)
+			return 0, fmt.Errorf("can't convert enviroment variable to int: %v (Value: %v)", key, value)
 		}
-		return intValue
+		return intValue, nil
 	}
-	return defaultVal
+	return defaultVal, nil
 }
 
-func GetBoolEnv(key string, defaultVal bool) bool {
+func GetBoolEnv(key string, defaultVal bool) (bool, error) {
 	if value, exists := os.LookupEnv(key); exists {
 		boolValue, err := strconv.ParseBool(value)
 		if err != nil {
-			log.Fatalf("can't convert enviroment variable to bool: %v (Value: %v)", key, value)
+			return defaultVal, fmt.Errorf("can't convert enviroment variable to bool: %v (Value: %v)", key, value)
 		}
-		return boolValue
+		return boolValue, nil
 	}
-	return defaultVal
+	return defaultVal, nil
 }
 
-func GetEnvInDev(key, defaultVal string) string {
-	b := GetBoolEnv("PRODUCTION", false)
+func GetEnvInDev(key, defaultVal string) (string, error) {
+	b, err := GetBoolEnv("PRODUCTION", false)
+
+	if err != nil {
+		return "", err
+	}
 
 	if b {
 		return GetEnvElseError(key)
 	}
 
-	return GetEnv(key, defaultVal)
+	return GetEnv(key, defaultVal), nil
 }
