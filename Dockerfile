@@ -13,7 +13,7 @@ COPY ./src .
 
 RUN CGO_ENABLED=1 go build -o /bin/app .
 
-FROM alpine:latest
+FROM alpine:3
 
 COPY --from=build /bin/app /bin/app
 
