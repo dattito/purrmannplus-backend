@@ -8,7 +8,7 @@ type Account struct {
 	AuthPw string
 }
 
-func NewAccount(authId string, authPw string) (*Account, error) {
+func NewAccount(authId, authPw string) (*Account, error) {
 	if authId == "" {
 		return nil, errors.New("authId is empty")
 	}
