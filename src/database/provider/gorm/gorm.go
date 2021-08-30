@@ -67,7 +67,7 @@ func (g *GormProvider) AddAccount(account *app_models.Account) error {
 	if err != nil {
 		return err
 	}
-	account.ID = accdb.ID
+	account.Id = accdb.ID
 	return nil
 }
 

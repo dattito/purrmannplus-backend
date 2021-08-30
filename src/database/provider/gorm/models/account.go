@@ -21,7 +21,7 @@ func AccountToAccountDB(a models.Account) AccountDB {
 
 func AccountDBToAccount(a AccountDB) models.Account {
 	return models.Account{
-		ID:     a.ID,
+		Id:     a.ID,
 		AuthId: a.AuthId,
 		AuthPw: a.AuthPw,
 	}

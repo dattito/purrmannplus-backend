@@ -5,5 +5,5 @@ import (
 )
 
 func GetHealth(c *fiber.Ctx) error {
-	return c.SendStatus(204)
+	return c.SendStatus(fiber.StatusNoContent)
 }

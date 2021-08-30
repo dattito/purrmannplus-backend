@@ -11,4 +11,5 @@ func InitRoutes(app *fiber.App) {
 	app.Post("/login", controllers.AccountLogin)
 
 	app.Post("/accounts", controllers.AddAccount)
+	app.Get("/accounts", controllers.GetAccounts)
 }

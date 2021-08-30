@@ -12,6 +12,8 @@ var DATABASE_AUTOMIGRATE bool
 
 var JWT_SECRET string
 
+var SUBSTITUTION_URL string = "https://vertretungsplan.hpg-speyer.de"
+
 func InitConfig() error {
 	var err error
 	SUBSTITUTIONS_UPDATECRON = utils.GetEnv("SUBSTITUTIONS_UPDATECRON", "*/10 6-23 * * *")
