@@ -11,6 +11,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type GormProvider struct {
@@ -33,7 +34,9 @@ func NewGormProvider() (*GormProvider, error) {
 		return &GormProvider{}, errors.New("DATABASE_TYPE env has to one of ('POSTGRES', 'MYSQL', 'SQLITE')")
 	}
 
-	db, err := gorm.Open(o(config.DATABASE_URI), &gorm.Config{})
+	db, err := gorm.Open(o(config.DATABASE_URI), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
 	if err != nil {
 		return &GormProvider{}, err
 	}
@@ -88,7 +91,7 @@ func (g *GormProvider) GetAccountByCredentials(a app_models.Account) (app_models
 
 	accdb := db_models.AccountDB{}
 
-	err := g.DB.Where("authId = ? AND authPw = ?", a.AuthId, a.AuthPw).First(&accdb).Error
+	err := g.DB.Where("auth_id = ? AND auth_pw = ?", a.AuthId, a.AuthPw).First(&accdb).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
