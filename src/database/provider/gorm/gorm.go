@@ -5,6 +5,7 @@ import (
 
 	app_models "github.com/datti-to/purrmannplus-backend/app/models"
 	"github.com/datti-to/purrmannplus-backend/config"
+	db_errors "github.com/datti-to/purrmannplus-backend/database/errors"
 	db_models "github.com/datti-to/purrmannplus-backend/database/provider/gorm/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
@@ -74,6 +75,25 @@ func (g *GormProvider) GetAccount(id string) (app_models.Account, error) {
 	err := g.DB.First(&accdb, id).Error
 
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return app_models.Account{}, &db_errors.ErrRecordNotFound
+		}
+		return app_models.Account{}, err
+	}
+
+	return db_models.AccountDBToAccount(accdb), nil
+}
+
+func (g *GormProvider) GetAccountByCredentials(a app_models.Account) (app_models.Account, error) {
+
+	accdb := db_models.AccountDB{}
+
+	err := g.DB.Where("authId = ? AND authPw = ?", a.AuthId, a.AuthPw).First(&accdb).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return app_models.Account{}, &db_errors.ErrRecordNotFound
+		}
 		return app_models.Account{}, err
 	}
 
@@ -87,6 +107,9 @@ func (g *GormProvider) GetAccounts() ([]app_models.Account, error) {
 	err := g.DB.Find(&accdb).Error
 
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return []app_models.Account{}, &db_errors.ErrRecordNotFound
+		}
 		return []app_models.Account{}, err
 	}
 

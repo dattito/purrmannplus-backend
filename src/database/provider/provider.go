@@ -10,6 +10,7 @@ type Provider interface {
 	CloseDB() error
 	AddAccount(account *models.Account) error
 	GetAccount(id string) (models.Account, error)
+	GetAccountByCredentials(a models.Account) (models.Account, error)
 	GetAccounts() ([]models.Account, error)
 	UpdateAccount(account models.Account) error
 	DeleteAccount(id string) error

@@ -8,5 +8,7 @@ import (
 func InitRoutes(app *fiber.App) {
 	app.Get("/health", controllers.GetHealth)
 
+	app.Post("/login", controllers.AccountLogin)
+
 	app.Post("/accounts", controllers.AddAccount)
 }

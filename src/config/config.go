@@ -10,6 +10,8 @@ var DATABASE_TYPE string
 var SIGNAL_CLI_GRPC_API_URL string
 var DATABASE_AUTOMIGRATE bool
 
+var JWT_SECRET string
+
 func InitConfig() error {
 	var err error
 	SUBSTITUTIONS_UPDATECRON = utils.GetEnv("SUBSTITUTIONS_UPDATECRON", "*/10 6-23 * * *")
@@ -22,6 +24,11 @@ func InitConfig() error {
 	}
 
 	DATABASE_AUTOMIGRATE, err = utils.GetBoolEnv("DATABASE_AUTOMIGRATE", true)
+	if err != nil {
+		return err
+	}
+
+	JWT_SECRET, err = utils.GetEnvInDev("JWT_SECRET", "secret")
 	if err != nil {
 		return err
 	}
