@@ -6,7 +6,7 @@ import (
 	app_models "github.com/datti-to/purrmannplus-backend/app/models"
 	"github.com/datti-to/purrmannplus-backend/config"
 	db_errors "github.com/datti-to/purrmannplus-backend/database/errors"
-	db_models "github.com/datti-to/purrmannplus-backend/database/provider/gorm/models"
+	db_models "github.com/datti-to/purrmannplus-backend/database/providers/gorm/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
@@ -142,4 +142,13 @@ func (g *GormProvider) DeleteAccount(id string) error {
 	}
 
 	return g.DB.Delete(&accdb).Error
+}
+
+func (g *GormProvider) AddSubstitution(substitutions *app_models.Substitutions) error {
+	subdb := db_models.SubstitutionsToSubstitutionDB(substitutions)
+	if err := g.DB.Create(&subdb).Error; err != nil {
+		return err
+	}
+	substitutions.Id = subdb.ID
+	return nil
 }

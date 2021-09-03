@@ -31,6 +31,12 @@ require (
 )
 
 require (
+	github.com/PuerkitoBio/goquery v1.7.1
 	github.com/klauspost/compress v1.13.4 // indirect
 	github.com/valyala/fasthttp v1.29.0 // indirect
+)
+
+require (
+	github.com/andybalholm/cascadia v1.2.0 // indirect
+	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
 )

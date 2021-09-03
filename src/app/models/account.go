@@ -3,7 +3,7 @@ package models
 import "errors"
 
 type Account struct {
-	Id     string
+	Id     string 
 	AuthId string
 	AuthPw string
 }
