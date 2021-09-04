@@ -36,7 +36,6 @@ func (s *Entries) Value() (driver.Value, error) {
 
 type SubstitutionDB struct {
 	Model
-	ID        string    `gorm:"primary_key,size:32"`
 	AccountDB AccountDB `gorm:"foreignkey:AccountID"`
 	Entries   Entries   `gorm:"entries"`
 }
@@ -68,9 +67,12 @@ func SubstitutionDBToSubstitution(s SubstitutionDB) *models.Substitutions {
 }
 
 func SubstitutionsToSubstitutionDB(s *models.Substitutions) *SubstitutionDB {
-	return &SubstitutionDB{
-		ID:        s.Id,
+	sd := &SubstitutionDB{
 		AccountDB: AccountToAccountDB(s.Account),
 		Entries:   s.Entries,
 	}
+
+	sd.ID = s.Id
+
+	return sd
 }
