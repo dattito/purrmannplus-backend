@@ -12,4 +12,6 @@ func InitRoutes(app *fiber.App) {
 
 	app.Post("/accounts", controllers.AddAccount)
 	app.Get("/accounts", controllers.GetAccounts)
+
+	app.Post("/accounts/phone_number_confirmation", controllers.SendPhoneNumberConfirmationLink)
 }
