@@ -16,4 +16,5 @@ func InitPublicRoutes(app *fiber.App) {
 
 func InitJWTRestrictedRoutes(app *fiber.App) {
 	app.Post("/accounts/phone_number_confirmation", controllers.SendPhoneNumberConfirmationLink)
+	app.Post("/substitution_updater", controllers.RegisterToSubstitutionUpdater)
 }
