@@ -4,7 +4,7 @@ import "github.com/datti-to/purrmannplus-backend/app/models"
 
 type AccountInfoDB struct {
 	Model
-	AccountDB AccountDB `gorm:"foreignkey:AccountID"`
+	AccountDB AccountDB `gorm:"foreignkey:account_id"`
 	PhoneNumber string `gorm:"phone_number"`
 }
 

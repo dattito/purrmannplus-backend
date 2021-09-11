@@ -15,6 +15,7 @@ type Provider interface {
 	GetAccounts() ([]models.Account, error)
 	UpdateAccount(account models.Account) error
 	DeleteAccount(id string) error
+	GetAccountInfo(accountId string) (models.AccountInfo, error)
 
 	AddSubstitution(substitutions *models.Substitutions) error
 }

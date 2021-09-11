@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/datti-to/purrmannplus-backend/utils"
@@ -10,6 +11,7 @@ var (
 	DOT_ENV_FILE_PATH         string
 	USE_DOT_ENV_FILE          bool
 	LISTENING_PORT            int
+	API_URL                   string
 	SUBSTITUTIONS_UPDATECRON  string
 	MOODLE_UPDATECRON         string
 	DATABASE_URI              string
@@ -45,6 +47,8 @@ func InitConfig() error {
 	if err != nil {
 		return err
 	}
+
+	API_URL = utils.GetEnv("API_URL", fmt.Sprintf("http://localhost:%d", LISTENING_PORT))
 
 	SUBSTITUTIONS_UPDATECRON = utils.GetEnv("SUBSTITUTIONS_UPDATECRON", "*/10 6-23 * * *")
 	MOODLE_UPDATECRON = utils.GetEnv("MOODLE_UPDATECRON", "0 6-23 * * *")

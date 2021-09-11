@@ -10,7 +10,6 @@ func InitJWTMiddlewares(app *fiber.App) {
 	App.Use(jwtware.New(jwtware.Config{
 		SigningKey: []byte(config.JWT_SECRET),
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
-
 			IsMissingOrMalformedJWT := err.Error() == "Missing or malformed JWT"
 			var StatusCode int
 			if IsMissingOrMalformedJWT {
