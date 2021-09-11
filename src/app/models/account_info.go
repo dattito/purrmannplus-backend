@@ -3,6 +3,7 @@ package models
 import "github.com/datti-to/purrmannplus-backend/utils"
 
 type AccountInfo struct {
+	Id string
 	Account     Account
 	PhoneNumber string
 }
