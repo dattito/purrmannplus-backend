@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/datti-to/purrmannplus-backend/api"
@@ -15,10 +16,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	app := fiber.New()
-
-	api.InitRoutes(app)
-
 	if err := database.Init(); err != nil {
 		log.Fatal(err)
 	}
@@ -27,5 +24,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	app.Listen(":3000")
+	app := fiber.New()
+	api.InitRoutes(app)
+	log.Fatal(app.Listen(fmt.Sprintf(":%d", config.LISTENING_PORT)))
 }

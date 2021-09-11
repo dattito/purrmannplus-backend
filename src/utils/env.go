@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/joho/godotenv"
 )
 
 func GetEnvElseError(key string) (string, error) {
@@ -13,12 +15,21 @@ func GetEnvElseError(key string) (string, error) {
 	return "", fmt.Errorf("environment variable not set: %v", key)
 }
 
+func GetBoolEnvElseError(key string) (bool, error) {
+	if _, exists := os.LookupEnv(key); exists {
+		return GetBoolEnv(key, false)
+	}
+	return false, fmt.Errorf("environment variable not set: %v", key)
+}
+
 func GetEnv(key, defaultVal string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value
 	}
 	return defaultVal
 }
+
+
 
 func GetIntEnv(key string, defaultVal int) (int, error) {
 	if value, exists := os.LookupEnv(key); exists {
@@ -54,4 +65,36 @@ func GetEnvInDev(key, defaultVal string) (string, error) {
 	}
 
 	return GetEnv(key, defaultVal), nil
+}
+
+func GetBoolEnvInDev(key string, defaultVal bool) (bool, error) {
+	b, err := GetBoolEnv("PRODUCTION", false)
+
+	if err != nil {
+		return false, err
+	}
+
+	if b {
+		return GetBoolEnvElseError(key)
+	}
+
+	return GetBoolEnv(key, defaultVal)
+}
+
+func LoadDotEnvFile() error {
+	return godotenv.Load(".env")
+}
+
+func GetBoolDevProdEnv(key string, devDefaultVal, prodDefaultVal bool) (bool, error) {
+	productionMode, err := GetBoolEnv("PRODUCTION", false)
+
+	if err != nil {
+		return false, err
+	}
+
+	if productionMode {
+		return GetBoolEnv(key, prodDefaultVal)
+	}
+
+	return GetBoolEnv(key, devDefaultVal)
 }
