@@ -49,3 +49,5 @@ require (
 	github.com/joho/godotenv v1.3.0
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
 )
+
+require github.com/gofiber/jwt/v3 v3.0.2 // indirect
