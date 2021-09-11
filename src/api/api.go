@@ -14,7 +14,7 @@ func Init() {
 
 	InitPublicRoutes(App)
 
-	InitMiddlewares(App)
+	InitJWTMiddlewares(App)
 
 	InitJWTRestrictedRoutes(App)
 }

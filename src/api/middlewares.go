@@ -6,7 +6,7 @@ import (
 	jwtware "github.com/gofiber/jwt/v3"
 )
 
-func InitMiddlewares(app *fiber.App) {
+func InitJWTMiddlewares(app *fiber.App) {
 	App.Use(jwtware.New(jwtware.Config{
 		SigningKey: []byte(config.JWT_SECRET),
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
