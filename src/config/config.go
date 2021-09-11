@@ -6,24 +6,20 @@ import (
 	"github.com/datti-to/purrmannplus-backend/utils"
 )
 
-var DOT_ENV_FILE_PATH string
-var USE_DOT_ENV_FILE bool
-
-var LISTENING_PORT int
-
-var SUBSTITUTIONS_UPDATECRON string
-var MOODLE_UPDATECRON string
-
-var DATABASE_URI string
-var DATABASE_TYPE string
-var DATABASE_AUTOMIGRATE bool
-
-var SIGNAL_CLI_GRPC_API_URL string
-var SIGNAL_SENDER_PHONENUMBER string
-
-var JWT_SECRET string
-
-var SUBSTITUTION_URL string
+var (
+	DOT_ENV_FILE_PATH         string
+	USE_DOT_ENV_FILE          bool
+	LISTENING_PORT            int
+	SUBSTITUTIONS_UPDATECRON  string
+	MOODLE_UPDATECRON         string
+	DATABASE_URI              string
+	DATABASE_TYPE             string
+	DATABASE_AUTOMIGRATE      bool
+	SIGNAL_CLI_GRPC_API_URL   string
+	SIGNAL_SENDER_PHONENUMBER string
+	JWT_SECRET                string
+	SUBSTITUTION_URL          string
+)
 
 func InitConfig() error {
 
