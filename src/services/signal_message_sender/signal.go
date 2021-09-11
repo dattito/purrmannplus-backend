@@ -42,7 +42,7 @@ func newSignalMessageSender(senderNumber, signalCliGrpcApiUrl string) (*_SignalM
 	}, nil
 }
 
-func InitSignalMessageSender() error {
+func Init() error {
 	var err error
 	SignalMessageSender, err = newSignalMessageSender(config.SIGNAL_SENDER_PHONENUMBER, config.SIGNAL_CLI_GRPC_API_URL)
 

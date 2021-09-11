@@ -23,7 +23,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := signal_message_sender.InitSignalMessageSender(); err != nil {
+	if err := signal_message_sender.Init(); err != nil {
 		log.Fatal(err)
 	}
 
