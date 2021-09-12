@@ -39,7 +39,7 @@ type RestProvider struct {
 	app *fiber.App
 }
 
-func (r *RestProvider)Init() error {
+func (r *RestProvider) Init() error {
 	r.app = fiber.New()
 
 	r.app.Get(GetHealthRoute, controllers.GetHealth)
