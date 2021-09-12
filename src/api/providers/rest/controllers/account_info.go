@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	api_models "github.com/datti-to/purrmannplus-backend/api/models"
+	api_models "github.com/datti-to/purrmannplus-backend/api/providers/rest/models"
 	"github.com/datti-to/purrmannplus-backend/app/models"
 	"github.com/datti-to/purrmannplus-backend/config"
 	"github.com/datti-to/purrmannplus-backend/database"

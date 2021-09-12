@@ -3,7 +3,7 @@ package controllers
 import (
 	"errors"
 
-	"github.com/datti-to/purrmannplus-backend/api/models"
+	"github.com/datti-to/purrmannplus-backend/api/providers/rest/models"
 	"github.com/datti-to/purrmannplus-backend/database"
 	db_errors "github.com/datti-to/purrmannplus-backend/database/errors"
 	"github.com/datti-to/purrmannplus-backend/utils/jwt"

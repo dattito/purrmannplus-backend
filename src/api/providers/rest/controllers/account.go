@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	api_models "github.com/datti-to/purrmannplus-backend/api/models"
+	api_models "github.com/datti-to/purrmannplus-backend/api/providers/rest/models"
 	"github.com/datti-to/purrmannplus-backend/database"
 	"github.com/datti-to/purrmannplus-backend/services/hpg"
 	"github.com/gofiber/fiber/v2"
