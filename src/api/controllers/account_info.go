@@ -38,9 +38,11 @@ func SendPhoneNumberConfirmationLink(c *fiber.Ctx) error {
 			"error": "couln't create token",
 		})
 	}
-	text := fmt.Sprintf(`Um deine Telefonnummer zu bestätigen, drücke 
-	auf den nachfolgenden Link. Er ist 10 Minuten lang gültig. Du hast den Link nicht angefordert? Dann kannst du ihn ignorieren.
-	%s/accounts/phone_number_confirmation/validate?t=%s`, config.API_URL, token)
+
+	text := fmt.Sprintf("Willkommen bei PurrmannPlus. Um deine Telefonnummer zu bestätigen, drücke "+
+		"auf den nachfolgenden Link. Er ist 10 Minuten lang gültig. Du hast den Link nicht angefordert? Dann kannst du ihn ignorieren. "+
+		"%s/accounts/phone_number_confirmation/validate?t=%s",
+		config.API_URL, token)
 
 	err = signal_message_sender.SignalMessageSender.Send(text, account_info.PhoneNumber)
 
