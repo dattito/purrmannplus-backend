@@ -4,8 +4,9 @@ import "github.com/datti-to/purrmannplus-backend/app/models"
 
 type AccountInfoDB struct {
 	Model
-	AccountDB AccountDB `gorm:"foreignkey:account_id"`
-	PhoneNumber string `gorm:"phone_number"`
+	AccountId   string    `gorm:"account_id,unique"`
+	AccountDB   AccountDB `gorm:"foreignkey:account_id"`
+	PhoneNumber string    `gorm:"phone_number"`
 }
 
 func (AccountInfoDB) TableName() string {
@@ -14,7 +15,7 @@ func (AccountInfoDB) TableName() string {
 
 func AccountInfoToAccountInfoDB(account models.AccountInfo) AccountInfoDB {
 	aib := AccountInfoDB{
-		AccountDB: AccountToAccountDB(account.Account),
+		AccountDB:   AccountToAccountDB(account.Account),
 		PhoneNumber: account.PhoneNumber,
 	}
 	aib.ID = account.Id
@@ -26,8 +27,8 @@ func AccountInfoDBToAccountInfo(accountInfo AccountInfoDB) models.AccountInfo {
 	account := AccountDBToAccount(accountInfo.AccountDB)
 
 	return models.AccountInfo{
-		Id: accountInfo.ID,
-		Account: account,
+		Id:          accountInfo.ID,
+		Account:     account,
 		PhoneNumber: accountInfo.PhoneNumber,
 	}
 }

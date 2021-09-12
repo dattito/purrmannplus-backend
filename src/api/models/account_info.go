@@ -1,7 +1,7 @@
 package models
 
 type PostAddPhoneNumberRequest struct {
-	PhoneNumber string `json:"phone_number"`
+	Token string `query:"token"`
 }
 
 type PostSendPhoneNumberConfirmationLinkRequest struct {

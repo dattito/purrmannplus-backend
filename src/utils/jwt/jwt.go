@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/datti-to/purrmannplus-backend/config"
@@ -36,4 +37,36 @@ func NewAccountIdPhoneNumberToken(accountId, phone_number string) (string, error
 	}
 
 	return t, nil
+}
+
+func ParseAccountIdToken(tokenString string) (string, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		
+		return []byte(config.JWT_SECRET), nil
+	})
+	if err != nil {
+		return "", err
+	}
+
+	claims := token.Claims.(jwt.MapClaims)
+	return claims["account_id"].(string), nil
+}
+
+func ParseAccountIdPhoneNumberToken(tokenString string) (string, string, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return []byte(config.JWT_SECRET), nil
+	})
+	if err != nil {
+		return "", "", err
+	}
+
+	claims := token.Claims.(jwt.MapClaims)
+	return claims["account_id"].(string), claims["phone_number"].(string), nil
 }

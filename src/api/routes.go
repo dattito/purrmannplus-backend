@@ -1,21 +1,11 @@
 package api
 
-import (
-	"github.com/datti-to/purrmannplus-backend/api/controllers"
-	"github.com/gofiber/fiber/v2"
+const (
+	GetHealthRoute                       = "/health"
+	AccountLoginRoute                    = "/login"
+	AddAccountRoute                      = "/accounts"
+	GetAccountsRoute                     = "/accounts"
+	SendPhoneNumberConfirmationLinkRoute = "/accounts/phone_number_confirmation"
+	RegisterToSubstitutionUpdaterRoute   = "/substitution_updater"
+	AddPhoneNumberRoute                  = "/accounts/phone_number_confirmation/validate"
 )
-
-func InitPublicRoutes(app *fiber.App) {
-	app.Get("/health", controllers.GetHealth)
-
-	app.Post("/login", controllers.AccountLogin)
-
-	app.Post("/accounts", controllers.AddAccount)
-	app.Get("/accounts", controllers.GetAccounts)
-}
-
-func InitJWTRestrictedRoutes(app *fiber.App) {
-	app.Post("/accounts/phone_number_confirmation", controllers.SendPhoneNumberConfirmationLink)
-	app.Get("/accounts/phone_number_confirmation/validate", controllers.AddPhoneNumber)
-	app.Post("/substitution_updater", controllers.RegisterToSubstitutionUpdater)
-}
