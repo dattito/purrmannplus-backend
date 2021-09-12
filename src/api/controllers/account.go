@@ -10,7 +10,9 @@ import (
 func AddAccount(c *fiber.Ctx) error {
 	accApi := new(api_models.PostAccountRequest)
 	if err := c.BodyParser(accApi); err != nil {
-		return err
+		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+			"error": err.Error(),
+		})
 	}
 
 	acc, err := api_models.PostAccountRequestToAccount(accApi)

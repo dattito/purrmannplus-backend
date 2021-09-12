@@ -36,7 +36,8 @@ func (s *Entries) Value() (driver.Value, error) {
 
 type SubstitutionDB struct {
 	Model
-	AccountDB AccountDB `gorm:"foreignkey:AccountID"`
+	AccountId string    `gorm:"account_id,unique"`
+	AccountDB AccountDB `gorm:"foreignKey:account_id"`
 	Entries   Entries   `gorm:"entries"`
 }
 

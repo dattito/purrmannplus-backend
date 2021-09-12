@@ -15,3 +15,5 @@
 # vendor/
 purrmannplus-backend
 .vscode
+.env
+db.sqlite

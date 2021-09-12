@@ -45,8 +45,21 @@ func NewGormProvider() (*GormProvider, error) {
 }
 
 func (g *GormProvider) CreateTables() error {
+	var err error
+	err = g.DB.AutoMigrate(&db_models.AccountDB{})
+	if err != nil {
+		return err
+	}
 
-	g.DB.AutoMigrate(&db_models.AccountDB{})
+	err = g.DB.AutoMigrate(&db_models.AccountInfoDB{})
+	if err != nil {
+		return err
+	}
+
+	err = g.DB.AutoMigrate(&db_models.SubstitutionDB{})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -142,6 +155,26 @@ func (g *GormProvider) DeleteAccount(id string) error {
 	}
 
 	return g.DB.Delete(&accdb).Error
+}
+
+func (g *GormProvider) AddAccountInfo(info *app_models.AccountInfo) error {
+
+	infodb := db_models.AccountInfoToAccountInfoDB(*info)
+	err := g.DB.Create(&infodb).Error
+	if err != nil {
+		return err
+	}
+	info.Id = infodb.ID
+	return nil
+}
+
+func (g *GormProvider) GetAccountInfo(accountId string) (app_models.AccountInfo, error) {
+	accInfo := db_models.AccountInfoDB{}
+	err := g.DB.Where("account_id = ?", accountId).First(&accInfo).Error
+	if err != nil {
+		return app_models.AccountInfo{}, err
+	}
+	return db_models.AccountInfoDBToAccountInfo(accInfo), nil
 }
 
 func (g *GormProvider) AddSubstitution(substitutions *app_models.Substitutions) error {
