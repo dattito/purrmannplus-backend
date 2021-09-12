@@ -29,8 +29,6 @@ func GetEnv(key, defaultVal string) string {
 	return defaultVal
 }
 
-
-
 func GetIntEnv(key string, defaultVal int) (int, error) {
 	if value, exists := os.LookupEnv(key); exists {
 		intValue, err := strconv.Atoi(value)
