@@ -23,7 +23,7 @@ var (
 	SUBSTITUTION_URL          string
 )
 
-func InitConfig() error {
+func Init() error {
 
 	var err error
 
