@@ -42,19 +42,21 @@ type RestProvider struct {
 func (r *RestProvider) Init() error {
 	r.app = fiber.New()
 
-	r.app.Get(GetHealthRoute, controllers.GetHealth)
+	v1 := r.app.Group("/v1")
 
-	r.app.Post(AccountLoginRoute, controllers.AccountLogin)
+	v1.Get(GetHealthRoute, controllers.GetHealth)
 
-	r.app.Post(AddAccountRoute, controllers.AddAccount)
-	r.app.Get(GetAccountsRoute, controllers.GetAccounts)
+	v1.Post(AccountLoginRoute, controllers.AccountLogin)
 
-	r.app.Get(AddPhoneNumberRoute, controllers.AddPhoneNumber)
+	v1.Post(AddAccountRoute, controllers.AddAccount)
+	v1.Get(GetAccountsRoute, controllers.GetAccounts)
 
-	r.app.Use(jwtware.New(getJWTConfig()))
+	v1.Get(AddPhoneNumberRoute, controllers.AddPhoneNumber)
 
-	r.app.Post(SendPhoneNumberConfirmationLinkRoute, controllers.SendPhoneNumberConfirmationLink)
-	r.app.Post(RegisterToSubstitutionUpdaterRoute, controllers.RegisterToSubstitutionUpdater)
+	v1.Use(jwtware.New(getJWTConfig()))
+
+	v1.Post(SendPhoneNumberConfirmationLinkRoute, controllers.SendPhoneNumberConfirmationLink)
+	v1.Post(RegisterToSubstitutionUpdaterRoute, controllers.RegisterToSubstitutionUpdater)
 
 	return nil
 }
