@@ -6,7 +6,7 @@ import (
 
 type AccountInfoDB struct {
 	Model
-	AccountId   string    `gorm:"account_id,unique"`
+	AccountId   string    `gorm:"account_id,uniqueIndex"`
 	AccountDB   AccountDB `gorm:"foreignkey:account_id"`
 	PhoneNumber string    `gorm:"phone_number"`
 }
