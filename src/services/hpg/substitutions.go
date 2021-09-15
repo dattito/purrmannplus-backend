@@ -80,6 +80,5 @@ func GetSubstituationOfStudent(authid string, authpw string) (map[string][]strin
 		}
 	})
 
-
 	return spMap, nil
 }
