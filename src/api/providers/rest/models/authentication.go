@@ -12,5 +12,5 @@ type PostLoginResponse struct {
 }
 
 func PostLoginRequestToAccount(p PostLoginRequest) (*models.Account, error) {
-	return models.NewAccount(p.AuthId, p.AuthPw)
+	return models.NewValidAccount(p.AuthId, p.AuthPw)
 }

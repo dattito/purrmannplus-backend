@@ -3,10 +3,10 @@ package gorm
 import (
 	"errors"
 
-	app_models "github.com/datti-to/purrmannplus-backend/app/models"
 	"github.com/datti-to/purrmannplus-backend/config"
 	db_errors "github.com/datti-to/purrmannplus-backend/database/errors"
-	db_models "github.com/datti-to/purrmannplus-backend/database/providers/gorm/models"
+	provider_models "github.com/datti-to/purrmannplus-backend/database/models"
+	"github.com/datti-to/purrmannplus-backend/database/providers/gorm/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
@@ -46,17 +46,17 @@ func NewGormProvider() (*GormProvider, error) {
 
 func (g *GormProvider) CreateTables() error {
 	var err error
-	err = g.DB.AutoMigrate(&db_models.AccountDB{})
+	err = g.DB.AutoMigrate(&models.AccountDB{})
 	if err != nil {
 		return err
 	}
 
-	err = g.DB.AutoMigrate(&db_models.AccountInfoDB{})
+	err = g.DB.AutoMigrate(&models.AccountInfoDB{})
 	if err != nil {
 		return err
 	}
 
-	err = g.DB.AutoMigrate(&db_models.SubstitutionDB{})
+	err = g.DB.AutoMigrate(&models.SubstitutionDB{})
 	if err != nil {
 		return err
 	}
@@ -73,80 +73,72 @@ func (g *GormProvider) CloseDB() error {
 	return nil
 }
 
-func (g *GormProvider) AddAccount(account *app_models.Account) error {
+func (g *GormProvider) AddAccount(authId, authPw string) (provider_models.AccountDBModel, error) {
 
-	accdb := db_models.AccountToAccountDB(*account)
-	err := g.DB.Create(&accdb).Error
-	if err != nil {
-		return err
+	accdb := models.AccountDB{
+		AuthId: authId,
+		AuthPw: authPw,
 	}
-	account.Id = accdb.ID
-	return nil
+	err := g.DB.Create(&accdb).Error
+	return models.AccountDBToAccountDBModel(accdb), err
 }
 
-func (g *GormProvider) GetAccount(id string) (app_models.Account, error) {
+func (g *GormProvider) GetAccount(id string) (provider_models.AccountDBModel, error) {
 
-	accdb := db_models.AccountDB{}
+	accdb := models.AccountDB{}
 
 	err := g.DB.First(&accdb, id).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return app_models.Account{}, &db_errors.ErrRecordNotFound
+			return provider_models.AccountDBModel{}, &db_errors.ErrRecordNotFound
 		}
-		return app_models.Account{}, err
+		return provider_models.AccountDBModel{}, err
 	}
 
-	return db_models.AccountDBToAccount(accdb), nil
+	return models.AccountDBToAccountDBModel(accdb), nil
 }
 
-func (g *GormProvider) GetAccountByCredentials(a app_models.Account) (app_models.Account, error) {
+func (g *GormProvider) GetAccountByCredentials(authId, authPw string) (provider_models.AccountDBModel, error) {
 
-	accdb := db_models.AccountDB{}
+	accdb := models.AccountDB{}
 
-	err := g.DB.Where("auth_id = ? AND auth_pw = ?", a.AuthId, a.AuthPw).First(&accdb).Error
+	err := g.DB.Where("auth_id = ? AND auth_pw = ?", authId, authPw).First(&accdb).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return app_models.Account{}, &db_errors.ErrRecordNotFound
+			return provider_models.AccountDBModel{}, &db_errors.ErrRecordNotFound
 		}
-		return app_models.Account{}, err
+		return provider_models.AccountDBModel{}, err
 	}
 
-	return db_models.AccountDBToAccount(accdb), nil
+	return models.AccountDBToAccountDBModel(accdb), nil
 }
 
-func (g *GormProvider) GetAccounts() ([]app_models.Account, error) {
+func (g *GormProvider) GetAccounts() ([]provider_models.AccountDBModel, error) {
 
-	accdb := []db_models.AccountDB{}
+	accdb := []models.AccountDB{}
 
 	err := g.DB.Find(&accdb).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return []app_models.Account{}, &db_errors.ErrRecordNotFound
+			return []provider_models.AccountDBModel{}, &db_errors.ErrRecordNotFound
 		}
-		return []app_models.Account{}, err
+		return []provider_models.AccountDBModel{}, err
 	}
 
-	var accounts []app_models.Account
-	for _, a := range accdb {
-		accounts = append(accounts, db_models.AccountDBToAccount(a))
+	var accs []provider_models.AccountDBModel
+	for _, v := range accdb {
+		accs = append(accs, models.AccountDBToAccountDBModel(v))
 	}
 
-	return accounts, nil
-}
-
-func (g *GormProvider) UpdateAccount(account app_models.Account) error {
-
-	accdb := db_models.AccountToAccountDB(account)
-
-	return g.DB.Save(accdb).Error
+	return accs, nil
 }
 
 func (g *GormProvider) DeleteAccount(id string) error {
 
-	accdb := db_models.AccountDB{}
+	accdb := models.AccountDB{}
 
 	err := g.DB.First(&accdb, id).Error
 
@@ -157,31 +149,33 @@ func (g *GormProvider) DeleteAccount(id string) error {
 	return g.DB.Delete(&accdb).Error
 }
 
-func (g *GormProvider) AddAccountInfo(info *app_models.AccountInfo) error {
+func (g *GormProvider) AddAccountInfo(accountId, phoneNumber string) (provider_models.AccountInfoDBModel, error) {
 
-	infodb := db_models.AccountInfoToAccountInfoDB(*info)
-	err := g.DB.Create(&infodb).Error
-	if err != nil {
-		return err
+	accInfo := models.AccountInfoDB{
+		AccountId:   accountId,
+		PhoneNumber: phoneNumber,
 	}
-	info.Id = infodb.ID
-	return nil
+	err := g.DB.Create(&accInfo).Error
+	return models.AccountInfoDBToAccountInfoDBModel(accInfo), err
 }
 
-func (g *GormProvider) GetAccountInfo(accountId string) (app_models.AccountInfo, error) {
-	accInfo := db_models.AccountInfoDB{}
+func (g *GormProvider) GetAccountInfo(accountId string) (provider_models.AccountInfoDBModel, error) {
+	accInfo := models.AccountInfoDB{}
 	err := g.DB.Where("account_id = ?", accountId).First(&accInfo).Error
 	if err != nil {
-		return app_models.AccountInfo{}, err
+		return provider_models.AccountInfoDBModel{}, err
 	}
-	return db_models.AccountInfoDBToAccountInfo(accInfo), nil
+	return models.AccountInfoDBToAccountInfoDBModel(accInfo), err
 }
 
-func (g *GormProvider) AddSubstitution(substitutions *app_models.Substitutions) error {
-	subdb := db_models.SubstitutionsToSubstitutionDB(substitutions)
-	if err := g.DB.Create(&subdb).Error; err != nil {
-		return err
+func (g *GormProvider) AddSubstitution(accountId string, entries map[string][]string) (provider_models.SubstitutionDBModel, error) {
+
+	subdb := models.SubstitutionDB{
+		AccountId: accountId,
+		Entries:   entries,
 	}
-	substitutions.Id = subdb.ID
-	return nil
+
+	err := g.DB.Create(&subdb).Error
+
+	return models.SubstitutionDBToSubstitutionDBModel(subdb), err
 }

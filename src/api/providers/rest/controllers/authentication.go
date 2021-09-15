@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/datti-to/purrmannplus-backend/api/providers/rest/models"
-	"github.com/datti-to/purrmannplus-backend/database"
+	"github.com/datti-to/purrmannplus-backend/app/commands"
 	db_errors "github.com/datti-to/purrmannplus-backend/database/errors"
 	"github.com/datti-to/purrmannplus-backend/utils/jwt"
 	"github.com/gofiber/fiber/v2"
@@ -16,14 +16,7 @@ func AccountLogin(c *fiber.Ctx) error {
 		return err
 	}
 
-	acc, err := models.PostLoginRequestToAccount(*a)
-	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
-			"error": err.Error(),
-		})
-	}
-
-	dbAcc, err := database.DB.GetAccountByCredentials(*acc)
+	dbAcc, err := commands.GetAccountByCredentials(a.AuthId, a.AuthPw)
 	if err != nil {
 		if errors.Is(err, &db_errors.ErrRecordNotFound) {
 			return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{

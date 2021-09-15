@@ -1,6 +1,9 @@
 package models
 
-import "github.com/datti-to/purrmannplus-backend/utils"
+import (
+	"github.com/datti-to/purrmannplus-backend/database/models"
+	"github.com/datti-to/purrmannplus-backend/utils"
+)
 
 type AccountInfo struct {
 	Id          string
@@ -18,5 +21,16 @@ func NewAccountInfo(account Account, phoneNumber string) (*AccountInfo, error) {
 	return &AccountInfo{
 		Account:     account,
 		PhoneNumber: formattedPhoneNumber,
+	}, nil
+}
+
+func AccountInfoDBModelToAccount(accountInfoDBModel models.AccountInfoDBModel) (AccountInfo, error) {
+
+	return AccountInfo{
+		Id: accountInfoDBModel.Id,
+		Account: Account{
+			Id: accountInfoDBModel.AccountId,
+		},
+		PhoneNumber: accountInfoDBModel.PhoneNumber,
 	}, nil
 }

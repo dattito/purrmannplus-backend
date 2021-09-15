@@ -8,7 +8,7 @@ type PostAccountRequest struct {
 }
 
 func PostAccountRequestToAccount(req *PostAccountRequest) (*app_models.Account, error) {
-	return app_models.NewAccount(req.AuthId, req.AuthPw)
+	return app_models.NewValidAccount(req.AuthId, req.AuthPw)
 }
 
 type PostAccountResponse struct {

@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/datti-to/purrmannplus-backend/app/models"
 )
 
 var weekdays = [5]string{"Mo", "Di", "Mi", "Do", "Fr"}
@@ -23,7 +22,7 @@ func beginsWithAWeekday(s string) bool {
 	return false
 }
 
-func GetSubstituationOfStudent(authid string, authpw string) (*models.Substitutions, error) {
+func GetSubstituationOfStudent(authid string, authpw string) (map[string][]string, error) {
 
 	// Request the HTML page.
 	res, err := http.PostForm(fmt.Sprintf("https://vertretungsplan.hpg-speyer.de/pmwiki/pmwiki.php?n=Main.%s", authid),
@@ -55,7 +54,7 @@ func GetSubstituationOfStudent(authid string, authpw string) (*models.Substituti
 	s := doc.Find("table") // if s.Length()=3, there are new substituations
 
 	if s.Length() < 3 {
-		return &models.Substitutions{}, nil
+		return make(map[string][]string), nil
 	}
 
 	sp := s.Eq(1)
@@ -81,10 +80,6 @@ func GetSubstituationOfStudent(authid string, authpw string) (*models.Substituti
 		}
 	})
 
-	substitutions, err := models.NewSubstitutions(authid, authpw, spMap)
-	if err != nil {
-		return nil, err
-	}
 
-	return substitutions, nil
+	return spMap, nil
 }

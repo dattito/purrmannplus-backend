@@ -5,9 +5,9 @@ import (
 	"log"
 
 	api_models "github.com/datti-to/purrmannplus-backend/api/providers/rest/models"
+	"github.com/datti-to/purrmannplus-backend/app/commands"
 	"github.com/datti-to/purrmannplus-backend/app/models"
 	"github.com/datti-to/purrmannplus-backend/config"
-	"github.com/datti-to/purrmannplus-backend/database"
 	"github.com/datti-to/purrmannplus-backend/services/signal_message_sender"
 	utils_jwt "github.com/datti-to/purrmannplus-backend/utils/jwt"
 	"github.com/gofiber/fiber/v2"
@@ -80,20 +80,11 @@ func AddPhoneNumber(c *fiber.Ctx) error {
 		})
 	}
 
-	account_info, err := models.NewAccountInfo(models.Account{Id: accountId}, phoneNumber)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-			"error": err.Error(),
-		})
-	}
-
-	if err := database.DB.AddAccountInfo(account_info); err != nil {
+	if _, err = commands.AddAccountInfo(accountId, phoneNumber); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "something went wrong",
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-		"ok": true,
-	})
+	return c.SendStatus(fiber.StatusCreated)
 }

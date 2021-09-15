@@ -7,7 +7,7 @@ type Substitutions struct {
 }
 
 func NewSubstitutions(authId, authPw string, entries map[string][]string) (*Substitutions, error) {
-	a, err := NewAccount(authId, authPw)
+	a, err := NewValidAccount(authId, authPw)
 	if err != nil {
 		return nil, err
 	}

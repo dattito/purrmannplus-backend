@@ -10,7 +10,7 @@ import (
 type Model struct {
 	gorm.Model
 
-	ID        string `gorm:"primary_key,size:32"`
+	Id        string `gorm:"primary_key,size:32"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
@@ -22,7 +22,7 @@ func (m *Model) BeforeCreate(_ *gorm.DB) error {
 	if err != nil {
 		return err
 	}
-	m.ID = uuid.String()
+	m.Id = uuid.String()
 
 	return nil
 }

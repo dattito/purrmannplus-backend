@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/datti-to/purrmannplus-backend/app/models"
+	provider_models "github.com/datti-to/purrmannplus-backend/database/models"
 )
 
 type Entries map[string][]string
@@ -59,21 +59,10 @@ func (s *SubstitutionDB) Value() (driver.Value, error) {
 	return json.Marshal(s)
 }
 
-func SubstitutionDBToSubstitution(s SubstitutionDB) *models.Substitutions {
-	return &models.Substitutions{
-		Id:      s.ID,
-		Account: AccountDBToAccount(s.AccountDB),
-		Entries: s.Entries,
-	}
-}
-
-func SubstitutionsToSubstitutionDB(s *models.Substitutions) *SubstitutionDB {
-	sd := &SubstitutionDB{
-		AccountDB: AccountToAccountDB(s.Account),
+func SubstitutionDBToSubstitutionDBModel(s SubstitutionDB) provider_models.SubstitutionDBModel {
+	return provider_models.SubstitutionDBModel{
+		Id:        s.Id,
+		AccountId: s.AccountId,
 		Entries:   s.Entries,
 	}
-
-	sd.ID = s.Id
-
-	return sd
 }

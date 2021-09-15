@@ -1,6 +1,10 @@
 package models
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/datti-to/purrmannplus-backend/database/models"
+)
 
 type Account struct {
 	Id     string
@@ -8,7 +12,7 @@ type Account struct {
 	AuthPw string
 }
 
-func NewAccount(authId, authPw string) (*Account, error) {
+func NewValidAccount(authId, authPw string) (*Account, error) {
 	if authId == "" {
 		return nil, errors.New("authId is empty")
 	}
@@ -21,4 +25,12 @@ func NewAccount(authId, authPw string) (*Account, error) {
 		AuthId: authId,
 		AuthPw: authPw,
 	}, nil
+}
+
+func AcccountDBModelToAccount(accountDBModel models.AccountDBModel) Account {
+	return Account{
+		Id:     accountDBModel.Id,
+		AuthId: accountDBModel.AuthId,
+		AuthPw: accountDBModel.AuthPw,
+	}
 }

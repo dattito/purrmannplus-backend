@@ -1,6 +1,8 @@
 package models
 
-import "github.com/datti-to/purrmannplus-backend/app/models"
+import (
+	provider_models "github.com/datti-to/purrmannplus-backend/database/models"
+)
 
 type AccountDB struct {
 	Model
@@ -12,19 +14,9 @@ func (a AccountDB) TableName() string {
 	return "accounts"
 }
 
-func AccountToAccountDB(a models.Account) AccountDB {
-	ab := AccountDB{
-		AuthId: a.AuthId,
-		AuthPw: a.AuthPw,
-	}
-	ab.ID = a.Id
-
-	return ab
-}
-
-func AccountDBToAccount(a AccountDB) models.Account {
-	return models.Account{
-		Id:     a.ID,
+func AccountDBToAccountDBModel(a AccountDB) provider_models.AccountDBModel {
+	return provider_models.AccountDBModel{
+		Id:     a.Id,
 		AuthId: a.AuthId,
 		AuthPw: a.AuthPw,
 	}
