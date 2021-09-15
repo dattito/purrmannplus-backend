@@ -4,7 +4,7 @@ import "github.com/datti-to/purrmannplus-backend/app/models"
 
 type AccountDB struct {
 	Model
-	AuthId string `gorm:"uniqueIndex"`
+	AuthId string `gorm:"auth_id,uniqueIndex"`
 	AuthPw string `gorm:"auth_pw"`
 }
 
