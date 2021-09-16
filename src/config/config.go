@@ -20,6 +20,7 @@ var (
 	SIGNAL_CLI_GRPC_API_URL   string
 	SIGNAL_SENDER_PHONENUMBER string
 	JWT_SECRET                string
+	JWT_RANDOM_SECRET         string
 	SUBSTITUTION_URL          string
 )
 
@@ -74,6 +75,8 @@ func Init() error {
 	if err != nil {
 		return err
 	}
+
+	JWT_RANDOM_SECRET = utils.RandStringBytesMaskImprSrcUnsafe(128)
 
 	SUBSTITUTION_URL, err = utils.GetEnvInDev("SUBSTITUTION_URL", "https://vertretungsplan.hpg-speyer.de")
 	if err != nil {
