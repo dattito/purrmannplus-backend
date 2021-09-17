@@ -76,7 +76,7 @@ func Init() error {
 		return err
 	}
 
-	JWT_RANDOM_SECRET = utils.RandStringBytesMaskImprSrcUnsafe(128)
+	JWT_RANDOM_SECRET = utils.GenerateString(128)
 
 	SUBSTITUTION_URL, err = utils.GetEnvInDev("SUBSTITUTION_URL", "https://vertretungsplan.hpg-speyer.de")
 	if err != nil {
