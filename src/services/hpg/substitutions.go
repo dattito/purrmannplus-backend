@@ -32,12 +32,12 @@ func GetSubstituationOfStudent(authid string, authpw string) (map[string][]strin
 		},
 	)
 	defer res.Body.Close()
-	
+
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
-	 
+
 	if res.StatusCode != 200 {
 		return nil, fmt.Errorf("status code error: %d %s", res.StatusCode, res.Status)
 	}
