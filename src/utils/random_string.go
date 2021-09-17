@@ -2,8 +2,8 @@ package utils
 
 import (
 	"math/rand"
-	"time"
 	"strings"
+	"time"
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -16,20 +16,20 @@ const (
 var src = rand.NewSource(time.Now().UnixNano())
 
 func GenerateString(n int) string {
-    sb := strings.Builder{}
-    sb.Grow(n)
-    // A src.Int63() generates 63 random bits, enough for letterIdxMax characters!
-    for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
-        if remain == 0 {
-            cache, remain = src.Int63(), letterIdxMax
-        }
-        if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
-            sb.WriteByte(letterBytes[idx])
-            i--
-        }
-        cache >>= letterIdxBits
-        remain--
-    }
+	sb := strings.Builder{}
+	sb.Grow(n)
+	// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!
+	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
+		if remain == 0 {
+			cache, remain = src.Int63(), letterIdxMax
+		}
+		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
+			sb.WriteByte(letterBytes[idx])
+			i--
+		}
+		cache >>= letterIdxBits
+		remain--
+	}
 
-    return sb.String()
+	return sb.String()
 }
