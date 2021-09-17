@@ -22,7 +22,7 @@ func beginsWithAWeekday(s string) bool {
 	return false
 }
 
-func GetSubstituationOfStudent(authid string, authpw string) (map[string][]string, error) {
+func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, error) {
 
 	// Request the HTML page.
 	res, err := http.PostForm(fmt.Sprintf("https://vertretungsplan.hpg-speyer.de/pmwiki/pmwiki.php?n=Main.%s", authid),
