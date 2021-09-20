@@ -140,16 +140,9 @@ func (g *GormProvider) GetAccounts() ([]provider_models.AccountDBModel, error) {
 
 // Does what you think it does...
 func (g *GormProvider) DeleteAccount(id string) error {
-
-	accdb := models.AccountDB{}
-
-	err := g.DB.First(&accdb, id).Error
-
-	if err != nil {
-		return err
-	}
-
-	return g.DB.Delete(&accdb).Error
+	a := &models.AccountDB{}
+	a.Id = id
+	return g.DB.Where("id = ?", id).Delete(a).Error
 }
 
 // Adds a new account_info entry of an account to the database
