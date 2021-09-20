@@ -17,7 +17,9 @@ type Provider interface {
 	AddAccountInfo(accountId, phoneNumber string) (models.AccountInfoDBModel, error)
 	GetAccountInfo(accountId string) (models.AccountInfoDBModel, error)
 
-	AddSubstitution(accountId string, substitutions map[string][]string) (models.SubstitutionDBModel, error)
+	SetSubstitutions(accountId string, substitutions map[string][]string) (models.SubstitutionDBModel, error)
+	AddAccountToSubstitutionUpdater(accountId string) error
+	GetSubstitutions(accountId string) (models.SubstitutionDBModel, error)
 }
 
 func GetProvider() (Provider, error) {

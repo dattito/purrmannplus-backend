@@ -73,6 +73,7 @@ func (g *GormProvider) CloseDB() error {
 	return nil
 }
 
+// Adds an account with it's credendials (username=authId, password=authPw) to the database
 func (g *GormProvider) AddAccount(authId, authPw string) (provider_models.AccountDBModel, error) {
 
 	accdb := models.AccountDB{
@@ -83,6 +84,7 @@ func (g *GormProvider) AddAccount(authId, authPw string) (provider_models.Accoun
 	return models.AccountDBToAccountDBModel(accdb), err
 }
 
+// Returns account object of given accountId
 func (g *GormProvider) GetAccount(id string) (provider_models.AccountDBModel, error) {
 
 	accdb := models.AccountDB{}
@@ -99,6 +101,7 @@ func (g *GormProvider) GetAccount(id string) (provider_models.AccountDBModel, er
 	return models.AccountDBToAccountDBModel(accdb), nil
 }
 
+// Gets account using username (authId) and password (authPw)
 func (g *GormProvider) GetAccountByCredentials(authId, authPw string) (provider_models.AccountDBModel, error) {
 
 	accdb := models.AccountDB{}
@@ -115,6 +118,7 @@ func (g *GormProvider) GetAccountByCredentials(authId, authPw string) (provider_
 	return models.AccountDBToAccountDBModel(accdb), nil
 }
 
+// what do think it does?
 func (g *GormProvider) GetAccounts() ([]provider_models.AccountDBModel, error) {
 
 	accdb := []models.AccountDB{}
@@ -136,6 +140,7 @@ func (g *GormProvider) GetAccounts() ([]provider_models.AccountDBModel, error) {
 	return accs, nil
 }
 
+// Does what you think it does...
 func (g *GormProvider) DeleteAccount(id string) error {
 
 	accdb := models.AccountDB{}
@@ -149,6 +154,7 @@ func (g *GormProvider) DeleteAccount(id string) error {
 	return g.DB.Delete(&accdb).Error
 }
 
+// Adds a new account_info entry of an account to the database
 func (g *GormProvider) AddAccountInfo(accountId, phoneNumber string) (provider_models.AccountInfoDBModel, error) {
 
 	accInfo := models.AccountInfoDB{
@@ -159,6 +165,7 @@ func (g *GormProvider) AddAccountInfo(accountId, phoneNumber string) (provider_m
 	return models.AccountInfoDBToAccountInfoDBModel(accInfo), err
 }
 
+// Gets the account_info from a given accountId
 func (g *GormProvider) GetAccountInfo(accountId string) (provider_models.AccountInfoDBModel, error) {
 	accInfo := models.AccountInfoDB{}
 	err := g.DB.Where("account_id = ?", accountId).First(&accInfo).Error
@@ -168,14 +175,44 @@ func (g *GormProvider) GetAccountInfo(accountId string) (provider_models.Account
 	return models.AccountInfoDBToAccountInfoDBModel(accInfo), err
 }
 
-func (g *GormProvider) AddSubstitution(accountId string, entries map[string][]string) (provider_models.SubstitutionDBModel, error) {
-
-	subdb := models.SubstitutionDB{
+// Adds an account to the substitution_updater table if not exists
+func (g *GormProvider) AddAccountToSubstitutionUpdater(accountId string) error {
+	s := models.SubstitutionDB{
 		AccountId: accountId,
-		Entries:   entries,
 	}
 
-	err := g.DB.Create(&subdb).Error
+	return g.DB.FirstOrCreate(s).Error
+}
 
-	return models.SubstitutionDBToSubstitutionDBModel(subdb), err
+// Updates the substitution of a given account
+func (g *GormProvider) SetSubstitutions(accountId string, entries map[string][]string) (provider_models.SubstitutionDBModel, error) {
+
+	subdb := models.SubstitutionDB{}
+
+	if err := g.DB.Where("account_id = ?", accountId).First(&subdb).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return provider_models.SubstitutionDBModel{}, &db_errors.ErrRecordNotFound
+		}
+		return provider_models.SubstitutionDBModel{}, err
+	}
+
+	subdb.Entries = entries
+
+	return models.SubstitutionDBToSubstitutionDBModel(subdb), g.DB.Save(&subdb).Error
+}
+
+//Returns the substitution of a given account
+func (g *GormProvider) GetSubstitutions(accountId string) (provider_models.SubstitutionDBModel, error) {
+	subdb := models.SubstitutionDB{}
+
+	err := g.DB.Where("account_d = ?", accountId).First(&subdb).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return provider_models.SubstitutionDBModel{}, &db_errors.ErrRecordNotFound
+		}
+		return provider_models.SubstitutionDBModel{}, err
+	}
+
+	return models.SubstitutionDBToSubstitutionDBModel(subdb), nil
 }
