@@ -10,7 +10,7 @@ type AccountDB struct {
 	AuthPw string `gorm:"auth_pw"`
 }
 
-func (a AccountDB) TableName() string {
+func (AccountDB) TableName() string {
 	return "accounts"
 }
 

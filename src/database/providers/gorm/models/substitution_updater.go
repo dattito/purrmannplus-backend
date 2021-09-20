@@ -41,7 +41,7 @@ type SubstitutionDB struct {
 	Entries   Entries   `gorm:"entries"`
 }
 
-func (s SubstitutionDB) TableName() string {
+func (SubstitutionDB) TableName() string {
 	return "substitutions"
 }
 
