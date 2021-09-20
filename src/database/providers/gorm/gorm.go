@@ -35,7 +35,7 @@ func NewGormProvider() (*GormProvider, error) {
 	}
 
 	db, err := gorm.Open(o(config.DATABASE_URI), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
+		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
 		return &GormProvider{}, err
@@ -89,9 +89,7 @@ func (g *GormProvider) GetAccount(id string) (provider_models.AccountDBModel, er
 
 	accdb := models.AccountDB{}
 
-	err := g.DB.First(&accdb, id).Error
-
-	if err != nil {
+	if err := g.DB.Where("id = ?", id).First(&accdb).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return provider_models.AccountDBModel{}, &db_errors.ErrRecordNotFound
 		}
@@ -170,6 +168,9 @@ func (g *GormProvider) GetAccountInfo(accountId string) (provider_models.Account
 	accInfo := models.AccountInfoDB{}
 	err := g.DB.Where("account_id = ?", accountId).First(&accInfo).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return provider_models.AccountInfoDBModel{}, &db_errors.ErrRecordNotFound
+		}
 		return provider_models.AccountInfoDBModel{}, err
 	}
 	return models.AccountInfoDBToAccountInfoDBModel(accInfo), err
@@ -181,7 +182,7 @@ func (g *GormProvider) AddAccountToSubstitutionUpdater(accountId string) error {
 		AccountId: accountId,
 	}
 
-	return g.DB.FirstOrCreate(s).Error
+	return g.DB.FirstOrCreate(&s).Error
 }
 
 // Updates the substitution of a given account

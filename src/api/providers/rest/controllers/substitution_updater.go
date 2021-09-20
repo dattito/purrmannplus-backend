@@ -18,7 +18,5 @@ func RegisterToSubstitutionUpdater(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.JSON(&fiber.Map{
-		"ok": true,
-	})
+	return c.SendStatus(fiber.StatusCreated)
 }

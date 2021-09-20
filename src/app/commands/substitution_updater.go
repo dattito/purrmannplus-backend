@@ -8,7 +8,6 @@ import (
 )
 
 func AddToSubstitutionUpdater(accountId string) error {
-
 	if _, err := database.DB.GetAccount(accountId); err != nil {
 		if errors.Is(err, &db_errors.ErrRecordNotFound) {
 			return errors.New("account not found")
