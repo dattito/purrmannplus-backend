@@ -8,7 +8,7 @@ import (
 )
 
 type Model struct {
-	Id        string `gorm:"primary_key,size:32"`
+	Id        string `gorm:"primary_key;size:32"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

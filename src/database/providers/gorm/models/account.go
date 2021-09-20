@@ -6,7 +6,7 @@ import (
 
 type AccountDB struct {
 	Model
-	AuthId string `gorm:"auth_id,uniqueIndex"`
+	AuthId string `gorm:"auth_id;uniqueIndex"`
 	AuthPw string `gorm:"auth_pw"`
 }
 
