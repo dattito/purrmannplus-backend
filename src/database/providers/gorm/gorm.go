@@ -197,7 +197,9 @@ func (g *GormProvider) SetSubstitutions(accountId string, entries map[string][]s
 		return provider_models.SubstitutionDBModel{}, err
 	}
 
-	subdb.Entries = entries
+	var e models.Entries = entries
+
+	subdb.Entries = &e
 
 	return models.SubstitutionDBToSubstitutionDBModel(subdb), g.DB.Save(&subdb).Error
 }
