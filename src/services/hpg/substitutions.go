@@ -31,12 +31,13 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 			"authpw": {authpw},
 		},
 	)
-	defer res.Body.Close()
 
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
+
+	defer res.Body.Close()
 
 	if res.StatusCode != 200 {
 		return nil, fmt.Errorf("status code error: %d %s", res.StatusCode, res.Status)
