@@ -2,6 +2,7 @@ package hpg
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -25,7 +26,7 @@ func beginsWithAWeekday(s string) bool {
 func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, error) {
 
 	// Request the HTML page.
-	res, err := http.PostForm(fmt.Sprintf("https://vertretungsplan.hpg-speyer.de/pmwiki/pmwiki.php?n=Main.%s", authid),
+	res, err := http.PostForm(fmt.Sprintf("https://vertretungsplan.hpg-speyer.de/pmwiki/pmwiki.php?n=Main.%s", strings.ToLower(authid)),
 		url.Values{
 			"authid": {authid},
 			"authpw": {authpw},
@@ -39,8 +40,16 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 
 	defer res.Body.Close()
 
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	//Convert the body to type string
+	sb := string(body)
+	log.Println(sb)
+
 	if res.StatusCode != 200 {
-		return nil, fmt.Errorf("status code error: %d %s", res.StatusCode, res.Status)
+		return nil, fmt.Errorf("wrong credentials")
 	}
 
 	// Load the HTML document
@@ -51,7 +60,7 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 
 	// Checked for wrong crendentials
 	if doc.Find("form").Length() > 0 {
-		return nil, WrongCredentialsError
+		return nil, fmt.Errorf("wrong credentials")
 	}
 
 	// Find the review items
