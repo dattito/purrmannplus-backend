@@ -57,6 +57,7 @@ func (r *RestProvider) Init() error {
 
 	v1.Post(SendPhoneNumberConfirmationLinkRoute, controllers.SendPhoneNumberConfirmationLink)
 	v1.Post(RegisterToSubstitutionUpdaterRoute, controllers.RegisterToSubstitutionUpdater)
+	v1.Delete(UnregisterFromSubstitutionUpdaterRoute, controllers.UnregisterFromSubstitutionUpdater)
 
 	return nil
 }

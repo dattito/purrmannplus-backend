@@ -38,7 +38,7 @@ type SubstitutionDB struct {
 	Model
 	AccountId string    `gorm:"account_id,uniqueIndex"`
 	AccountDB AccountDB `gorm:"foreignKey:account_id"`
-	Entries   *Entries   `gorm:"entries"`
+	Entries   *Entries  `gorm:"entries;default:{}"`
 }
 
 func (SubstitutionDB) TableName() string {

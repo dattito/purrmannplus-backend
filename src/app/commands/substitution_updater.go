@@ -8,13 +8,6 @@ import (
 )
 
 func AddToSubstitutionUpdater(accountId string) error {
-	if _, err := database.DB.GetAccount(accountId); err != nil {
-		if errors.Is(err, &db_errors.ErrRecordNotFound) {
-			return errors.New("account not found")
-		}
-		return err
-	}
-
 	ai, err := database.DB.GetAccountInfo(accountId)
 	if err != nil {
 		if errors.Is(err, &db_errors.ErrRecordNotFound) {
@@ -28,4 +21,8 @@ func AddToSubstitutionUpdater(accountId string) error {
 	}
 
 	return database.DB.AddAccountToSubstitutionUpdater(accountId)
+}
+
+func RemoveFromSubstitutionUpdater(accountId string) error {
+	return database.DB.RemoveAccountFromSubstitutionUpdater(accountId)
 }

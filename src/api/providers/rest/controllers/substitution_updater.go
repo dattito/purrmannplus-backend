@@ -20,3 +20,18 @@ func RegisterToSubstitutionUpdater(c *fiber.Ctx) error {
 
 	return c.SendStatus(fiber.StatusCreated)
 }
+
+func UnregisterFromSubstitutionUpdater(c *fiber.Ctx) error {
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	accountId := claims["account_id"].(string)
+
+	err := commands.RemoveFromSubstitutionUpdater(accountId)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	return c.SendStatus(fiber.StatusNoContent)
+}

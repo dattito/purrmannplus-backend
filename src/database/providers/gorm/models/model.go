@@ -8,12 +8,9 @@ import (
 )
 
 type Model struct {
-	gorm.Model
-
 	Id        string `gorm:"primary_key,size:32"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
 // BeforeCreate will set a UUID rather than numeric ID.

@@ -19,6 +19,7 @@ type Provider interface {
 
 	SetSubstitutions(accountId string, substitutions map[string][]string) (models.SubstitutionDBModel, error)
 	AddAccountToSubstitutionUpdater(accountId string) error
+	RemoveAccountFromSubstitutionUpdater(accountId string) error
 	GetSubstitutions(accountId string) (models.SubstitutionDBModel, error)
 }
 

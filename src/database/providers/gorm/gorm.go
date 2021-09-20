@@ -185,6 +185,18 @@ func (g *GormProvider) AddAccountToSubstitutionUpdater(accountId string) error {
 	return g.DB.FirstOrCreate(&s).Error
 }
 
+// Removes an account from the substitution_updater table if exists
+func (g *GormProvider) RemoveAccountFromSubstitutionUpdater(accountId string) error {
+
+	if err := g.DB.Where("account_id = ?", accountId).Delete(&models.SubstitutionDB{}).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return &db_errors.ErrRecordNotFound
+		}
+		return err
+	}
+	return nil
+}
+
 // Updates the substitution of a given account
 func (g *GormProvider) SetSubstitutions(accountId string, entries map[string][]string) (provider_models.SubstitutionDBModel, error) {
 
