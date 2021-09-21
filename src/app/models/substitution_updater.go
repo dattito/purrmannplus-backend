@@ -1,5 +1,7 @@
 package models
 
+import "github.com/datti-to/purrmannplus-backend/database/models"
+
 type Substitutions struct {
 	Id      string
 	Account Account
@@ -19,4 +21,26 @@ func NewSubstitutions(authId, authPw string, entries map[string][]string) (*Subs
 
 func NewEmptySubstitutions(authId, authPw string) (*Substitutions, error) {
 	return NewSubstitutions(authId, authPw, map[string][]string{})
+}
+
+type SubstitutionUpdateInfos struct {
+	AuthId          string
+	AuthPw          string
+	PhoneNumber     string
+	AccountId       string
+	SubstitutionsId string
+	Entries         map[string][]string
+	NotSetYet       bool
+}
+
+func AccountCredentialsAndPhoneNumberAndSubstitutionsDBModelToSubstitutionUpdateInfos(m *models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel) SubstitutionUpdateInfos {
+	return SubstitutionUpdateInfos{
+		AuthId:          m.AuthId,
+		AuthPw:          m.AuthPw,
+		PhoneNumber:     m.PhoneNumber,
+		AccountId:       m.AccountId,
+		SubstitutionsId: m.SubstitutionsId,
+		Entries:         m.Entries,
+		NotSetYet:       m.NotSetYet,
+	}
 }

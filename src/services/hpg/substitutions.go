@@ -25,7 +25,7 @@ func beginsWithAWeekday(s string) bool {
 func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, error) {
 
 	// Request the HTML page.
-	res, err := http.PostForm(fmt.Sprintf("https://vertretungsplan.hpg-speyer.de/pmwiki/pmwiki.php?n=Main.%s", authid),
+	res, err := http.PostForm(fmt.Sprintf("https://vertretungsplan.hpg-speyer.de/pmwiki/pmwiki.php?n=Main.%s", strings.ToLower(authid)),
 		url.Values{
 			"authid": {authid},
 			"authpw": {authpw},
@@ -39,26 +39,21 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 
 	defer res.Body.Close()
 
-	if res.StatusCode != 200 {
-		return nil, fmt.Errorf("status code error: %d %s", res.StatusCode, res.Status)
-	}
-
 	// Load the HTML document
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	// Checked for wrong crendentials
-	if doc.Find("form").Length() > 0 {
+	if !strings.Contains(doc.Text(), "abmelden") {
 		return nil, WrongCredentialsError
 	}
 
 	// Find the review items
-	s := doc.Find("table") // if s.Length()=3, there are new substituations
+	s := doc.Find("table") // if s.Length()=4, there are new substituations
 
-	if s.Length() < 3 {
-		return make(map[string][]string), nil
+	if s.Length() < 4 {
+		return map[string][]string{}, nil
 	}
 
 	sp := s.Eq(1)

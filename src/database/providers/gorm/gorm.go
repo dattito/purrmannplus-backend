@@ -35,7 +35,7 @@ func NewGormProvider() (*GormProvider, error) {
 	}
 
 	db, err := gorm.Open(o(config.DATABASE_URI), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
+		Logger: logger.Default.LogMode(logger.LogLevel(config.DATABASE_LOG_LEVEL)),
 	})
 	if err != nil {
 		return &GormProvider{}, err
@@ -73,6 +73,7 @@ func (g *GormProvider) CloseDB() error {
 	return nil
 }
 
+// Adds an account with it's credendials (username=authId, password=authPw) to the database
 func (g *GormProvider) AddAccount(authId, authPw string) (provider_models.AccountDBModel, error) {
 
 	accdb := models.AccountDB{
@@ -83,13 +84,12 @@ func (g *GormProvider) AddAccount(authId, authPw string) (provider_models.Accoun
 	return models.AccountDBToAccountDBModel(accdb), err
 }
 
+// Returns account object of given accountId
 func (g *GormProvider) GetAccount(id string) (provider_models.AccountDBModel, error) {
 
 	accdb := models.AccountDB{}
 
-	err := g.DB.First(&accdb, id).Error
-
-	if err != nil {
+	if err := g.DB.First(&accdb, "id = ?", id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return provider_models.AccountDBModel{}, &db_errors.ErrRecordNotFound
 		}
@@ -99,11 +99,12 @@ func (g *GormProvider) GetAccount(id string) (provider_models.AccountDBModel, er
 	return models.AccountDBToAccountDBModel(accdb), nil
 }
 
+// Gets account using username (authId) and password (authPw)
 func (g *GormProvider) GetAccountByCredentials(authId, authPw string) (provider_models.AccountDBModel, error) {
 
 	accdb := models.AccountDB{}
 
-	err := g.DB.Where("auth_id = ? AND auth_pw = ?", authId, authPw).First(&accdb).Error
+	err := g.DB.First(&accdb, "auth_id = ? AND auth_pw = ?", authId, authPw).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -115,6 +116,7 @@ func (g *GormProvider) GetAccountByCredentials(authId, authPw string) (provider_
 	return models.AccountDBToAccountDBModel(accdb), nil
 }
 
+// what do think it does?
 func (g *GormProvider) GetAccounts() ([]provider_models.AccountDBModel, error) {
 
 	accdb := []models.AccountDB{}
@@ -136,19 +138,14 @@ func (g *GormProvider) GetAccounts() ([]provider_models.AccountDBModel, error) {
 	return accs, nil
 }
 
+// Does what you think it does...
 func (g *GormProvider) DeleteAccount(id string) error {
-
-	accdb := models.AccountDB{}
-
-	err := g.DB.First(&accdb, id).Error
-
-	if err != nil {
-		return err
-	}
-
-	return g.DB.Delete(&accdb).Error
+	a := &models.AccountDB{}
+	a.Id = id
+	return g.DB.Delete(a, "id = ?", id).Error
 }
 
+// Adds a new account_info entry of an account to the database
 func (g *GormProvider) AddAccountInfo(accountId, phoneNumber string) (provider_models.AccountInfoDBModel, error) {
 
 	accInfo := models.AccountInfoDB{
@@ -159,23 +156,90 @@ func (g *GormProvider) AddAccountInfo(accountId, phoneNumber string) (provider_m
 	return models.AccountInfoDBToAccountInfoDBModel(accInfo), err
 }
 
+// Gets the account_info from a given accountId
 func (g *GormProvider) GetAccountInfo(accountId string) (provider_models.AccountInfoDBModel, error) {
 	accInfo := models.AccountInfoDB{}
-	err := g.DB.Where("account_id = ?", accountId).First(&accInfo).Error
+	err := g.DB.First(&accInfo, "account_id = ?", accountId).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return provider_models.AccountInfoDBModel{}, &db_errors.ErrRecordNotFound
+		}
 		return provider_models.AccountInfoDBModel{}, err
 	}
 	return models.AccountInfoDBToAccountInfoDBModel(accInfo), err
 }
 
-func (g *GormProvider) AddSubstitution(accountId string, entries map[string][]string) (provider_models.SubstitutionDBModel, error) {
+// Removes an account from the substitution_updater table if exists
+func (g *GormProvider) RemoveAccountFromSubstitutionUpdater(accountId string) error {
+
+	if err := g.DB.Delete(&models.SubstitutionDB{}, "account_id = ?", accountId).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return &db_errors.ErrRecordNotFound
+		}
+		return err
+	}
+	return nil
+}
+
+// Updates the substitution of a given account
+func (g *GormProvider) SetSubstitutions(accountId string, entries map[string][]string, NotSetYet bool) (provider_models.SubstitutionDBModel, error) {
+
+	var entriesE models.Entries = entries
 
 	subdb := models.SubstitutionDB{
 		AccountId: accountId,
-		Entries:   entries,
 	}
 
-	err := g.DB.Create(&subdb).Error
+	if err := g.DB.FirstOrCreate(&subdb, "account_id = ?", accountId).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return provider_models.SubstitutionDBModel{}, &db_errors.ErrRecordNotFound
+		}
+		return provider_models.SubstitutionDBModel{}, err
+	}
 
-	return models.SubstitutionDBToSubstitutionDBModel(subdb), err
+	subdb.Entries = &entriesE
+	subdb.NotSetYet = NotSetYet
+
+	err := g.DB.Save(&subdb).Error
+	if err != nil {
+		return provider_models.SubstitutionDBModel{}, err
+	}
+
+	return models.SubstitutionDBToSubstitutionDBModel(subdb), nil
+}
+
+//Returns the substitution of a given account
+func (g *GormProvider) GetSubstitutions(accountId string) (provider_models.SubstitutionDBModel, error) {
+	subdb := models.SubstitutionDB{}
+
+	err := g.DB.First(&subdb, "account_id = ?", accountId).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return provider_models.SubstitutionDBModel{}, &db_errors.ErrRecordNotFound
+		}
+		return provider_models.SubstitutionDBModel{}, err
+	}
+
+	return models.SubstitutionDBToSubstitutionDBModel(subdb), nil
+}
+
+func (g *GormProvider) GetAllAccountCredentialsAndPhoneNumberAndSubstitutions() ([]provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel, error) {
+	m := []models.AccountCredentialsAndPhoneNumberAndSubstitutionsDB{}
+
+	g.DB.Model(models.AccountDB{}).Select("accounts.auth_id", "accounts.auth_pw", "account_infos.phone_number", "accounts.id AS 'account_id'", "substitutions.id AS 'substitutions_id'", "substitutions.entries", "substitutions.not_set_yet").Joins("INNER JOIN substitutions ON substitutions.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Scan(&m)
+
+	var mm []provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel
+	for _, v := range m {
+		mm = append(mm, models.ACPSDBtoACPDSDBM(v))
+	}
+
+	return mm, nil
+}
+
+// Returns the accountId, auth_id, auth_pw, phone_number, substitutions_id and the substitutions of a given account
+func (g *GormProvider) GetAccountCredentialsAndPhoneNumberAndSubstitutions(accountId string) (provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel, error) {
+	m := models.AccountCredentialsAndPhoneNumberAndSubstitutionsDB{}
+	g.DB.Model(models.AccountDB{}).Select("accounts.auth_id", "accounts.auth_pw", "account_infos.phone_number", "accounts.id AS 'account_id'", "substitutions.id AS 'substitutions_id'", "substitutions.entries", "substitutions.not_set_yet").Joins("INNER JOIN substitutions ON substitutions.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Where("accounts.id = ?", accountId).Scan(&m)
+	return models.ACPSDBtoACPDSDBM(m), nil
 }

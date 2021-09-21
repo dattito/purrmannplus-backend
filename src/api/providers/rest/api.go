@@ -49,7 +49,7 @@ func (r *RestProvider) Init() error {
 	v1.Post(AccountLoginRoute, controllers.AccountLogin)
 
 	v1.Post(AddAccountRoute, controllers.AddAccount)
-	v1.Get(GetAccountsRoute, controllers.GetAccounts)
+	//v1.Get(GetAccountsRoute, controllers.GetAccounts)
 
 	v1.Get(AddPhoneNumberRoute, controllers.AddPhoneNumber)
 
@@ -57,6 +57,7 @@ func (r *RestProvider) Init() error {
 
 	v1.Post(SendPhoneNumberConfirmationLinkRoute, controllers.SendPhoneNumberConfirmationLink)
 	v1.Post(RegisterToSubstitutionUpdaterRoute, controllers.RegisterToSubstitutionUpdater)
+	v1.Delete(UnregisterFromSubstitutionUpdaterRoute, controllers.UnregisterFromSubstitutionUpdater)
 
 	return nil
 }

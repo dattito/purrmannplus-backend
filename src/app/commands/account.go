@@ -28,6 +28,7 @@ func CreateAccount(authId, authPw string) (models.Account, error) {
 }
 
 func GetAllAccounts() ([]models.Account, error) {
+
 	accounts, err := database.DB.GetAccounts()
 	if err != nil {
 		return nil, err
@@ -56,4 +57,8 @@ func GetAccountByCredentials(authId, authPw string) (models.Account, error) {
 	}
 
 	return models.AcccountDBModelToAccount(a), nil
+}
+
+func DeleteAccount(accountId string) error {
+	return database.DB.DeleteAccount(accountId)
 }

@@ -36,9 +36,10 @@ func (s *Entries) Value() (driver.Value, error) {
 
 type SubstitutionDB struct {
 	Model
-	AccountId string    `gorm:"account_id,uniqueIndex"`
+	AccountId string    `gorm:"account_id;uniqueIndex"`
 	AccountDB AccountDB `gorm:"foreignKey:account_id"`
-	Entries   Entries   `gorm:"entries"`
+	Entries   *Entries  `gorm:"entries;default:{}"`
+	NotSetYet bool      `gorm:"column:not_set_yet"`
 }
 
 func (SubstitutionDB) TableName() string {
@@ -63,6 +64,29 @@ func SubstitutionDBToSubstitutionDBModel(s SubstitutionDB) provider_models.Subst
 	return provider_models.SubstitutionDBModel{
 		Id:        s.Id,
 		AccountId: s.AccountId,
-		Entries:   s.Entries,
+		Entries:   *s.Entries,
+		NotSetYet: s.NotSetYet,
+	}
+}
+
+type AccountCredentialsAndPhoneNumberAndSubstitutionsDB struct {
+	AuthId          string   `gorm:"column:auth_id"`
+	AuthPw          string   `gorm:"column:auth_pw"`
+	PhoneNumber     string   `gorm:"column:phone_number"`
+	AccountId       string   `gorm:"column:account_id"`
+	SubstitutionsId string   `gorm:"column:substitutions_id"`
+	Entries         *Entries `gorm:"column:entries"`
+	NotSetYet       bool     `gorm:"column:not_set_yet"`
+}
+
+func ACPSDBtoACPDSDBM(s AccountCredentialsAndPhoneNumberAndSubstitutionsDB) provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel {
+	return provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel{
+		AuthId:          s.AuthId,
+		AuthPw:          s.AuthPw,
+		PhoneNumber:     s.PhoneNumber,
+		AccountId:       s.AccountId,
+		SubstitutionsId: s.SubstitutionsId,
+		Entries:         *s.Entries,
+		NotSetYet:       s.NotSetYet,
 	}
 }
