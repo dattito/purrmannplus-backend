@@ -57,11 +57,6 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 		return nil, err
 	}
 
-	// Checked for wrong crendentials
-	if doc.Find("form").Length() > 0 {
-		return nil, WrongCredentialsError
-	}
-
 	// Find the review items
 	s := doc.Find("table") // if s.Length()=3, there are new substituations
 
