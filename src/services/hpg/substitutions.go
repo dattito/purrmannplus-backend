@@ -46,10 +46,9 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 	}
 	//Convert the body to type string
 	sb := string(body)
-	log.Println(sb)
 
-	if res.StatusCode != 200 {
-		return nil, fmt.Errorf("wrong credentials")
+	if !strings.Contains(sb, "abmelden") {
+		return nil, WrongCredentialsError
 	}
 
 	// Load the HTML document
@@ -60,7 +59,7 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 
 	// Checked for wrong crendentials
 	if doc.Find("form").Length() > 0 {
-		return nil, fmt.Errorf("wrong credentials")
+		return nil, WrongCredentialsError
 	}
 
 	// Find the review items
