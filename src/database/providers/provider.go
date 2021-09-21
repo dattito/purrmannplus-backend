@@ -17,11 +17,11 @@ type Provider interface {
 	AddAccountInfo(accountId, phoneNumber string) (models.AccountInfoDBModel, error)
 	GetAccountInfo(accountId string) (models.AccountInfoDBModel, error)
 
-	SetSubstitutions(accountId string, substitutions map[string][]string) (models.SubstitutionDBModel, error)
-	AddAccountToSubstitutionUpdater(accountId string) error
+	SetSubstitutions(accountId string, substitutions map[string][]string, notSetYet bool) (models.SubstitutionDBModel, error)
 	RemoveAccountFromSubstitutionUpdater(accountId string) error
 	GetSubstitutions(accountId string) (models.SubstitutionDBModel, error)
 	GetAllAccountCredentialsAndPhoneNumberAndSubstitutions() ([]models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel, error)
+	GetAccountCredentialsAndPhoneNumberAndSubstitutions(accountId string) (models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel, error)
 }
 
 func GetProvider() (Provider, error) {

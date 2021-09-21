@@ -39,6 +39,7 @@ type SubstitutionDB struct {
 	AccountId string    `gorm:"account_id;uniqueIndex"`
 	AccountDB AccountDB `gorm:"foreignKey:account_id"`
 	Entries   *Entries  `gorm:"entries;default:{}"`
+	NotSetYet bool      `gorm:"column:not_set_yet"`
 }
 
 func (SubstitutionDB) TableName() string {
@@ -64,6 +65,7 @@ func SubstitutionDBToSubstitutionDBModel(s SubstitutionDB) provider_models.Subst
 		Id:        s.Id,
 		AccountId: s.AccountId,
 		Entries:   *s.Entries,
+		NotSetYet: s.NotSetYet,
 	}
 }
 
@@ -74,6 +76,7 @@ type AccountCredentialsAndPhoneNumberAndSubstitutionsDB struct {
 	AccountId       string   `gorm:"column:account_id"`
 	SubstitutionsId string   `gorm:"column:substitutions_id"`
 	Entries         *Entries `gorm:"column:entries"`
+	NotSetYet       bool     `gorm:"column:not_set_yet"`
 }
 
 func ACPSDBtoACPDSDBM(s AccountCredentialsAndPhoneNumberAndSubstitutionsDB) provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel {
@@ -84,5 +87,6 @@ func ACPSDBtoACPDSDBM(s AccountCredentialsAndPhoneNumberAndSubstitutionsDB) prov
 		AccountId:       s.AccountId,
 		SubstitutionsId: s.SubstitutionsId,
 		Entries:         *s.Entries,
+		NotSetYet:       s.NotSetYet,
 	}
 }

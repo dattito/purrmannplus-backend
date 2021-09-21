@@ -10,8 +10,10 @@ import (
 var (
 	DOT_ENV_FILE_PATH                        string
 	USE_DOT_ENV_FILE                         bool
+	DATABASE_LOG_LEVEL                       int // 0-4: 1=off, 2=Error, 3=Warning, 4=Info
 	LISTENING_PORT                           int
 	API_URL                                  string
+	ENABLE_SUBSTITUTIONS_SCHEDULER           bool
 	SUBSTITUTIONS_UPDATECRON                 string
 	MAX_ERROS_TO_STOP_UPDATING_SUBSTITUTIONS int
 	MOODLE_UPDATECRON                        string
@@ -45,6 +47,11 @@ func Init() error {
 		}
 	}
 
+	DATABASE_LOG_LEVEL, err = utils.GetIntEnv("DATABASE_LOG_LEVEL", 1)
+	if err != nil {
+		return err
+	}
+
 	LISTENING_PORT, err = utils.GetIntEnv("LISTENING_PORT", 3000)
 	if err != nil {
 		return err
@@ -52,6 +59,10 @@ func Init() error {
 
 	API_URL = utils.GetEnv("API_URL", fmt.Sprintf("http://localhost:%d", LISTENING_PORT))
 
+	ENABLE_SUBSTITUTIONS_SCHEDULER, err = utils.GetBoolEnv("ENABLE_SUBSTITUTIONS_SCHEDULER", true)
+	if err != nil {
+		return err
+	}
 	SUBSTITUTIONS_UPDATECRON = utils.GetEnv("SUBSTITUTIONS_UPDATECRON", "*/10 6-23 * * *")
 	MAX_ERROS_TO_STOP_UPDATING_SUBSTITUTIONS, err = utils.GetIntEnv("MAX_ERROS_TO_STOP_UPDATING_SUBSTITUTIONS", 5)
 	if err != nil {

@@ -4,6 +4,7 @@ type SubstitutionDBModel struct {
 	Id        string
 	AccountId string
 	Entries   map[string][]string
+	NotSetYet bool
 }
 
 type AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel struct {
@@ -13,4 +14,5 @@ type AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel struct {
 	AccountId       string
 	SubstitutionsId string
 	Entries         map[string][]string
+	NotSetYet       bool
 }

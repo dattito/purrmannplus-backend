@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/datti-to/purrmannplus-backend/api"
+	"github.com/datti-to/purrmannplus-backend/app"
 	"github.com/datti-to/purrmannplus-backend/config"
 	"github.com/datti-to/purrmannplus-backend/database"
 	"github.com/datti-to/purrmannplus-backend/services/scheduler"
@@ -25,11 +26,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	app.Init()
+
 	api.Init()
 
-	// commands.EnableSubstitutionUpdater()
-
-	scheduler.StartScheduler()
+	//scheduler.StartScheduler()
 
 	log.Fatal(api.StartListening())
 }

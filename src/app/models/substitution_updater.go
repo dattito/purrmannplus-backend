@@ -30,6 +30,7 @@ type SubstitutionUpdateInfos struct {
 	AccountId       string
 	SubstitutionsId string
 	Entries         map[string][]string
+	NotSetYet       bool
 }
 
 func AccountCredentialsAndPhoneNumberAndSubstitutionsDBModelToSubstitutionUpdateInfos(m *models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel) SubstitutionUpdateInfos {
@@ -40,5 +41,6 @@ func AccountCredentialsAndPhoneNumberAndSubstitutionsDBModelToSubstitutionUpdate
 		AccountId:       m.AccountId,
 		SubstitutionsId: m.SubstitutionsId,
 		Entries:         m.Entries,
+		NotSetYet:       m.NotSetYet,
 	}
 }

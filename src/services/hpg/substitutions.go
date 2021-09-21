@@ -2,7 +2,6 @@ package hpg
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -40,28 +39,21 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	//Convert the body to type string
-	sb := string(body)
-
-	if !strings.Contains(sb, "abmelden") {
-		return nil, WrongCredentialsError
-	}
-
 	// Load the HTML document
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	// Find the review items
-	s := doc.Find("table") // if s.Length()=3, there are new substituations
+	if !strings.Contains(doc.Text(), "abmelden") {
+		return nil, WrongCredentialsError
+	}
 
-	if s.Length() < 3 {
-		return make(map[string][]string), nil
+	// Find the review items
+	s := doc.Find("table") // if s.Length()=4, there are new substituations
+
+	if s.Length() < 4 {
+		return map[string][]string{}, nil
 	}
 
 	sp := s.Eq(1)
