@@ -5,8 +5,8 @@ const (
 	AccountLoginRoute                      = "/login"
 	AddAccountRoute                        = "/accounts"
 	GetAccountsRoute                       = "/accounts"
-	SendPhoneNumberConfirmationLinkRoute   = "/accounts/phone_number_confirmation"
+	SendPhoneNumberConfirmationLinkRoute   = "/accounts/phone_number"
+	AddPhoneNumberRoute                    = "/accounts/phone_number/validate"
 	RegisterToSubstitutionUpdaterRoute     = "/substitution_updater"
 	UnregisterFromSubstitutionUpdaterRoute = "/substitution_updater"
-	AddPhoneNumberRoute                    = "/accounts/phone_number_confirmation/validate"
 )

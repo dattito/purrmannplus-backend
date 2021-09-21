@@ -54,9 +54,7 @@ func SendPhoneNumberConfirmationLink(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-		"ok": true,
-	})
+	return c.SendStatus(fiber.StatusCreated)
 }
 
 func AddPhoneNumber(c *fiber.Ctx) error {
