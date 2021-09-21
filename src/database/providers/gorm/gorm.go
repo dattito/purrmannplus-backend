@@ -2,6 +2,7 @@ package gorm
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/datti-to/purrmannplus-backend/config"
 	db_errors "github.com/datti-to/purrmannplus-backend/database/errors"
@@ -223,4 +224,19 @@ func (g *GormProvider) GetSubstitutions(accountId string) (provider_models.Subst
 	}
 
 	return models.SubstitutionDBToSubstitutionDBModel(subdb), nil
+}
+
+func (g *GormProvider) GetAllAccountCredentialsAndPhoneNumberAndSubstitutions() ([]provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel, error) {
+	m := []models.AccountCredentialsAndPhoneNumberAndSubstitutionsDB{}
+
+	g.DB.Model(models.AccountDB{}).Select("accounts.auth_id", "accounts.auth_pw", "account_infos.phone_number", "account.id AS 'account_id'", "substitutions.id AS 'substitutions_id'", "substitutions.entries").Joins("INNER JOIN substitutions ON substitutions.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Scan(&m)
+
+	fmt.Println(m)
+
+	var mm []provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel
+	for _, v := range m {
+		mm = append(mm, models.ACPSDBtoACPDSDBM(v))
+	}
+
+	return mm, nil
 }

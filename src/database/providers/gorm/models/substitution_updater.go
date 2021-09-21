@@ -66,3 +66,23 @@ func SubstitutionDBToSubstitutionDBModel(s SubstitutionDB) provider_models.Subst
 		Entries:   *s.Entries,
 	}
 }
+
+type AccountCredentialsAndPhoneNumberAndSubstitutionsDB struct {
+	AuthId          string   `gorm:"column:auth_id"`
+	AuthPw          string   `gorm:"column:auth_pw"`
+	PhoneNumber     string   `gorm:"column:phone_number"`
+	AccountId       string   `gorm:"column:account_id"`
+	SubstitutionsId string   `gorm:"column:substitutions_id"`
+	Entries         *Entries `gorm:"column:entries"`
+}
+
+func ACPSDBtoACPDSDBM(s AccountCredentialsAndPhoneNumberAndSubstitutionsDB) provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel {
+	return provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel{
+		AuthId:          s.AuthId,
+		AuthPw:          s.AuthPw,
+		PhoneNumber:     s.PhoneNumber,
+		AccountId:       s.AccountId,
+		SubstitutionsId: s.SubstitutionsId,
+		Entries:         *s.Entries,
+	}
+}

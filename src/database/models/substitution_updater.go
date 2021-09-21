@@ -5,3 +5,12 @@ type SubstitutionDBModel struct {
 	AccountId string
 	Entries   map[string][]string
 }
+
+type AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel struct {
+	AuthId          string
+	AuthPw          string
+	PhoneNumber     string
+	AccountId       string
+	SubstitutionsId string
+	Entries         map[string][]string
+}

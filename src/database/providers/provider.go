@@ -21,6 +21,7 @@ type Provider interface {
 	AddAccountToSubstitutionUpdater(accountId string) error
 	RemoveAccountFromSubstitutionUpdater(accountId string) error
 	GetSubstitutions(accountId string) (models.SubstitutionDBModel, error)
+	GetAllAccountCredentialsAndPhoneNumberAndSubstitutions() ([]models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel, error)
 }
 
 func GetProvider() (Provider, error) {

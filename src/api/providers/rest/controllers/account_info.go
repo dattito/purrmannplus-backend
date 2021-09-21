@@ -42,7 +42,7 @@ func SendPhoneNumberConfirmationLink(c *fiber.Ctx) error {
 
 	text := fmt.Sprintf("Willkommen bei PurrmannPlus. Um deine Telefonnummer zu bestätigen, drücke "+
 		"auf den nachfolgenden Link. Er ist 10 Minuten lang gültig. Du hast den Link nicht angefordert? Dann kannst du ihn ignorieren. "+
-		"%s/v1/accounts/phone_number_confirmation/validate?token=%s",
+		"%s/v1/accounts/phone_number/validate?token=%s",
 		config.API_URL, token)
 
 	err = signal_message_sender.SignalMessageSender.Send(text, account_info.PhoneNumber)

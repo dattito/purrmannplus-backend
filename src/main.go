@@ -27,6 +27,8 @@ func main() {
 
 	api.Init()
 
+	// commands.EnableSubstitutionUpdater()
+
 	scheduler.StartScheduler()
 
 	log.Fatal(api.StartListening())
