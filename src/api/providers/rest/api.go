@@ -35,6 +35,10 @@ func getJWTConfig() jwtware.Config {
 	}
 }
 
+func Protected() fiber.Handler {
+	return jwtware.New(getJWTConfig())
+}
+
 type RestProvider struct {
 	app *fiber.App
 }
@@ -50,14 +54,11 @@ func (r *RestProvider) Init() error {
 
 	v1.Post(AddAccountRoute, controllers.AddAccount)
 	//v1.Get(GetAccountsRoute, controllers.GetAccounts)
-
+	v1.Post(SendPhoneNumberConfirmationLinkRoute, Protected(), controllers.SendPhoneNumberConfirmationLink)
 	v1.Get(AddPhoneNumberRoute, controllers.AddPhoneNumber)
 
-	v1.Use(jwtware.New(getJWTConfig()))
-
-	v1.Post(SendPhoneNumberConfirmationLinkRoute, controllers.SendPhoneNumberConfirmationLink)
-	v1.Post(RegisterToSubstitutionUpdaterRoute, controllers.RegisterToSubstitutionUpdater)
-	v1.Delete(UnregisterFromSubstitutionUpdaterRoute, controllers.UnregisterFromSubstitutionUpdater)
+	v1.Post(RegisterToSubstitutionUpdaterRoute, Protected(), controllers.RegisterToSubstitutionUpdater)
+	v1.Delete(UnregisterFromSubstitutionUpdaterRoute, Protected(), controllers.UnregisterFromSubstitutionUpdater)
 
 	return nil
 }
