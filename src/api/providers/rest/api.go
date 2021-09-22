@@ -53,6 +53,7 @@ func (r *RestProvider) Init() error {
 	v1.Post(AccountLoginRoute, controllers.AccountLogin)
 
 	v1.Post(AddAccountRoute, controllers.AddAccount)
+	v1.Delete(DeleteAccountRoute, Protected(), controllers.DeleteAccount)
 	//v1.Get(GetAccountsRoute, controllers.GetAccounts)
 	v1.Post(SendPhoneNumberConfirmationLinkRoute, Protected(), controllers.SendPhoneNumberConfirmationLink)
 	v1.Get(AddPhoneNumberRoute, controllers.AddPhoneNumber)
