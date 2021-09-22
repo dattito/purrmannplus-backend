@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.1.2] - 2021-09-22
+### Changed
+- Docker WORKDIR changed to /data
 ## [v0.1.1] - 2021-09-22
 ### Fixed
 - Wrong expression in github docker push workflow
@@ -17,5 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (Un)register to the substitution updater which automatically sends updates on new substitutions
 
 [Unreleased]: https://github.com/Dattito/purrmannplus-backend/tree/dev
+[v0.1.2]: https://github.com/Dattito/purrmannplus-backend/compare/v0.1.1...v0.1.2
 [v0.1.1]: https://github.com/Dattito/purrmannplus-backend/compare/v0.1...v0.1.1
 [v0.1]: https://github.com/Dattito/purrmannplus-backend/releases/tag/v0.1
