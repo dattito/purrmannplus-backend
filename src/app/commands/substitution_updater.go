@@ -24,7 +24,7 @@ func contains(s []string, str string) bool {
 	return false
 }
 
-func differenceAmount(newSubstituations map[string][]string, oldSubstituations map[string][]string) map[string][]string {
+func differenceAmount(newSubstituations, oldSubstituations map[string][]string) map[string][]string {
 	s := map[string][]string{}
 
 	for day, lessons := range newSubstituations {
