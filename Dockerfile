@@ -17,4 +17,6 @@ FROM alpine:3
 
 COPY --from=build /bin/app /bin/app
 
+WORKDIR /data
+
 ENTRYPOINT ["/bin/app"]
