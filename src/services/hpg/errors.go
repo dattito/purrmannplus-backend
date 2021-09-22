@@ -2,7 +2,7 @@ package hpg
 
 type wrongCredentialsError struct{}
 
-func (e *wrongCredentialsError) Error() string {
+func (*wrongCredentialsError) Error() string {
 	return "HPG: wrong credentials"
 }
 
