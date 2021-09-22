@@ -5,6 +5,7 @@ import (
 
 	"github.com/datti-to/purrmannplus-backend/app/models"
 	"github.com/datti-to/purrmannplus-backend/database"
+	db_errors "github.com/datti-to/purrmannplus-backend/database/errors"
 	"github.com/datti-to/purrmannplus-backend/services/hpg"
 )
 
@@ -40,6 +41,27 @@ func GetAllAccounts() ([]models.Account, error) {
 	}
 
 	return accs, nil
+}
+
+func GetAccount(accountId string) (models.Account, error) {
+	a, err := database.DB.GetAccount(accountId)
+	if err != nil {
+		return models.Account{}, err
+	}
+
+	return models.AcccountDBModelToAccount(a), nil
+}
+
+func ValidAccountId(accountId string) (bool, error) {
+	_, err := GetAccount(accountId)
+	if err != nil {
+		if errors.Is(err, &db_errors.ErrRecordNotFound) {
+			return false, nil
+		}
+		return false, err
+	}
+
+	return true, nil
 }
 
 func GetAccountByCredentials(authId, authPw string) (models.Account, error) {

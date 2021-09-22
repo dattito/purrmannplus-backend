@@ -24,9 +24,23 @@ func SendPhoneNumberConfirmationLink(c *fiber.Ctx) error {
 
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
-	account_id := claims["account_id"].(string)
+	accountId := claims["account_id"].(string)
 
-	account_info, err := models.NewAccountInfo(models.Account{Id: account_id}, pr.PhoneNumber)
+	ok, err := commands.ValidAccountId(accountId)
+	if err != nil {
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+			"error": "Something went wrong",
+		})
+	}
+
+	if !ok {
+		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+			"error": "account not found",
+		})
+	}
+
+	account_info, err := models.NewAccountInfo(models.Account{Id: accountId}, pr.PhoneNumber)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": err.Error(),
@@ -78,9 +92,24 @@ func AddPhoneNumber(c *fiber.Ctx) error {
 		})
 	}
 
-	if _, err = commands.AddAccountInfo(accountId, phoneNumber); err != nil {
+	ok, err := commands.ValidAccountId(accountId)
+	if err != nil {
+		log.Println(err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-			"error": "something went wrong",
+			"error": "Something went wrong",
+		})
+	}
+
+	if !ok {
+		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+			"error": "account not found",
+		})
+	}
+
+	if _, err = commands.AddAccountInfo(accountId, phoneNumber); err != nil {
+		log.Println(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+			"error": "Something went wrong",
 		})
 	}
 
