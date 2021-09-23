@@ -30,7 +30,7 @@ func main() {
 
 	api.Init()
 
-	//scheduler.StartScheduler()
+	scheduler.StartScheduler()
 
 	log.Fatal(api.StartListening())
 }
