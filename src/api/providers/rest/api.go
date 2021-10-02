@@ -32,6 +32,7 @@ func getJWTConfig() jwtware.Config {
 				"error": ErrorText,
 			})
 		},
+		TokenLookup: "header:Authorization,cookie:Authorization",
 	}
 }
 
