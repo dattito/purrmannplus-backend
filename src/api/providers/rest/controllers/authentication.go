@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"time"
 
 	"github.com/datti-to/purrmannplus-backend/api/providers/rest/models"
 	"github.com/datti-to/purrmannplus-backend/app/commands"
@@ -33,6 +34,18 @@ func AccountLogin(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": err.Error(),
 		})
+	}
+
+	if a.StoreInCookie {
+		cookie := new(fiber.Cookie)
+		cookie.Name = "Authorization"
+		cookie.Value = token
+		cookie.Expires = time.Now().Add(24 * 30 * time.Hour)
+		cookie.HTTPOnly = true
+
+		c.Cookie(cookie)
+
+		return c.SendStatus(fiber.StatusCreated)
 	}
 
 	return c.JSON(&fiber.Map{

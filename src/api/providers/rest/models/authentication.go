@@ -3,8 +3,9 @@ package models
 import "github.com/datti-to/purrmannplus-backend/app/models"
 
 type PostLoginRequest struct {
-	AuthId string `json:"auth_id"`
-	AuthPw string `json:"auth_pw"`
+	StoreInCookie bool   `json:"store_in_cookie"`
+	AuthId        string `json:"auth_id"`
+	AuthPw        string `json:"auth_pw"`
 }
 
 type PostLoginResponse struct {
