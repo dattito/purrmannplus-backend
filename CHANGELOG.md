@@ -11,7 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Renamed imports from `/datti-to/` to `/dattito/`
 - Phone-Number confirmation message can only send if it wasn't added yet
-
 ### Fixed
 - Wrong gorm annotations in structs
 - Wrong version-number in CHANGELOG.md (v0.1 instead of v0.2)
