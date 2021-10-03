@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -->
 
 ## [Unreleased]
+### Changed
+- Renamed imports from `/datti-to/` to `/dattito/`
+
+### Fixed
+- Wrong gorm annotations in structs
 
 ## [v0.1] - 2021-10-02
 ### Added
