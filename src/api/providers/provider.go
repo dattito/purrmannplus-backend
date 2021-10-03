@@ -1,6 +1,6 @@
 package providers
 
-import "github.com/datti-to/purrmannplus-backend/api/providers/rest"
+import "github.com/dattito/purrmannplus-backend/api/providers/rest"
 
 type Provider interface {
 	Init() error

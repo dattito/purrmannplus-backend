@@ -3,10 +3,10 @@ package commands
 import (
 	"errors"
 
-	"github.com/datti-to/purrmannplus-backend/app/models"
-	"github.com/datti-to/purrmannplus-backend/database"
-	db_errors "github.com/datti-to/purrmannplus-backend/database/errors"
-	"github.com/datti-to/purrmannplus-backend/services/hpg"
+	"github.com/dattito/purrmannplus-backend/app/models"
+	"github.com/dattito/purrmannplus-backend/database"
+	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
+	"github.com/dattito/purrmannplus-backend/services/hpg"
 )
 
 func CreateAccount(authId, authPw string) (models.Account, error) {

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	provider_models "github.com/datti-to/purrmannplus-backend/database/models"
+	provider_models "github.com/dattito/purrmannplus-backend/database/models"
 )
 
 type Entries map[string][]string

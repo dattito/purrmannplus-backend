@@ -3,8 +3,8 @@ package signal_message_sender
 import (
 	"context"
 
-	"github.com/datti-to/purrmannplus-backend/config"
-	"github.com/datti-to/purrmannplus-backend/services/signal_message_sender/proto"
+	"github.com/dattito/purrmannplus-backend/config"
+	"github.com/dattito/purrmannplus-backend/services/signal_message_sender/proto"
 	"google.golang.org/grpc"
 )
 

@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/datti-to/purrmannplus-backend/app/commands"
-	"github.com/datti-to/purrmannplus-backend/config"
+	"github.com/dattito/purrmannplus-backend/app/commands"
+	"github.com/dattito/purrmannplus-backend/config"
 )
 
 func Init() {

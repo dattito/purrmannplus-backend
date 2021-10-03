@@ -3,12 +3,12 @@ package main
 import (
 	"log"
 
-	"github.com/datti-to/purrmannplus-backend/api"
-	"github.com/datti-to/purrmannplus-backend/app"
-	"github.com/datti-to/purrmannplus-backend/config"
-	"github.com/datti-to/purrmannplus-backend/database"
-	"github.com/datti-to/purrmannplus-backend/services/scheduler"
-	"github.com/datti-to/purrmannplus-backend/services/signal_message_sender"
+	"github.com/dattito/purrmannplus-backend/api"
+	"github.com/dattito/purrmannplus-backend/app"
+	"github.com/dattito/purrmannplus-backend/config"
+	"github.com/dattito/purrmannplus-backend/database"
+	"github.com/dattito/purrmannplus-backend/services/scheduler"
+	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
 )
 
 func main() {

@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	api_models "github.com/datti-to/purrmannplus-backend/api/providers/rest/models"
-	"github.com/datti-to/purrmannplus-backend/app/commands"
+	api_models "github.com/dattito/purrmannplus-backend/api/providers/rest/models"
+	"github.com/dattito/purrmannplus-backend/app/commands"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )

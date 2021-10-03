@@ -1,8 +1,8 @@
 package database
 
 import (
-	"github.com/datti-to/purrmannplus-backend/config"
-	"github.com/datti-to/purrmannplus-backend/database/providers"
+	"github.com/dattito/purrmannplus-backend/config"
+	"github.com/dattito/purrmannplus-backend/database/providers"
 )
 
 var DB provider.Provider

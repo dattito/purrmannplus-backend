@@ -4,10 +4,10 @@ import (
 	"errors"
 	"time"
 
-	"github.com/datti-to/purrmannplus-backend/api/providers/rest/models"
-	"github.com/datti-to/purrmannplus-backend/app/commands"
-	db_errors "github.com/datti-to/purrmannplus-backend/database/errors"
-	"github.com/datti-to/purrmannplus-backend/utils/jwt"
+	"github.com/dattito/purrmannplus-backend/api/providers/rest/models"
+	"github.com/dattito/purrmannplus-backend/app/commands"
+	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
+	"github.com/dattito/purrmannplus-backend/utils/jwt"
 	"github.com/gofiber/fiber/v2"
 )
 

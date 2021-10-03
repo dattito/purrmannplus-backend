@@ -1,8 +1,8 @@
 package models
 
 import (
-	"github.com/datti-to/purrmannplus-backend/database/models"
-	"github.com/datti-to/purrmannplus-backend/utils"
+	"github.com/dattito/purrmannplus-backend/database/models"
+	"github.com/dattito/purrmannplus-backend/utils"
 )
 
 type AccountInfo struct {

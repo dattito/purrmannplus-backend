@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"log"
 
-	api_models "github.com/datti-to/purrmannplus-backend/api/providers/rest/models"
-	"github.com/datti-to/purrmannplus-backend/app/commands"
-	"github.com/datti-to/purrmannplus-backend/app/models"
-	"github.com/datti-to/purrmannplus-backend/config"
-	"github.com/datti-to/purrmannplus-backend/services/signal_message_sender"
-	utils_jwt "github.com/datti-to/purrmannplus-backend/utils/jwt"
+	api_models "github.com/dattito/purrmannplus-backend/api/providers/rest/models"
+	"github.com/dattito/purrmannplus-backend/app/commands"
+	"github.com/dattito/purrmannplus-backend/app/models"
+	"github.com/dattito/purrmannplus-backend/config"
+	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
+	utils_jwt "github.com/dattito/purrmannplus-backend/utils/jwt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )

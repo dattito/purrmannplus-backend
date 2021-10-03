@@ -3,8 +3,8 @@ package rest
 import (
 	"fmt"
 
-	"github.com/datti-to/purrmannplus-backend/api/providers/rest/controllers"
-	"github.com/datti-to/purrmannplus-backend/config"
+	"github.com/dattito/purrmannplus-backend/api/providers/rest/controllers"
+	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 )

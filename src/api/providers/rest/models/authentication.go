@@ -1,6 +1,6 @@
 package models
 
-import "github.com/datti-to/purrmannplus-backend/app/models"
+import "github.com/dattito/purrmannplus-backend/app/models"
 
 type PostLoginRequest struct {
 	StoreInCookie bool   `json:"store_in_cookie"`

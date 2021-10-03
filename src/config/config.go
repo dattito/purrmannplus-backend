@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/datti-to/purrmannplus-backend/utils"
+	"github.com/dattito/purrmannplus-backend/utils"
 )
 
 var (

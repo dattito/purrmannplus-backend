@@ -1,6 +1,6 @@
 package models
 
-import "github.com/datti-to/purrmannplus-backend/database/models"
+import "github.com/dattito/purrmannplus-backend/database/models"
 
 type Substitutions struct {
 	Id      string

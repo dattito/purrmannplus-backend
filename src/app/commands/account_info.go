@@ -1,8 +1,8 @@
 package commands
 
 import (
-	"github.com/datti-to/purrmannplus-backend/app/models"
-	"github.com/datti-to/purrmannplus-backend/database"
+	"github.com/dattito/purrmannplus-backend/app/models"
+	"github.com/dattito/purrmannplus-backend/database"
 )
 
 func AddAccountInfo(accountId, phoneNumber string) (models.AccountInfo, error) {
