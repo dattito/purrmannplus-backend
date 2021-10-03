@@ -11,8 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Wrong gorm annotations in structs
+- Wrong version-number in CHANGELOG.md (v0.1 instead of v0.2)
 
-## [v0.1] - 2021-10-02
+## [v0.2] - 2021-10-02
 ### Added
 - JWT Authentication token can be stored in cookie and read from cookie
 ## [v0.1.3] - 2021-09-23
