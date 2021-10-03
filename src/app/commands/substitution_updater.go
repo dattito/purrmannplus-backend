@@ -31,11 +31,11 @@ func differenceAmount(newSubstituations, oldSubstituations map[string][]string) 
 		if len(oldSubstituations[day]) <= 0 {
 			s[day] = lessons
 			continue
-		} else {
-			for _, lesson := range lessons {
-				if !contains(oldSubstituations[day], lesson) {
-					s[day] = append(s[day], lesson)
-				}
+		}
+
+		for _, lesson := range lessons {
+			if !contains(oldSubstituations[day], lesson) {
+				s[day] = append(s[day], lesson)
 			}
 		}
 	}
