@@ -7,8 +7,8 @@ import (
 
 type AccountDB struct {
 	Model
-	AuthId string `gorm:"auth_id;uniqueIndex"`
-	AuthPw string `gorm:"auth_pw"`
+	AuthId string `gorm:"column:auth_id;uniqueIndex"`
+	AuthPw string `gorm:"column:auth_pw"`
 }
 
 func (AccountDB) TableName() string {

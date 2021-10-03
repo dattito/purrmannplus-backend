@@ -6,9 +6,9 @@ import (
 
 type AccountInfoDB struct {
 	Model
-	AccountId   string    `gorm:"account_id;uniqueIndex"`
+	AccountId   string    `gorm:"column:account_id;uniqueIndex"`
 	AccountDB   AccountDB `gorm:"foreignkey:account_id"`
-	PhoneNumber string    `gorm:"phone_number"`
+	PhoneNumber string    `gorm:"column:phone_number"`
 }
 
 func (AccountInfoDB) TableName() string {
