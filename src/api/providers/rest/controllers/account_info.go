@@ -47,6 +47,19 @@ func SendPhoneNumberConfirmationLink(c *fiber.Ctx) error {
 		})
 	}
 
+	has_phone_number, err := commands.HasPhoneNumber(accountId)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+			"error": "Something went wrong",
+		})
+	}
+
+	if has_phone_number {
+		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+			"error": "Phone number already added",
+		})
+	}
+
 	token, err := utils_jwt.NewAccountIdPhoneNumberToken(account_info.Account.Id, account_info.PhoneNumber)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{

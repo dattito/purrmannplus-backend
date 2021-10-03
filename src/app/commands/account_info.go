@@ -1,8 +1,11 @@
 package commands
 
 import (
+	"errors"
+
 	"github.com/dattito/purrmannplus-backend/app/models"
 	"github.com/dattito/purrmannplus-backend/database"
+	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
 )
 
 func AddAccountInfo(accountId, phoneNumber string) (models.AccountInfo, error) {
@@ -17,4 +20,17 @@ func AddAccountInfo(accountId, phoneNumber string) (models.AccountInfo, error) {
 	}
 
 	return models.AccountInfoDBModelToAccount(ai)
+}
+
+func HasPhoneNumber(account_id string) (bool, error) {
+	ai, err := database.DB.GetAccountInfo(account_id)
+	if err != nil {
+		if errors.Is(err, &db_errors.ErrRecordNotFound) {
+			return false, nil
+		}
+
+		return false, err
+	}
+
+	return ai.PhoneNumber != "", nil
 }
