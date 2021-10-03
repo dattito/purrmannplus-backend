@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/datti-to/purrmannplus-backend/config"
+	"github.com/dattito/purrmannplus-backend/config"
 )
 
 func CheckCredentials(authId, authPw string) (bool, error) {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/datti-to/purrmannplus-backend/config"
+	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/golang-jwt/jwt/v4"
 )
 

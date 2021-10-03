@@ -1,6 +1,6 @@
 package models
 
-import app_models "github.com/datti-to/purrmannplus-backend/app/models"
+import app_models "github.com/dattito/purrmannplus-backend/app/models"
 
 type PostAccountRequest struct {
 	AuthId string `json:"auth_id" form:"auth_id"`

@@ -1,8 +1,8 @@
 package provider
 
 import (
-	"github.com/datti-to/purrmannplus-backend/database/models"
-	"github.com/datti-to/purrmannplus-backend/database/providers/gorm"
+	"github.com/dattito/purrmannplus-backend/database/models"
+	"github.com/dattito/purrmannplus-backend/database/providers/gorm"
 )
 
 type Provider interface {

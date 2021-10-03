@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/datti-to/purrmannplus-backend/app/models"
-	"github.com/datti-to/purrmannplus-backend/config"
-	"github.com/datti-to/purrmannplus-backend/database"
-	db_errors "github.com/datti-to/purrmannplus-backend/database/errors"
-	"github.com/datti-to/purrmannplus-backend/services/hpg"
-	"github.com/datti-to/purrmannplus-backend/services/scheduler"
-	"github.com/datti-to/purrmannplus-backend/services/signal_message_sender"
+	"github.com/dattito/purrmannplus-backend/app/models"
+	"github.com/dattito/purrmannplus-backend/config"
+	"github.com/dattito/purrmannplus-backend/database"
+	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
+	"github.com/dattito/purrmannplus-backend/services/hpg"
+	"github.com/dattito/purrmannplus-backend/services/scheduler"
+	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
 )
 
 func contains(s []string, str string) bool {
@@ -113,11 +113,7 @@ func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 		return nil
 	}
 
-	if err := signal_message_sender.SignalMessageSender.Send(substituationToTextMessage(newSubstitutions), m.PhoneNumber); err != nil {
-		return err
-	}
-
-	return nil
+	return signal_message_sender.SignalMessageSender.Send(substituationToTextMessage(newSubstitutions), m.PhoneNumber)
 }
 
 func UpdateSubstitutionsByAccountId(accountId string) error {

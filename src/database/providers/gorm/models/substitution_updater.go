@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	provider_models "github.com/datti-to/purrmannplus-backend/database/models"
+	provider_models "github.com/dattito/purrmannplus-backend/database/models"
 )
 
 type Entries map[string][]string
@@ -36,7 +36,7 @@ func (s *Entries) Value() (driver.Value, error) {
 
 type SubstitutionDB struct {
 	Model
-	AccountId string    `gorm:"account_id;uniqueIndex"`
+	AccountId string    `gorm:"column:account_id;uniqueIndex"`
 	AccountDB AccountDB `gorm:"foreignKey:account_id"`
 	Entries   *Entries  `gorm:"entries;default:{}"`
 	NotSetYet bool      `gorm:"column:not_set_yet"`

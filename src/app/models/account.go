@@ -3,7 +3,7 @@ package models
 import (
 	"errors"
 
-	"github.com/datti-to/purrmannplus-backend/database/models"
+	"github.com/dattito/purrmannplus-backend/database/models"
 )
 
 type Account struct {

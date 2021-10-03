@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/datti-to/purrmannplus-backend/api/providers"
+	"github.com/dattito/purrmannplus-backend/api/providers"
 )
 
 var api providers.Provider

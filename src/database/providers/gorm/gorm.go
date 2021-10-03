@@ -3,10 +3,10 @@ package gorm
 import (
 	"errors"
 
-	"github.com/datti-to/purrmannplus-backend/config"
-	db_errors "github.com/datti-to/purrmannplus-backend/database/errors"
-	provider_models "github.com/datti-to/purrmannplus-backend/database/models"
-	"github.com/datti-to/purrmannplus-backend/database/providers/gorm/models"
+	"github.com/dattito/purrmannplus-backend/config"
+	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
+	provider_models "github.com/dattito/purrmannplus-backend/database/models"
+	"github.com/dattito/purrmannplus-backend/database/providers/gorm/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"

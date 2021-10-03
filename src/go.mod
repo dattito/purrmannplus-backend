@@ -1,4 +1,4 @@
-module github.com/datti-to/purrmannplus-backend
+module github.com/dattito/purrmannplus-backend
 
 go 1.17
 

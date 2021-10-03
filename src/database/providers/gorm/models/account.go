@@ -1,14 +1,14 @@
 package models
 
 import (
-	provider_models "github.com/datti-to/purrmannplus-backend/database/models"
+	provider_models "github.com/dattito/purrmannplus-backend/database/models"
 	"gorm.io/gorm"
 )
 
 type AccountDB struct {
 	Model
-	AuthId string `gorm:"auth_id;uniqueIndex"`
-	AuthPw string `gorm:"auth_pw"`
+	AuthId string `gorm:"column:auth_id;uniqueIndex"`
+	AuthPw string `gorm:"column:auth_pw"`
 }
 
 func (AccountDB) TableName() string {
