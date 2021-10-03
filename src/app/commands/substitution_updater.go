@@ -113,11 +113,7 @@ func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 		return nil
 	}
 
-	if err := signal_message_sender.SignalMessageSender.Send(substituationToTextMessage(newSubstitutions), m.PhoneNumber); err != nil {
-		return err
-	}
-
-	return nil
+	return signal_message_sender.SignalMessageSender.Send(substituationToTextMessage(newSubstitutions), m.PhoneNumber)
 }
 
 func UpdateSubstitutionsByAccountId(accountId string) error {
