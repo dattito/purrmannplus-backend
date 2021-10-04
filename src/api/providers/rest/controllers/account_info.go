@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"log"
 
 	api_models "github.com/dattito/purrmannplus-backend/api/providers/rest/models"
 	"github.com/dattito/purrmannplus-backend/app/commands"
@@ -29,7 +28,7 @@ func SendPhoneNumberConfirmationLink(c *fiber.Ctx) error {
 
 	ok, err := commands.ValidAccountId(accountId)
 	if err != nil {
-		logging.Errorf("%v", err)
+		logging.Errorf("Error while validating account id: %v", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "Something went wrong",
 		})
@@ -50,7 +49,7 @@ func SendPhoneNumberConfirmationLink(c *fiber.Ctx) error {
 
 	has_phone_number, err := commands.HasPhoneNumber(accountId)
 	if err != nil {
-		logging.Errorf("%v", err)
+		logging.Errorf("Error while checking if account has a phone-number: %v", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "Something went wrong",
 		})
@@ -64,7 +63,7 @@ func SendPhoneNumberConfirmationLink(c *fiber.Ctx) error {
 
 	token, err := utils_jwt.NewAccountIdPhoneNumberToken(account_info.Account.Id, account_info.PhoneNumber)
 	if err != nil {
-		logging.Errorf("%v", err)
+		logging.Errorf("Error while creating token: %v", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "couln't create token",
 		})
@@ -78,7 +77,7 @@ func SendPhoneNumberConfirmationLink(c *fiber.Ctx) error {
 	err = signal_message_sender.SignalMessageSender.Send(text, account_info.PhoneNumber)
 
 	if err != nil {
-		logging.Errorf("%v", err)
+		logging.Errorf("Error while sending signal message: %v", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "couln't send signal message",
 		})
@@ -103,7 +102,7 @@ func AddPhoneNumber(c *fiber.Ctx) error {
 
 	accountId, phoneNumber, err := utils_jwt.ParseAccountIdPhoneNumberToken(p.Token)
 	if err != nil {
-		logging.Errorf("%v", err)
+		logging.Errorf("Error while parsing token: %v", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "Couln't parse token",
 		})
@@ -111,7 +110,7 @@ func AddPhoneNumber(c *fiber.Ctx) error {
 
 	ok, err := commands.ValidAccountId(accountId)
 	if err != nil {
-		log.Println(err.Error())
+		logging.Errorf("Error while validating account id: %v", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "Something went wrong",
 		})
@@ -125,7 +124,7 @@ func AddPhoneNumber(c *fiber.Ctx) error {
 
 	_, user_err, internal_error := commands.AddAccountInfo(accountId, phoneNumber)
 	if internal_error != nil {
-		logging.Errorf("%v", internal_error)
+		logging.Errorf("Error while adding account info: %v", internal_error)
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "Something went wrong",
 		})
