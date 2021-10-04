@@ -6,6 +6,7 @@ import (
 	"github.com/dattito/purrmannplus-backend/app/models"
 	"github.com/dattito/purrmannplus-backend/database"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
+	"github.com/dattito/purrmannplus-backend/logging"
 	"github.com/dattito/purrmannplus-backend/services/hpg"
 )
 
@@ -25,6 +26,9 @@ func CreateAccount(authId, authPw string) (models.Account, error, error) {
 	}
 
 	a, err := database.DB.AddAccount(authId, authPw)
+	if err == nil {
+		logging.Infof("Created account %s", a.AuthId)
+	}
 
 	return models.AcccountDBModelToAccount(a), nil, err
 }
@@ -83,5 +87,10 @@ func GetAccountByCredentials(authId, authPw string) (models.Account, error) {
 }
 
 func DeleteAccount(accountId string) error {
-	return database.DB.DeleteAccount(accountId)
+	err := database.DB.DeleteAccount(accountId)
+	if err == nil {
+		logging.Infof("Deleted account %s", accountId)
+	}
+
+	return err
 }

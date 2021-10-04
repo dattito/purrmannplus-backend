@@ -3,7 +3,6 @@ package commands
 import (
 	"errors"
 	"fmt"
-	"log"
 
 	"github.com/dattito/purrmannplus-backend/app/models"
 	"github.com/dattito/purrmannplus-backend/config"
@@ -91,7 +90,7 @@ func RemoveFromSubstitutionUpdater(accountId string) error {
 
 // Updates the substitutions for a given account and it's relevant data and sends a message via signal
 func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
-	log.Printf("Updating substitutions of account %s (id: %s)", m.AuthId, m.AccountId)
+	logging.Debugf("Updating substitutions of account %s (id: %s)", m.AuthId, m.AccountId)
 	mayNewSubstitutions, err := hpg.GetSubstituationOfStudent(m.AuthId, m.AuthPw)
 	if err != nil {
 		return err
@@ -141,7 +140,7 @@ func UpdateAllSubstitutions() error {
 		m := models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModelToSubstitutionUpdateInfos(&mdb)
 		err := UpdateSubstitutions(m)
 		if err != nil {
-			log.Printf("Error updating substitutions for account %s: %s", mdb.AccountId, err.Error())
+			logging.Errorf("Error updating substitutions for account %s: %s", mdb.AccountId, err.Error())
 			errCount++
 			if errCount > config.MAX_ERROS_TO_STOP_UPDATING_SUBSTITUTIONS {
 				return errors.New("got too many errors updating substitutions, stopping")
