@@ -8,14 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - A cookie can be linked to a domain
-## [v0.3] - 2021-10-03
+### Fixed
+- Wrong version-number in CHANGELOG.md (v0.2 instead of v0.2.0)
+## [v0.3.0] - 2021-10-03
 ### Changed
 - Renamed imports from `/datti-to/` to `/dattito/`
 - Phone-Number confirmation message can only send if it wasn't added yet
 ### Fixed
 - Wrong gorm annotations in structs
 - Wrong version-number in CHANGELOG.md (v0.1 instead of v0.2)
-## [v0.2] - 2021-10-02
+## [v0.2.0] - 2021-10-02
 ### Added
 - JWT Authentication token can be stored in cookie and read from cookie
 ## [v0.1.3] - 2021-09-23
@@ -34,8 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (Un)register to the substitution updater which automatically sends updates on new substitutions
 
 [Unreleased]: https://github.com/Dattito/purrmannplus-backend/tree/dev
-[v0.3]: https://github.com/Dattito/purrmannplus-backend/compare/v0.2...v0.3
-[v0.2]: https://github.com/Dattito/purrmannplus-backend/compare/v0.1.3...v0.2
+[v0.3.0]: https://github.com/Dattito/purrmannplus-backend/compare/v0.2...v0.3.0
+[v0.2.0]: https://github.com/Dattito/purrmannplus-backend/compare/v0.1.3...v0.2.0
 [v0.1.3]: https://github.com/Dattito/purrmannplus-backend/compare/v0.1.2...v0.1.3
 [v0.1.2]: https://github.com/Dattito/purrmannplus-backend/compare/v0.1.1...v0.1.2
 [v0.1.1]: https://github.com/Dattito/purrmannplus-backend/compare/v0.1...v0.1.1
