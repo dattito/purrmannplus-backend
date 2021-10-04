@@ -38,11 +38,11 @@ func Init(logLevel int) {
 		f = os.Stdout
 	}
 
-	errorLogger = log.New(f, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
-	warningLogger = log.New(f, "WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
-	infoLogger = log.New(f, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
-	debugLogger = log.New(f, "DEBUG: ", log.Ldate|log.Ltime|log.Lshortfile)
-	fatalLogger = log.New(f, "FATAL: ", log.Ldate|log.Ltime|log.Lshortfile)
+	errorLogger = log.New(f, "ERROR: ", log.Ldate|log.Ltime|log.Llongfile)
+	warningLogger = log.New(f, "WARNING: ", log.Ldate|log.Ltime|log.Llongfile)
+	infoLogger = log.New(f, "INFO: ", log.Ldate|log.Ltime|log.Llongfile)
+	debugLogger = log.New(f, "DEBUG: ", log.Ldate|log.Ltime|log.Llongfile)
+	fatalLogger = log.New(f, "FATAL: ", log.Ldate|log.Ltime|log.Llongfile)
 }
 
 func Fatal(v ...interface{}) {
