@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - A cookie can be linked to a domain
+- Better Logging with different Levels
 ### Fixed
 - Wrong version-number in CHANGELOG.md (v0.2 instead of v0.2.0)
 ## [v0.3.0] - 2021-10-03
