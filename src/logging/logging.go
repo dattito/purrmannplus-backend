@@ -26,7 +26,9 @@ const (
 	LEVEL_SILENT  = 0
 )
 
-func Init(logLevel int) {
+func Init(loglevel int) {
+	logLevel = loglevel
+
 	var f *os.File
 	if config.LOGGING_FILE != "" {
 		var err error

@@ -39,5 +39,5 @@ func main() {
 	scheduler.StartScheduler()
 
 	// Start API
-	log.Fatal(api.StartListening())
+	logging.Fatal(api.StartListening())
 }
