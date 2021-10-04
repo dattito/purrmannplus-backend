@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -->
 
 ## [Unreleased]
-
+### Added
+- A cookie can be linked to a domain
 ## [v0.3] - 2021-10-03
 ### Changed
 - Renamed imports from `/datti-to/` to `/dattito/`
