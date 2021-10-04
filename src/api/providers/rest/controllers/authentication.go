@@ -8,6 +8,7 @@ import (
 	"github.com/dattito/purrmannplus-backend/app/commands"
 	"github.com/dattito/purrmannplus-backend/config"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
+	"github.com/dattito/purrmannplus-backend/logging"
 	"github.com/dattito/purrmannplus-backend/utils/jwt"
 	"github.com/gofiber/fiber/v2"
 )
@@ -15,7 +16,9 @@ import (
 func AccountLogin(c *fiber.Ctx) error {
 	a := new(models.PostLoginRequest)
 	if err := c.BodyParser(a); err != nil {
-		return err
+		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+			"error": err.Error(),
+		})
 	}
 
 	dbAcc, err := commands.GetAccountByCredentials(a.AuthId, a.AuthPw)
@@ -25,13 +28,15 @@ func AccountLogin(c *fiber.Ctx) error {
 				"error": "wrong credentials",
 			})
 		}
+		logging.Errorf("Error while getting account by credentials: %v", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-			"error": err.Error(),
+			"error": "Something went wrong",
 		})
 	}
 
 	token, err := jwt.NewAccountIdToken(dbAcc.Id)
 	if err != nil {
+		logging.Errorf("Error while creating token: %v", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": err.Error(),
 		})

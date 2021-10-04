@@ -26,6 +26,8 @@ var (
 	JWT_SECRET                               string
 	JWT_RANDOM_SECRET                        string
 	SUBSTITUTION_URL                         string
+	LOGGING_FILE                             string
+	LOG_LEVEL                                int
 )
 
 func Init() error {
@@ -99,6 +101,13 @@ func Init() error {
 	JWT_RANDOM_SECRET = utils.GenerateString(128)
 
 	SUBSTITUTION_URL, err = utils.GetEnvInDev("SUBSTITUTION_URL", "https://vertretungsplan.hpg-speyer.de")
+	if err != nil {
+		return err
+	}
+
+	LOGGING_FILE = utils.GetEnv("LOGGING_FILE", "")
+
+	LOG_LEVEL, err = utils.GetIntEnv("LOG_LEVEL", 2)
 	if err != nil {
 		return err
 	}

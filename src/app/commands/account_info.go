@@ -8,18 +8,20 @@ import (
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
 )
 
-func AddAccountInfo(accountId, phoneNumber string) (models.AccountInfo, error) {
+// Return the account info for the given account id; error produced by user; error not produced by user
+func AddAccountInfo(accountId, phoneNumber string) (models.AccountInfo, error, error) {
 	_, err := models.NewAccountInfo(models.Account{Id: accountId}, phoneNumber)
 	if err != nil {
-		return models.AccountInfo{}, err
+		return models.AccountInfo{}, err, nil
 	}
 
 	ai, err := database.DB.AddAccountInfo(accountId, phoneNumber)
 	if err != nil {
-		return models.AccountInfo{}, err
+		return models.AccountInfo{}, nil, err
 	}
 
-	return models.AccountInfoDBModelToAccount(ai)
+	f, err := models.AccountInfoDBModelToAccount(ai)
+	return f, nil, err
 }
 
 func HasPhoneNumber(account_id string) (bool, error) {
