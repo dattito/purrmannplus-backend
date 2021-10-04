@@ -26,15 +26,15 @@ const (
 	LEVEL_SILENT  = 0
 )
 
-func Init(loglevel int) {
+func Init(loglevel int) error {
 	logLevel = loglevel
 
 	var f *os.File
 	if config.LOGGING_FILE != "" {
 		var err error
-		f, err = os.OpenFile(config.LOGGING_FILE, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		f, err = os.OpenFile(config.LOGGING_FILE, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 		if err != nil {
-			log.Fatalf("error opening file: %v", err)
+			return err
 		}
 	} else {
 		f = os.Stdout
@@ -45,6 +45,8 @@ func Init(loglevel int) {
 	infoLogger = log.New(f, "INFO: ", log.Ldate|log.Ltime|log.Llongfile)
 	debugLogger = log.New(f, "DEBUG: ", log.Ldate|log.Ltime|log.Llongfile)
 	fatalLogger = log.New(f, "FATAL: ", log.Ldate|log.Ltime|log.Llongfile)
+
+	return nil
 }
 
 func Fatal(v ...interface{}) {

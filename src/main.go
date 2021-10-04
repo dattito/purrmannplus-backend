@@ -16,19 +16,21 @@ func main() {
 
 	// Load configuration
 	if err := config.Init(); err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to load configuration: %v", err)
 	}
 
-	logging.Init(config.LOG_LEVEL)
+	if err := logging.Init(config.LOG_LEVEL); err != nil {
+		log.Fatalf("Failed to initialize logging: %s", err)
+	}
 
 	scheduler.Init()
 
 	if err := signal_message_sender.Init(); err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to initialize signal message sender: %s", err)
 	}
 
 	if err := database.Init(); err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to initialize database: %s", err)
 	}
 
 	app.Init()
