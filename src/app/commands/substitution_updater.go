@@ -58,29 +58,30 @@ func substituationToTextMessage(substitution map[string][]string) string {
 	return text
 }
 
-func AddToSubstitutionUpdater(accountId string) error {
+// Returns error produced by user; error not produced by user
+func AddToSubstitutionUpdater(accountId string) (error, error) {
 	ai, err := database.DB.GetAccountInfo(accountId)
 	if err != nil {
 		if errors.Is(err, &db_errors.ErrRecordNotFound) {
-			return errors.New("phone number has to be added first")
+			return errors.New("phone number has to be added first"), nil
 		}
-		return err
+		return nil, err
 	}
 
 	if ai.PhoneNumber == "" {
-		return errors.New("phone number has to be added first")
+		return errors.New("phone number has to be added first"), nil
 	}
 
 	if _, err := database.DB.GetSubstitutions(accountId); err == nil || !errors.Is(err, &db_errors.ErrRecordNotFound) {
-		return errors.New("substitutions already exist")
+		return errors.New("substitutions already exist"), nil
 	}
 
 	_, err = database.DB.SetSubstitutions(accountId, map[string][]string{}, true)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return UpdateSubstitutionsByAccountId(accountId)
+	return nil, UpdateSubstitutionsByAccountId(accountId)
 }
 
 func RemoveFromSubstitutionUpdater(accountId string) error {
