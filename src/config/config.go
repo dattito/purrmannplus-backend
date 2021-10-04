@@ -13,6 +13,7 @@ var (
 	DATABASE_LOG_LEVEL                       int // 0-4: 1=off, 2=Error, 3=Warning, 4=Info
 	LISTENING_PORT                           int
 	API_URL                                  string
+	AUTHORIZATION_COOKIE_DOMAIN              string
 	ENABLE_SUBSTITUTIONS_SCHEDULER           bool
 	SUBSTITUTIONS_UPDATECRON                 string
 	MAX_ERROS_TO_STOP_UPDATING_SUBSTITUTIONS int
@@ -58,6 +59,9 @@ func Init() error {
 	}
 
 	API_URL = utils.GetEnv("API_URL", fmt.Sprintf("http://localhost:%d", LISTENING_PORT))
+
+	// If set, in the authorization cookie will be set the domain
+	AUTHORIZATION_COOKIE_DOMAIN = utils.GetEnv("AUTHORIZATION_COOKIE_DOMAIN", "")
 
 	ENABLE_SUBSTITUTIONS_SCHEDULER, err = utils.GetBoolEnv("ENABLE_SUBSTITUTIONS_SCHEDULER", true)
 	if err != nil {

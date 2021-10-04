@@ -6,6 +6,7 @@ import (
 
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/models"
 	"github.com/dattito/purrmannplus-backend/app/commands"
+	"github.com/dattito/purrmannplus-backend/config"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
 	"github.com/dattito/purrmannplus-backend/utils/jwt"
 	"github.com/gofiber/fiber/v2"
@@ -42,6 +43,10 @@ func AccountLogin(c *fiber.Ctx) error {
 		cookie.Value = token
 		cookie.Expires = time.Now().Add(24 * 30 * time.Hour)
 		cookie.HTTPOnly = true
+
+		if config.AUTHORIZATION_COOKIE_DOMAIN != "" {
+			cookie.Domain = config.AUTHORIZATION_COOKIE_DOMAIN
+		}
 
 		c.Cookie(cookie)
 
