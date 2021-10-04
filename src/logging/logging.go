@@ -13,9 +13,20 @@ var (
 	infoLogger    *log.Logger
 	debugLogger   *log.Logger
 	fatalLogger   *log.Logger
+
+	logLevel int
 )
 
-func Init() {
+const (
+	LEVEL_DEBUG   = 5
+	LEVEL_INFO    = 4
+	LEVEL_WARNING = 3
+	LEVEL_ERROR   = 2
+	LEVEL_FATAL   = 1
+	LEVEL_SILENT  = 0
+)
+
+func Init(logLevel int) {
 	var f *os.File
 	if config.LOGGING_FILE != "" {
 		var err error
@@ -34,42 +45,82 @@ func Init() {
 	fatalLogger = log.New(f, "FATAL: ", log.Ldate|log.Ltime|log.Lshortfile)
 }
 
-func Error(v ...interface{}) {
-	errorLogger.Println(v...)
-}
-
-func Errorf(format string, v ...interface{}) {
-	errorLogger.Printf(format, v...)
-}
-
-func Warning(v ...interface{}) {
-	warningLogger.Println(v...)
-}
-
-func Warningf(format string, v ...interface{}) {
-	warningLogger.Printf(format, v...)
-}
-
-func Info(v ...interface{}) {
-	infoLogger.Println(v...)
-}
-
-func Infof(format string, v ...interface{}) {
-	infoLogger.Printf(format, v...)
-}
-
-func Debug(v ...interface{}) {
-	debugLogger.Println(v...)
-}
-
-func Debugf(format string, v ...interface{}) {
-	debugLogger.Printf(format, v...)
-}
-
 func Fatal(v ...interface{}) {
+	if logLevel < LEVEL_FATAL {
+		return
+	}
+
 	fatalLogger.Fatalln(v...)
 }
 
 func Fatalf(format string, v ...interface{}) {
+	if logLevel < LEVEL_FATAL {
+		return
+	}
+
 	fatalLogger.Fatalf(format, v...)
+}
+
+func Error(v ...interface{}) {
+	if logLevel < LEVEL_ERROR {
+		return
+	}
+
+	errorLogger.Println(v...)
+}
+
+func Errorf(format string, v ...interface{}) {
+	if logLevel < LEVEL_ERROR {
+		return
+	}
+
+	errorLogger.Printf(format, v...)
+}
+
+func Warning(v ...interface{}) {
+	if logLevel < LEVEL_WARNING {
+		return
+	}
+
+	warningLogger.Println(v...)
+}
+
+func Warningf(format string, v ...interface{}) {
+	if logLevel < LEVEL_WARNING {
+		return
+	}
+
+	warningLogger.Printf(format, v...)
+}
+
+func Info(v ...interface{}) {
+	if logLevel < LEVEL_INFO {
+		return
+	}
+
+	infoLogger.Println(v...)
+}
+
+func Infof(format string, v ...interface{}) {
+	if logLevel < LEVEL_INFO {
+		return
+	}
+
+	infoLogger.Printf(format, v...)
+}
+
+func Debug(v ...interface{}) {
+	if logLevel < LEVEL_DEBUG {
+		return
+	}
+
+	debugLogger.Println(v...)
+}
+
+func Debugf(format string, v ...interface{}) {
+	if logLevel < LEVEL_DEBUG {
+		return
+	}
+
+	debugLogger.Printf(format, v...)
 }

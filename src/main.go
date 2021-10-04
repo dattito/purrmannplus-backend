@@ -14,12 +14,12 @@ import (
 
 func main() {
 
-	logging.Init()
-
 	// Load configuration
 	if err := config.Init(); err != nil {
 		log.Fatal(err)
 	}
+
+	logging.Init(config.LOG_LEVEL)
 
 	scheduler.Init()
 
