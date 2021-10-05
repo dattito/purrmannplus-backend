@@ -3,12 +3,12 @@ package commands
 import (
 	"errors"
 	"fmt"
-	"log"
 
 	"github.com/dattito/purrmannplus-backend/app/models"
 	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/dattito/purrmannplus-backend/database"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
+	"github.com/dattito/purrmannplus-backend/logging"
 	"github.com/dattito/purrmannplus-backend/services/hpg"
 	"github.com/dattito/purrmannplus-backend/services/scheduler"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
@@ -31,11 +31,11 @@ func differenceAmount(newSubstituations, oldSubstituations map[string][]string) 
 		if len(oldSubstituations[day]) <= 0 {
 			s[day] = lessons
 			continue
-		} else {
-			for _, lesson := range lessons {
-				if !contains(oldSubstituations[day], lesson) {
-					s[day] = append(s[day], lesson)
-				}
+		}
+
+		for _, lesson := range lessons {
+			if !contains(oldSubstituations[day], lesson) {
+				s[day] = append(s[day], lesson)
 			}
 		}
 	}
@@ -58,29 +58,30 @@ func substituationToTextMessage(substitution map[string][]string) string {
 	return text
 }
 
-func AddToSubstitutionUpdater(accountId string) error {
+// Returns error produced by user; error not produced by user
+func AddToSubstitutionUpdater(accountId string) (error, error) {
 	ai, err := database.DB.GetAccountInfo(accountId)
 	if err != nil {
 		if errors.Is(err, &db_errors.ErrRecordNotFound) {
-			return errors.New("phone number has to be added first")
+			return errors.New("phone number has to be added first"), nil
 		}
-		return err
+		return nil, err
 	}
 
 	if ai.PhoneNumber == "" {
-		return errors.New("phone number has to be added first")
+		return errors.New("phone number has to be added first"), nil
 	}
 
 	if _, err := database.DB.GetSubstitutions(accountId); err == nil || !errors.Is(err, &db_errors.ErrRecordNotFound) {
-		return errors.New("substitutions already exist")
+		return errors.New("substitutions already exist"), nil
 	}
 
 	_, err = database.DB.SetSubstitutions(accountId, map[string][]string{}, true)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return UpdateSubstitutionsByAccountId(accountId)
+	return nil, UpdateSubstitutionsByAccountId(accountId)
 }
 
 func RemoveFromSubstitutionUpdater(accountId string) error {
@@ -89,7 +90,7 @@ func RemoveFromSubstitutionUpdater(accountId string) error {
 
 // Updates the substitutions for a given account and it's relevant data and sends a message via signal
 func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
-	log.Printf("Updating substitutions of account %s (id: %s)", m.AuthId, m.AccountId)
+	logging.Debugf("Updating substitutions of account %s (id: %s)", m.AuthId, m.AccountId)
 	mayNewSubstitutions, err := hpg.GetSubstituationOfStudent(m.AuthId, m.AuthPw)
 	if err != nil {
 		return err
@@ -139,7 +140,7 @@ func UpdateAllSubstitutions() error {
 		m := models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModelToSubstitutionUpdateInfos(&mdb)
 		err := UpdateSubstitutions(m)
 		if err != nil {
-			log.Printf("Error updating substitutions for account %s: %s", mdb.AccountId, err.Error())
+			logging.Errorf("Error updating substitutions for account %s: %s", mdb.AccountId, err.Error())
 			errCount++
 			if errCount > config.MAX_ERROS_TO_STOP_UPDATING_SUBSTITUTIONS {
 				return errors.New("got too many errors updating substitutions, stopping")
@@ -152,7 +153,7 @@ func UpdateAllSubstitutions() error {
 func EnableSubstitutionUpdater() {
 	scheduler.AddJob(config.SUBSTITUTIONS_UPDATECRON, func() {
 		if err := UpdateAllSubstitutions(); err != nil {
-			log.Println(err.Error())
+			logging.Errorf("Error updating substitutions: %v", err)
 		}
 	})
 }

@@ -13,6 +13,7 @@ var (
 	DATABASE_LOG_LEVEL                       int // 0-4: 1=off, 2=Error, 3=Warning, 4=Info
 	LISTENING_PORT                           int
 	API_URL                                  string
+	AUTHORIZATION_COOKIE_DOMAIN              string
 	ENABLE_SUBSTITUTIONS_SCHEDULER           bool
 	SUBSTITUTIONS_UPDATECRON                 string
 	MAX_ERROS_TO_STOP_UPDATING_SUBSTITUTIONS int
@@ -25,6 +26,8 @@ var (
 	JWT_SECRET                               string
 	JWT_RANDOM_SECRET                        string
 	SUBSTITUTION_URL                         string
+	LOGGING_FILE                             string
+	LOG_LEVEL                                int
 )
 
 func Init() error {
@@ -58,6 +61,9 @@ func Init() error {
 	}
 
 	API_URL = utils.GetEnv("API_URL", fmt.Sprintf("http://localhost:%d", LISTENING_PORT))
+
+	// If set, in the authorization cookie will be set the domain
+	AUTHORIZATION_COOKIE_DOMAIN = utils.GetEnv("AUTHORIZATION_COOKIE_DOMAIN", "")
 
 	ENABLE_SUBSTITUTIONS_SCHEDULER, err = utils.GetBoolEnv("ENABLE_SUBSTITUTIONS_SCHEDULER", true)
 	if err != nil {
@@ -95,6 +101,13 @@ func Init() error {
 	JWT_RANDOM_SECRET = utils.GenerateString(128)
 
 	SUBSTITUTION_URL, err = utils.GetEnvInDev("SUBSTITUTION_URL", "https://vertretungsplan.hpg-speyer.de")
+	if err != nil {
+		return err
+	}
+
+	LOGGING_FILE = utils.GetEnv("LOGGING_FILE", "")
+
+	LOG_LEVEL, err = utils.GetIntEnv("LOG_LEVEL", 2)
 	if err != nil {
 		return err
 	}

@@ -1,9 +1,8 @@
 package controllers
 
 import (
-	"log"
-
 	"github.com/dattito/purrmannplus-backend/app/commands"
+	"github.com/dattito/purrmannplus-backend/logging"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -15,7 +14,7 @@ func RegisterToSubstitutionUpdater(c *fiber.Ctx) error {
 
 	ok, err := commands.ValidAccountId(accountId)
 	if err != nil {
-		log.Println(err.Error())
+		logging.Errorf("Error validating account id: %s", err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "Something went wrong",
 		})
@@ -27,9 +26,18 @@ func RegisterToSubstitutionUpdater(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := commands.AddToSubstitutionUpdater(accountId); err != nil {
+	user_err, db_err := commands.AddToSubstitutionUpdater(accountId)
+
+	if db_err != nil {
+		logging.Errorf("Error while adding account to substitution updater: %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+			"error": "Something went wrong",
+		})
+	}
+
+	if user_err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
-			"error": err.Error(),
+			"error": user_err.Error(),
 		})
 	}
 
@@ -43,8 +51,9 @@ func UnregisterFromSubstitutionUpdater(c *fiber.Ctx) error {
 
 	err := commands.RemoveFromSubstitutionUpdater(accountId)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
-			"error": err.Error(),
+		logging.Errorf("Error while removing account from substitution updater: %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+			"error": "Something went wrong",
 		})
 	}
 

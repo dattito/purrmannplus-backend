@@ -3,6 +3,7 @@ package controllers
 import (
 	api_models "github.com/dattito/purrmannplus-backend/api/providers/rest/models"
 	"github.com/dattito/purrmannplus-backend/app/commands"
+	"github.com/dattito/purrmannplus-backend/logging"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -10,16 +11,24 @@ import (
 func AddAccount(c *fiber.Ctx) error {
 	accApi := new(api_models.PostAccountRequest)
 	if err := c.BodyParser(accApi); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 			"error": err.Error(),
 		})
 	}
 
-	acc, err := commands.CreateAccount(accApi.AuthId, accApi.AuthPw)
+	acc, user_err, db_err := commands.CreateAccount(accApi.AuthId, accApi.AuthPw)
 
-	if err != nil {
+	if user_err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
-			"error": err.Error(),
+			"error": user_err.Error(),
+		})
+	}
+
+	if db_err != nil {
+		logging.Errorf("Error while creating account: %v", db_err.Error())
+
+		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+			"error": "Something went wrong",
 		})
 	}
 
@@ -29,8 +38,9 @@ func AddAccount(c *fiber.Ctx) error {
 func GetAccounts(c *fiber.Ctx) error {
 	accs, err := commands.GetAllAccounts()
 	if err != nil {
+		logging.Errorf("Error while getting accounts: %v", err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-			"error": err.Error(),
+			"error": "Something went wrong",
 		})
 	}
 
@@ -43,6 +53,7 @@ func DeleteAccount(c *fiber.Ctx) error {
 	accountId := claims["account_id"].(string)
 
 	if err := commands.DeleteAccount(accountId); err != nil {
+		logging.Errorf("Error while deleting account: %v", err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": err.Error(),
 		})
