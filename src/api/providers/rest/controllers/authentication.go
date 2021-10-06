@@ -8,8 +8,8 @@ import (
 	"github.com/dattito/purrmannplus-backend/app/commands"
 	"github.com/dattito/purrmannplus-backend/config"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
-	"github.com/dattito/purrmannplus-backend/utils/logging"
 	"github.com/dattito/purrmannplus-backend/utils/jwt"
+	"github.com/dattito/purrmannplus-backend/utils/logging"
 	"github.com/gofiber/fiber/v2"
 )
 
