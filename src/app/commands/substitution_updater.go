@@ -106,6 +106,8 @@ func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 		return err
 	}
 
+	logging.Debugf("Successfully updated substitutions of %s", m.AuthId)
+
 	// Send a message to the user if there are new substitutions
 	if m.NotSetYet || len(newSubstitutions) == 0 {
 		return nil
