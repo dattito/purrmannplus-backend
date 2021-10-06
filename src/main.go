@@ -7,9 +7,9 @@ import (
 	"github.com/dattito/purrmannplus-backend/app"
 	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/dattito/purrmannplus-backend/database"
-	"github.com/dattito/purrmannplus-backend/utils/logging"
 	"github.com/dattito/purrmannplus-backend/services/scheduler"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
+	"github.com/dattito/purrmannplus-backend/utils/logging"
 )
 
 func main() {

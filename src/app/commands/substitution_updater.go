@@ -8,10 +8,10 @@ import (
 	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/dattito/purrmannplus-backend/database"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
-	"github.com/dattito/purrmannplus-backend/utils/logging"
 	"github.com/dattito/purrmannplus-backend/services/hpg"
 	"github.com/dattito/purrmannplus-backend/services/scheduler"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
+	"github.com/dattito/purrmannplus-backend/utils/logging"
 )
 
 func contains(s []string, str string) bool {
@@ -101,16 +101,15 @@ func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 	newSubstitutions := differenceAmount(mayNewSubstitutions, old_substitutions)
 
 	// If there are no new substitutions, we don't need to do anything
-	if len(newSubstitutions) == 0 {
-		return nil
-	}
-
 	_, err = database.DB.SetSubstitutions(m.AccountId, mayNewSubstitutions, false)
 	if err != nil {
 		return err
 	}
+
+	logging.Debugf("Successfully updated substitutions of %s", m.AuthId)
+
 	// Send a message to the user if there are new substitutions
-	if m.NotSetYet {
+	if m.NotSetYet || len(newSubstitutions) == 0 {
 		return nil
 	}
 

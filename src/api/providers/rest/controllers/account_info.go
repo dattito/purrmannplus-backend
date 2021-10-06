@@ -7,9 +7,9 @@ import (
 	"github.com/dattito/purrmannplus-backend/app/commands"
 	"github.com/dattito/purrmannplus-backend/app/models"
 	"github.com/dattito/purrmannplus-backend/config"
-	"github.com/dattito/purrmannplus-backend/utils/logging"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
 	utils_jwt "github.com/dattito/purrmannplus-backend/utils/jwt"
+	"github.com/dattito/purrmannplus-backend/utils/logging"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )

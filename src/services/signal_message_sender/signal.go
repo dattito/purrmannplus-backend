@@ -29,6 +29,8 @@ func (sms *_SignalMessageSender) Send(message, recipientPhoneNumber string) erro
 
 	if err != nil {
 		logging.Errorf("Error sending signal message. Error: %s | Message tried to send: %s", err.Error(), message)
+	} else {
+		logging.Debugf("Signal message sent successfully. Message: %s | Recipient: %s", message, recipientPhoneNumber)
 	}
 
 	return err

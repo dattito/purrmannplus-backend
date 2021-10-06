@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -->
 
 ## [Unreleased]
+## [v0.5.0] - 2021-10-06
+### Added
+- More debug logging messages
+- Ability to disable the api (for example, if it should only use the scheduler for updating)
+### Fixed
+- signal messages can't sometimes send because of utf-8 encoding error
 ## [v0.4.1] - 2021-10-06
 ### Changed
 - Disabled logging the path
@@ -42,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (Un)register to the substitution updater which automatically sends updates on new substitutions
 
 [Unreleased]: https://github.com/Dattito/purrmannplus-backend/tree/dev
+[v0.5.0]: https://github.com/Dattito/purrmannplus-backend/compare/v0.4.1...v0.5.0
 [v0.4.1]: https://github.com/Dattito/purrmannplus-backend/compare/v0.4.0...v0.4.1
 [v0.4.0]: https://github.com/Dattito/purrmannplus-backend/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/Dattito/purrmannplus-backend/compare/v0.2.0...v0.3.0

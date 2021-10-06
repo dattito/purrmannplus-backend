@@ -6,8 +6,8 @@ import (
 	"github.com/dattito/purrmannplus-backend/app/models"
 	"github.com/dattito/purrmannplus-backend/database"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
-	"github.com/dattito/purrmannplus-backend/utils/logging"
 	"github.com/dattito/purrmannplus-backend/services/hpg"
+	"github.com/dattito/purrmannplus-backend/utils/logging"
 )
 
 // Returns the accountId of the new account; error produced by user; error not produced by user

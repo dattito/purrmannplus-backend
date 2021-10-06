@@ -6,6 +6,7 @@ import (
 	"github.com/dattito/purrmannplus-backend/app/models"
 	"github.com/dattito/purrmannplus-backend/database"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
+	"github.com/dattito/purrmannplus-backend/utils/logging"
 )
 
 // Return the account info for the given account id; error produced by user; error not produced by user
@@ -21,6 +22,11 @@ func AddAccountInfo(accountId, phoneNumber string) (models.AccountInfo, error, e
 	}
 
 	f, err := models.AccountInfoDBModelToAccount(ai)
+
+	if err == nil {
+		logging.Debugf("Added a phone number for account %s", accountId)
+	}
+
 	return f, nil, err
 }
 

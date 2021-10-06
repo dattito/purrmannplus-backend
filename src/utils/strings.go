@@ -1,9 +1,14 @@
 package utils
 
 import (
+	"bytes"
+	"io/ioutil"
 	"math/rand"
 	"strings"
 	"time"
+
+	"golang.org/x/text/encoding/ianaindex"
+	"golang.org/x/text/transform"
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -32,4 +37,19 @@ func GenerateString(n int) string {
 	}
 
 	return sb.String()
+}
+
+func ConvertStringToLatin1(str string) (string, error) {
+	charset := "latin1"
+	e, err := ianaindex.MIME.Encoding(charset)
+	if err != nil {
+		return "", err
+	}
+	r := transform.NewReader(bytes.NewBufferString(str), e.NewDecoder())
+	result, err := ioutil.ReadAll(r)
+	if err != nil {
+		return "", err
+	}
+
+	return string(result), nil
 }
