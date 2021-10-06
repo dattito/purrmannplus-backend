@@ -10,7 +10,7 @@ import (
 var (
 	DOT_ENV_FILE_PATH                        string
 	USE_DOT_ENV_FILE                         bool
-	DATABASE_LOG_LEVEL                       int // 0-4: 1=off, 2=Error, 3=Warning, 4=Info
+	DATABASE_LOG_LEVEL                       int // 0-5: 0:silent, 1:fatal, 2:error, 3:warn, 4:info, 5:debug
 	LISTENING_PORT                           int
 	API_URL                                  string
 	AUTHORIZATION_COOKIE_DOMAIN              string
