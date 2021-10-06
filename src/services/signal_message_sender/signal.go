@@ -5,6 +5,7 @@ import (
 
 	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender/proto"
+	"github.com/dattito/purrmannplus-backend/utils/logging"
 	"google.golang.org/grpc"
 )
 
@@ -25,6 +26,10 @@ func (sms *_SignalMessageSender) Send(message, recipientPhoneNumber string) erro
 			Recipients: []string{recipientPhoneNumber},
 		},
 	)
+
+	if err != nil {
+		logging.Errorf("Error sending signal message. Error: %s | Message tried to send: %s", err.Error(), message)
+	}
 
 	return err
 }

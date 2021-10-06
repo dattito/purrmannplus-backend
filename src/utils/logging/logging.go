@@ -40,11 +40,11 @@ func Init(loglevel int) error {
 		f = os.Stdout
 	}
 
-	errorLogger = log.New(f, "ERROR: ", log.Ldate|log.Ltime|log.Llongfile)
-	warningLogger = log.New(f, "WARNING: ", log.Ldate|log.Ltime|log.Llongfile)
-	infoLogger = log.New(f, "INFO: ", log.Ldate|log.Ltime|log.Llongfile)
-	debugLogger = log.New(f, "DEBUG: ", log.Ldate|log.Ltime|log.Llongfile)
-	fatalLogger = log.New(f, "FATAL: ", log.Ldate|log.Ltime|log.Llongfile)
+	errorLogger = log.New(f, "ERROR: ", log.Ldate|log.Ltime)
+	warningLogger = log.New(f, "WARNING: ", log.Ldate|log.Ltime)
+	infoLogger = log.New(f, "INFO: ", log.Ldate|log.Ltime)
+	debugLogger = log.New(f, "DEBUG: ", log.Ldate|log.Ltime)
+	fatalLogger = log.New(f, "FATAL: ", log.Ldate|log.Ltime)
 
 	return nil
 }

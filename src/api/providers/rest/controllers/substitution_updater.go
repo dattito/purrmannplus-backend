@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/dattito/purrmannplus-backend/app/commands"
-	"github.com/dattito/purrmannplus-backend/logging"
+	"github.com/dattito/purrmannplus-backend/utils/logging"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )
