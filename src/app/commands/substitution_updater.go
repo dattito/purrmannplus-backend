@@ -101,16 +101,13 @@ func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 	newSubstitutions := differenceAmount(mayNewSubstitutions, old_substitutions)
 
 	// If there are no new substitutions, we don't need to do anything
-	if len(newSubstitutions) == 0 {
-		return nil
-	}
-
 	_, err = database.DB.SetSubstitutions(m.AccountId, mayNewSubstitutions, false)
 	if err != nil {
 		return err
 	}
+
 	// Send a message to the user if there are new substitutions
-	if m.NotSetYet {
+	if m.NotSetYet || len(newSubstitutions) == 0 {
 		return nil
 	}
 
