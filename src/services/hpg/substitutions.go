@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/dattito/purrmannplus-backend/utils"
 )
 
 var weekdays = [5]string{"Mo", "Di", "Mi", "Do", "Fr"}
@@ -61,7 +62,12 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 	spMap := map[string][]string{}
 
 	lastW := ""
+	var spErr error
 	sp.Find("tr").Each(func(i int, s *goquery.Selection) {
+		if spErr != nil {
+			return
+		}
+
 		outp := ""
 		s.Find("td").Each(func(j int, k *goquery.Selection) {
 			t := strings.TrimSpace(k.Text())
@@ -73,11 +79,19 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 			}
 
 		})
-		outpt := strings.TrimSuffix(outp, " ")
+		outpt, err := utils.ConvertStringToLatin1(strings.TrimSuffix(outp, " "))
+		if err != nil {
+			spErr = err
+			return
+		}
 		if outpt != "" {
 			spMap[lastW] = append(spMap[lastW], outpt)
 		}
 	})
+
+	if spErr != nil {
+		return map[string][]string{}, spErr
+	}
 
 	return spMap, nil
 }
