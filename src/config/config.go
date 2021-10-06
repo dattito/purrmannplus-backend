@@ -14,6 +14,7 @@ var (
 	LISTENING_PORT                           int
 	API_URL                                  string
 	AUTHORIZATION_COOKIE_DOMAIN              string
+	ENABLE_API                               bool
 	ENABLE_SUBSTITUTIONS_SCHEDULER           bool
 	SUBSTITUTIONS_UPDATECRON                 string
 	MAX_ERROS_TO_STOP_UPDATING_SUBSTITUTIONS int
@@ -64,6 +65,11 @@ func Init() error {
 
 	// If set, in the authorization cookie will be set the domain
 	AUTHORIZATION_COOKIE_DOMAIN = utils.GetEnv("AUTHORIZATION_COOKIE_DOMAIN", "")
+
+	ENABLE_API, err = utils.GetBoolEnv("ENABLE_API", true)
+	if err != nil {
+		return err
+	}
 
 	ENABLE_SUBSTITUTIONS_SCHEDULER, err = utils.GetBoolEnv("ENABLE_SUBSTITUTIONS_SCHEDULER", true)
 	if err != nil {

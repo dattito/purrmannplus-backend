@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -->
 
 ## [Unreleased]
+### Added
+- More debug logging messages
+- Ability to disable the api (for example, if it should only use the scheduler for updating)
 ### Fixed
 - signal messages can't sometimes send because of utf-8 encoding error
 ## [v0.4.1] - 2021-10-06
