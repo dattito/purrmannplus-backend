@@ -23,7 +23,7 @@ jobs:
         with:
           images: dattito/purrmannplus-backend,ghcr.io/dattito/purrmannplus-backend
           tags: |
-            type=ref
+            type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
