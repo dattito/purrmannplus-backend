@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -->
 
 ## [Unreleased]
+### Changed
+- Disabled logging the path
+- Changed the logging directory
 ## [v0.4.0] - 2021-10-05
 ### Added
 - A cookie can be linked to a domain
