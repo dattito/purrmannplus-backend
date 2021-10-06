@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -->
 
 ## [Unreleased]
+### Fixed
+- signal messages can't sometimes send because of utf-8 encoding error
 ## [v0.4.1] - 2021-10-06
 ### Changed
 - Disabled logging the path
