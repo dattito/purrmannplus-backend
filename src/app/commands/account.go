@@ -13,7 +13,7 @@ import (
 // Returns the accountId of the new account; error produced by user; error not produced by user
 func CreateAccount(authId, authPw string) (models.Account, error, error) {
 	if _, err := models.NewValidAccount(authId, authPw); err != nil {
-		return models.Account{}, nil, err
+		return models.Account{}, err, nil
 	}
 
 	correct, err := hpg.CheckCredentials(authId, authPw)
