@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Account can now logout
+### Changed
+- Changed `auth_id` and `auth_pw` to `username` and `password`
 ### Fixed
 - While creating a new account, a user error was referenced as an internal error
 ## [v0.5.0] - 2021-10-06
