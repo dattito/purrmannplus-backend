@@ -22,7 +22,7 @@ func AccountLogin(c *fiber.Ctx) error {
 		})
 	}
 
-	dbAcc, err := commands.GetAccountByCredentials(a.AuthId, a.AuthPw)
+	dbAcc, err := commands.GetAccountByCredentials(a.Username, a.Password)
 	if err != nil {
 		if errors.Is(err, &db_errors.ErrRecordNotFound) {
 			return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{

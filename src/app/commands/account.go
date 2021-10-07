@@ -27,7 +27,7 @@ func CreateAccount(authId, authPw string) (models.Account, error, error) {
 
 	a, err := database.DB.AddAccount(authId, authPw)
 	if err == nil {
-		logging.Infof("Created account %s", a.AuthId)
+		logging.Infof("Created account %s", a.Username)
 	}
 
 	return models.AcccountDBModelToAccount(a), nil, err

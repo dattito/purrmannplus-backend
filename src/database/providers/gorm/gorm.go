@@ -74,11 +74,11 @@ func (g *GormProvider) CloseDB() error {
 }
 
 // Adds an account with it's credendials (username=authId, password=authPw) to the database
-func (g *GormProvider) AddAccount(authId, authPw string) (provider_models.AccountDBModel, error) {
+func (g *GormProvider) AddAccount(username, password string) (provider_models.AccountDBModel, error) {
 
 	accdb := models.AccountDB{
-		AuthId: authId,
-		AuthPw: authPw,
+		Username: username,
+		Password: password,
 	}
 	err := g.DB.Create(&accdb).Error
 	return models.AccountDBToAccountDBModel(accdb), err
@@ -100,11 +100,11 @@ func (g *GormProvider) GetAccount(id string) (provider_models.AccountDBModel, er
 }
 
 // Gets account using username (authId) and password (authPw)
-func (g *GormProvider) GetAccountByCredentials(authId, authPw string) (provider_models.AccountDBModel, error) {
+func (g *GormProvider) GetAccountByCredentials(username, password string) (provider_models.AccountDBModel, error) {
 
 	accdb := models.AccountDB{}
 
-	err := g.DB.First(&accdb, "auth_id = ? AND auth_pw = ?", authId, authPw).Error
+	err := g.DB.First(&accdb, "auth_id = ? AND auth_pw = ?", username, password).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
