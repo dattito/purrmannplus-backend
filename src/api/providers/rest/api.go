@@ -47,9 +47,10 @@ type RestProvider struct {
 func (r *RestProvider) Init() error {
 	r.app = fiber.New()
 
-	v1 := r.app.Group("/v1")
+	r.app.Get(HealthRoute, controllers.GetHealth)
+	r.app.Get(AboutRoute, controllers.About)
 
-	v1.Get(GetHealthRoute, controllers.GetHealth)
+	v1 := r.app.Group("/v1")
 
 	v1.Post(AccountLoginRoute, controllers.AccountLogin)
 	v1.Get(AccountLogoutRoute, controllers.AccountLogout)

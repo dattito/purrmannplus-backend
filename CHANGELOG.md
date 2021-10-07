@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Account can now logout
+- About Route
+- Version for the about route gets passed by the github action
 ### Changed
 - Changed `auth_id` and `auth_pw` to `username` and `password`
 ### Fixed
