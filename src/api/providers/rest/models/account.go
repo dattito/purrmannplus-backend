@@ -3,12 +3,12 @@ package models
 import app_models "github.com/dattito/purrmannplus-backend/app/models"
 
 type PostAccountRequest struct {
-	AuthId string `json:"auth_id" form:"auth_id"`
-	AuthPw string `json:"auth_pw" form:"auth_pw"`
+	Username string `json:"username" form:"username"`
+	Password string `json:"password" form:"password"`
 }
 
 func PostAccountRequestToAccount(req *PostAccountRequest) (*app_models.Account, error) {
-	return app_models.NewValidAccount(req.AuthId, req.AuthPw)
+	return app_models.NewValidAccount(req.Username, req.Password)
 }
 
 type PostAccountResponse struct {
@@ -22,16 +22,16 @@ func AccountToPostAccountResponse(account *app_models.Account) *PostAccountRespo
 }
 
 type GetAccountResponse struct {
-	Id     string `json:"id"`
-	AuthId string `json:"auth_id" form:"auth_id"`
-	AuthPw string `json:"auth_pw" form:"auth_pw"`
+	Id       string `json:"id"`
+	Username string `json:"username" form:"username"`
+	Password string `json:"password" form:"password"`
 }
 
 func AccountToGetAccountResponse(account *app_models.Account) *GetAccountResponse {
 	return &GetAccountResponse{
-		Id:     account.Id,
-		AuthId: account.AuthId,
-		AuthPw: account.AuthPw,
+		Id:       account.Id,
+		Username: account.Username,
+		Password: account.Password,
 	}
 }
 

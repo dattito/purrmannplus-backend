@@ -4,8 +4,8 @@ import "github.com/dattito/purrmannplus-backend/app/models"
 
 type PostLoginRequest struct {
 	StoreInCookie bool   `json:"store_in_cookie"`
-	AuthId        string `json:"auth_id"`
-	AuthPw        string `json:"auth_pw"`
+	Username        string `json:"username"`
+	Password        string `json:"password"`
 }
 
 type PostLoginResponse struct {
@@ -13,5 +13,5 @@ type PostLoginResponse struct {
 }
 
 func PostLoginRequestToAccount(p PostLoginRequest) (*models.Account, error) {
-	return models.NewValidAccount(p.AuthId, p.AuthPw)
+	return models.NewValidAccount(p.Username, p.Password)
 }
