@@ -11,12 +11,12 @@ import (
 )
 
 // Returns the accountId of the new account; error produced by user; error not produced by user
-func CreateAccount(authId, authPw string) (models.Account, error, error) {
-	if _, err := models.NewValidAccount(authId, authPw); err != nil {
+func CreateAccount(username, password string) (models.Account, error, error) {
+	if _, err := models.NewValidAccount(username, password); err != nil {
 		return models.Account{}, err, nil
 	}
 
-	correct, err := hpg.CheckCredentials(authId, authPw)
+	correct, err := hpg.CheckCredentials(username, password)
 	if err != nil {
 		return models.Account{}, nil, err
 	}
@@ -25,7 +25,7 @@ func CreateAccount(authId, authPw string) (models.Account, error, error) {
 		return models.Account{}, errors.New("incorrect credentials"), nil
 	}
 
-	a, err := database.DB.AddAccount(authId, authPw)
+	a, err := database.DB.AddAccount(username, password)
 	if err == nil {
 		logging.Infof("Created account %s", a.Username)
 	}
