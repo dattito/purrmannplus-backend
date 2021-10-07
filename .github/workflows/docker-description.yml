@@ -1,0 +1,18 @@
+name: Docker Description
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  description:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: dattito/purrmannplus-backend
+          readme-filepath: ./README.md
