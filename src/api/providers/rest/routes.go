@@ -1,7 +1,7 @@
 package rest
 
 const (
-	HealthRoute                         = "/health"
+	HealthRoute                            = "/health"
 	AboutRoute                             = "/about"
 	AccountLoginRoute                      = "/login"
 	AccountLogoutRoute                     = "/logout"
