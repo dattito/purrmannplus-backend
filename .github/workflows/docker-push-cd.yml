@@ -48,7 +48,18 @@ jobs:
       - 
         name: Set output
         id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF##*/}
+        run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF##*/})"
+      - 
+        name: Build and push dev
+        uses: docker/build-push-action@v2
+        if: ${{ tag }} == "dev"
+        with:
+          context: .
+          push: true
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: DNT_VERSION=${{ steps.vars.outputs.tag }}
       - 
         name: Build and push
         uses: docker/build-push-action@v2
@@ -58,4 +69,4 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: DNT_VERSION=${GITHUB_REF##*/}
+          build-args: DNT_VERSION=${{ steps.vars.outputs.tag }}
