@@ -52,7 +52,7 @@ jobs:
       - 
         name: Build and push dev
         uses: docker/build-push-action@v2
-        if: ${{ tag }} == "dev"
+        if: ${{ steps.vars.outputs.tag }} == "dev"
         with:
           context: .
           push: true
