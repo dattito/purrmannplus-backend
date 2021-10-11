@@ -63,6 +63,7 @@ jobs:
       - 
         name: Build and push
         uses: docker/build-push-action@v2
+        if: ${{ steps.vars.outputs.tag }} != "dev"
         with:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7
