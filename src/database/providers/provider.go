@@ -9,9 +9,9 @@ type Provider interface {
 	CreateTables() error
 	CloseDB() error
 
-	AddAccount(authId, authPw string) (models.AccountDBModel, error)
+	AddAccount(username, password string) (models.AccountDBModel, error)
 	GetAccount(id string) (models.AccountDBModel, error)
-	GetAccountByCredentials(authId, authPw string) (models.AccountDBModel, error)
+	GetAccountByCredentials(username, password string) (models.AccountDBModel, error)
 	GetAccounts() ([]models.AccountDBModel, error)
 	DeleteAccount(id string) error
 	AddAccountInfo(accountId, phoneNumber string) (models.AccountInfoDBModel, error)

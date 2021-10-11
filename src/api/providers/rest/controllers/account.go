@@ -16,7 +16,7 @@ func AddAccount(c *fiber.Ctx) error {
 		})
 	}
 
-	acc, user_err, db_err := commands.CreateAccount(accApi.AuthId, accApi.AuthPw)
+	acc, user_err, db_err := commands.CreateAccount(accApi.Username, accApi.Password)
 
 	if user_err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{

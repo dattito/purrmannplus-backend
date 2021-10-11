@@ -47,11 +47,13 @@ type RestProvider struct {
 func (r *RestProvider) Init() error {
 	r.app = fiber.New()
 
+	r.app.Get(HealthRoute, controllers.GetHealth)
+	r.app.Get(AboutRoute, controllers.About)
+
 	v1 := r.app.Group("/v1")
 
-	v1.Get(GetHealthRoute, controllers.GetHealth)
-
 	v1.Post(AccountLoginRoute, controllers.AccountLogin)
+	v1.Get(AccountLogoutRoute, controllers.AccountLogout)
 
 	v1.Post(AddAccountRoute, controllers.AddAccount)
 	v1.Delete(DeleteAccountRoute, Protected(), controllers.DeleteAccount)

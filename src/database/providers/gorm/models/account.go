@@ -7,8 +7,8 @@ import (
 
 type AccountDB struct {
 	Model
-	AuthId string `gorm:"column:auth_id;uniqueIndex"`
-	AuthPw string `gorm:"column:auth_pw"`
+	Username string `gorm:"column:auth_id;uniqueIndex"`
+	Password string `gorm:"column:auth_pw"`
 }
 
 func (AccountDB) TableName() string {
@@ -25,8 +25,8 @@ func (a *AccountDB) BeforeDelete(tx *gorm.DB) error {
 
 func AccountDBToAccountDBModel(a AccountDB) provider_models.AccountDBModel {
 	return provider_models.AccountDBModel{
-		Id:     a.Id,
-		AuthId: a.AuthId,
-		AuthPw: a.AuthPw,
+		Id:       a.Id,
+		Username: a.Username,
+		Password: a.Password,
 	}
 }

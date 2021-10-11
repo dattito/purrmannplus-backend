@@ -29,6 +29,7 @@ var (
 	SUBSTITUTION_URL                         string
 	LOGGING_FILE                             string
 	LOG_LEVEL                                int
+	DNT_VERSION                              string
 )
 
 func Init() error {
@@ -117,6 +118,9 @@ func Init() error {
 	if err != nil {
 		return err
 	}
+
+	// Gots passed by the build script
+	DNT_VERSION = utils.GetEnv("DNT_VERSION", "0.0.0")
 
 	return nil
 }

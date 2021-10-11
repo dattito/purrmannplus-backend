@@ -13,6 +13,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// AccountLogin logs in the user and returns a JWT token or sets a cookie
 func AccountLogin(c *fiber.Ctx) error {
 	a := new(models.PostLoginRequest)
 	if err := c.BodyParser(a); err != nil {
@@ -21,7 +22,7 @@ func AccountLogin(c *fiber.Ctx) error {
 		})
 	}
 
-	dbAcc, err := commands.GetAccountByCredentials(a.AuthId, a.AuthPw)
+	dbAcc, err := commands.GetAccountByCredentials(a.Username, a.Password)
 	if err != nil {
 		if errors.Is(err, &db_errors.ErrRecordNotFound) {
 			return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
@@ -61,4 +62,21 @@ func AccountLogin(c *fiber.Ctx) error {
 	return c.JSON(&fiber.Map{
 		"token": token,
 	})
+}
+
+// AccountLogout deletes the authorization cookie (logs out the user)
+func AccountLogout(c *fiber.Ctx) error {
+	cookie := new(fiber.Cookie)
+	cookie.Name = "Authorization"
+	cookie.Value = ""
+	cookie.Expires = time.Now().Add(-1 * time.Hour)
+	cookie.HTTPOnly = true
+
+	if config.AUTHORIZATION_COOKIE_DOMAIN != "" {
+		cookie.Domain = config.AUTHORIZATION_COOKIE_DOMAIN
+	}
+
+	c.Cookie(cookie)
+
+	return c.SendStatus(fiber.StatusOK)
 }
