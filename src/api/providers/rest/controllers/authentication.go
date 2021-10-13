@@ -47,7 +47,10 @@ func AccountLogin(c *fiber.Ctx) error {
 		cookie := new(fiber.Cookie)
 		cookie.Name = "Authorization"
 		cookie.Value = token
-		cookie.Expires = time.Now().Add(24 * 30 * time.Hour)
+
+		if a.StayLoggedIn {
+			cookie.Expires = time.Now().Add(time.Hour * 24 * 30)
+		}
 		cookie.HTTPOnly = true
 
 		if config.AUTHORIZATION_COOKIE_DOMAIN != "" {
