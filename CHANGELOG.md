@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -->
 
 ## [Unreleased]
+## [v0.5.2] - 2021-10-13
 ### Added
 - Route to check if the user is logged in
 ## [v0.5.1] - 2021-10-11
@@ -59,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (Un)register to the substitution updater which automatically sends updates on new substitutions
 
 [Unreleased]: https://github.com/Dattito/purrmannplus-backend/tree/dev
+[v0.5.2]: https://github.com/Dattito/purrmannplus-backend/compare/v0.5.1...v0.5.2
 [v0.5.1]: https://github.com/Dattito/purrmannplus-backend/compare/v0.5.0...v0.5.1
 [v0.5.0]: https://github.com/Dattito/purrmannplus-backend/compare/v0.4.1...v0.5.0
 [v0.4.1]: https://github.com/Dattito/purrmannplus-backend/compare/v0.4.0...v0.4.1
