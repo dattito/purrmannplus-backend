@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Possibility to just login for this session
 ### Changed
 - Changed default version to ""
+- Changed response of login with cookie
 ## [v0.5.2] - 2021-10-13
 ### Added
 - Route to check if the user is logged in

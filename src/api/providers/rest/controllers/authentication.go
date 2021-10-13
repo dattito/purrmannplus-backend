@@ -59,10 +59,12 @@ func AccountLogin(c *fiber.Ctx) error {
 
 		c.Cookie(cookie)
 
-		return c.SendStatus(fiber.StatusCreated)
+		return c.Status(fiber.StatusCreated).JSON(&fiber.Map{
+			"ok": true,
+		})
 	}
 
-	return c.JSON(&fiber.Map{
+	return c.Status(fiber.StatusCreated).JSON(&fiber.Map{
 		"token": token,
 	})
 }
