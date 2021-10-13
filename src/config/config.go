@@ -119,8 +119,8 @@ func Init() error {
 		return err
 	}
 
-	// Gots passed by the build script
-	DNT_VERSION = utils.GetEnv("DNT_VERSION", "0.0.0")
+	// Gots passed by the build script (DNT=DO NOT TOUCH)
+	DNT_VERSION = utils.GetEnv("DNT_VERSION", "")
 
 	return nil
 }
