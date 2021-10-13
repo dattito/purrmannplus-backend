@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -->
 
 ## [Unreleased]
+### Added
+- Route to check if the user is logged in
 ## [v0.5.1] - 2021-10-11
 ### Added
 - Account can now logout

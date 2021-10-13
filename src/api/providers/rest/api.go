@@ -54,6 +54,7 @@ func (r *RestProvider) Init() error {
 
 	v1.Post(AccountLoginRoute, controllers.AccountLogin)
 	v1.Get(AccountLogoutRoute, controllers.AccountLogout)
+	v1.Get(IsLoggedInRoute, Protected(), controllers.IsLoggedIn)
 
 	v1.Post(AddAccountRoute, controllers.AddAccount)
 	v1.Delete(DeleteAccountRoute, Protected(), controllers.DeleteAccount)
