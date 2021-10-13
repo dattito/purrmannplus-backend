@@ -80,3 +80,9 @@ func AccountLogout(c *fiber.Ctx) error {
 
 	return c.SendStatus(fiber.StatusOK)
 }
+
+func IsLoggedIn(c *fiber.Ctx) error {
+	return c.JSON(&fiber.Map{
+		"loggedIn": true,
+	})
+}

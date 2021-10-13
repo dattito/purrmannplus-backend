@@ -5,6 +5,7 @@ const (
 	AboutRoute                             = "/about"
 	AccountLoginRoute                      = "/login"
 	AccountLogoutRoute                     = "/logout"
+	IsLoggedInRoute                        = "/login_check"
 	AddAccountRoute                        = "/accounts"
 	GetAccountsRoute                       = "/accounts"
 	DeleteAccountRoute                     = "/accounts"
