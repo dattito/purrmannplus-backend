@@ -16,7 +16,6 @@ var (
 	AUTHORIZATION_COOKIE_DOMAIN              string
 	AUTHORIZATION_COOKIE_HTTPONLY            bool
 	AUTHORIZATION_COOKIE_SECURE              bool
-	AUTHORIZATION_COOKIE_SAMESITE_STRICT     bool
 	ENABLE_API                               bool
 	ENABLE_SUBSTITUTIONS_SCHEDULER           bool
 	SUBSTITUTIONS_UPDATECRON                 string
@@ -76,11 +75,6 @@ func Init() error {
 	}
 
 	AUTHORIZATION_COOKIE_SECURE, err = utils.GetBoolEnv("AUTHORIZATION_COOKIE_SECURE", false)
-	if err != nil {
-		return err
-	}
-
-	AUTHORIZATION_COOKIE_SAMESITE_STRICT, err = utils.GetBoolEnv("AUTHORIZATION_COOKIE_SAMESITE_STRICT", false)
 	if err != nil {
 		return err
 	}

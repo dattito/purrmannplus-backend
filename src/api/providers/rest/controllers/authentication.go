@@ -76,11 +76,7 @@ func AccountLogout(c *fiber.Ctx) error {
 	cookie.Value = ""
 	cookie.Expires = time.Now().Add(-1 * time.Hour)
 	cookie.HTTPOnly = config.AUTHORIZATION_COOKIE_HTTPONLY
-
-	if config.AUTHORIZATION_COOKIE_SAMESITE_STRICT {
-		cookie.SameSite = fiber.CookieSameSiteStrictMode
-	}
-
+	
 	cookie.Secure = config.AUTHORIZATION_COOKIE_SECURE
 
 	if config.AUTHORIZATION_COOKIE_DOMAIN != "" {
