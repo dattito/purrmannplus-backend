@@ -10,10 +10,13 @@ import (
 var (
 	DOT_ENV_FILE_PATH                        string
 	USE_DOT_ENV_FILE                         bool
-	DATABASE_LOG_LEVEL                       int // 0-5: 0:silent, 1:fatal, 2:error, 3:warn, 4:info, 5:debug
+	DATABASE_LOG_LEVEL                       int
 	LISTENING_PORT                           int
 	API_URL                                  string
 	AUTHORIZATION_COOKIE_DOMAIN              string
+	AUTHORIZATION_COOKIE_HTTPONLY            bool
+	AUTHORIZATION_COOKIE_SECURE              bool
+	AUTHORIZATION_COOKIE_SAMESITE_STRICT     bool
 	ENABLE_API                               bool
 	ENABLE_SUBSTITUTIONS_SCHEDULER           bool
 	SUBSTITUTIONS_UPDATECRON                 string
@@ -25,10 +28,10 @@ var (
 	SIGNAL_CLI_GRPC_API_URL                  string
 	SIGNAL_SENDER_PHONENUMBER                string
 	JWT_SECRET                               string
-	JWT_RANDOM_SECRET                        string
+	JWT_RANDOM_SECRET                        string // Gets generated on init
 	SUBSTITUTION_URL                         string
 	LOGGING_FILE                             string
-	LOG_LEVEL                                int
+	LOG_LEVEL                                int // 0-5: 0:silent, 1:fatal, 2:error, 3:warn, 4:info, 5:debug
 	DNT_VERSION                              string
 )
 
@@ -66,6 +69,21 @@ func Init() error {
 
 	// If set, in the authorization cookie will be set the domain
 	AUTHORIZATION_COOKIE_DOMAIN = utils.GetEnv("AUTHORIZATION_COOKIE_DOMAIN", "")
+
+	AUTHORIZATION_COOKIE_HTTPONLY, err = utils.GetBoolEnv("AUTHORIZATION_COOKIE_HTTPONLY", false)
+	if err != nil {
+		return err
+	}
+
+	AUTHORIZATION_COOKIE_SECURE, err = utils.GetBoolEnv("AUTHORIZATION_COOKIE_SECURE", false)
+	if err != nil {
+		return err
+	}
+
+	AUTHORIZATION_COOKIE_SAMESITE_STRICT, err = utils.GetBoolEnv("AUTHORIZATION_COOKIE_SAMESITE_STRICT", false)
+	if err != nil {
+		return err
+	}
 
 	ENABLE_API, err = utils.GetBoolEnv("ENABLE_API", true)
 	if err != nil {
