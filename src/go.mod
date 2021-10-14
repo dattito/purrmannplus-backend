@@ -8,7 +8,7 @@ require (
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/go-co-op/gocron v1.9.0
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
-	github.com/gofiber/fiber/v2 v2.20.1
+	github.com/gofiber/fiber/v2 v2.20.2
 	github.com/gofiber/jwt/v3 v3.1.2
 	github.com/gofrs/uuid v4.0.0+incompatible
 	github.com/golang-jwt/jwt/v4 v4.1.0
