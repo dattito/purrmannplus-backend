@@ -14,12 +14,6 @@ func getJWTConfig() jwtware.Config {
 		SigningKey: []byte(config.JWT_SECRET),
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
 			IsMissingOrMalformedJWT := err.Error() == "Missing or malformed JWT"
-			var StatusCode int
-			if IsMissingOrMalformedJWT {
-				StatusCode = fiber.StatusBadRequest
-			} else {
-				StatusCode = fiber.StatusUnauthorized
-			}
 
 			var ErrorText string
 			if IsMissingOrMalformedJWT {
@@ -28,7 +22,7 @@ func getJWTConfig() jwtware.Config {
 				ErrorText = "Invalid or expired JWT"
 			}
 
-			return c.Status(StatusCode).JSON(fiber.Map{
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 				"error": ErrorText,
 			})
 		},
