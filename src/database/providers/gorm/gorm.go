@@ -42,7 +42,6 @@ func NewGormProvider() (*GormProvider, error) {
 		return &GormProvider{}, err
 	}
 
-
 	return &GormProvider{DB: db}, nil
 }
 
