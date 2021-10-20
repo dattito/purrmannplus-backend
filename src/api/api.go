@@ -8,11 +8,13 @@ import (
 
 var api providers.Provider
 
+// Initialize the api object
 func Init() error {
 	api = providers.GetProvider()
 	return api.Init()
 }
 
+// Start the api to listen on the configured port
 func StartListening() error {
 	logging.Infof("Starting listening on port %d", config.LISTENING_PORT)
 	if config.ENABLE_API {

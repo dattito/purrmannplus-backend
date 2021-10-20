@@ -9,6 +9,7 @@ import (
 	jwtware "github.com/gofiber/jwt/v3"
 )
 
+// Get the JWT configuration for the api
 func getJWTConfig() jwtware.Config {
 	return jwtware.Config{
 		SigningKey: []byte(config.JWT_SECRET),
@@ -30,6 +31,7 @@ func getJWTConfig() jwtware.Config {
 	}
 }
 
+// Protected is a middleware that checks if the user is logged in
 func Protected() fiber.Handler {
 	return jwtware.New(getJWTConfig())
 }
@@ -38,6 +40,7 @@ type RestProvider struct {
 	app *fiber.App
 }
 
+// Initialize the fiber app and sets the routes and middlewares
 func (r *RestProvider) Init() error {
 	r.app = fiber.New()
 
@@ -62,6 +65,7 @@ func (r *RestProvider) Init() error {
 	return nil
 }
 
+// Start the fiber app and listen on the specified port
 func (r *RestProvider) StartListening() error {
 	return r.app.Listen(fmt.Sprintf(":%d", config.LISTENING_PORT))
 }

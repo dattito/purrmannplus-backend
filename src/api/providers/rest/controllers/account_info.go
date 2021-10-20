@@ -14,6 +14,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
+// Sends a message with a link to the user to confirm his phone number
 func SendPhoneNumberConfirmationLink(c *fiber.Ctx) error {
 	pr := new(api_models.PostSendPhoneNumberConfirmationLinkRequest)
 	if err := c.BodyParser(pr); err != nil {
@@ -86,6 +87,7 @@ func SendPhoneNumberConfirmationLink(c *fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusCreated)
 }
 
+// Validates the phone number of the user and adds it to the database
 func AddPhoneNumber(c *fiber.Ctx) error {
 	p := new(api_models.PostAddPhoneNumberRequest)
 	if err := c.QueryParser(p); err != nil {

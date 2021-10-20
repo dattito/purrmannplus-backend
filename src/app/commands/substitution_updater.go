@@ -14,6 +14,7 @@ import (
 	"github.com/dattito/purrmannplus-backend/utils/logging"
 )
 
+// Checks if a string is in a slice of strings
 func contains(s []string, str string) bool {
 	for _, v := range s {
 		if v == str {
@@ -24,6 +25,7 @@ func contains(s []string, str string) bool {
 	return false
 }
 
+// Returns a map of the differences between two maps (difference amount)
 func differenceAmount(newSubstituations, oldSubstituations map[string][]string) map[string][]string {
 	s := map[string][]string{}
 
@@ -42,6 +44,7 @@ func differenceAmount(newSubstituations, oldSubstituations map[string][]string) 
 	return s
 }
 
+// Produces a human readable text message from a map of substitutions
 func substituationToTextMessage(substitution map[string][]string) string {
 	if len(substitution) == 0 {
 		return "Du hast keine neuen Vertretungen"
@@ -88,7 +91,7 @@ func RemoveFromSubstitutionUpdater(accountId string) error {
 	return database.DB.RemoveAccountFromSubstitutionUpdater(accountId)
 }
 
-// Updates the substitutions for a given account and it's relevant data and sends a message via signal
+// Updates the substitutions for a given account and sends a message via signal
 func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 	logging.Debugf("Updating substitutions of account %s (id: %s)", m.AuthId, m.AccountId)
 	mayNewSubstitutions, err := hpg.GetSubstituationOfStudent(m.AuthId, m.AuthPw)
@@ -116,6 +119,7 @@ func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 	return signal_message_sender.SignalMessageSender.Send(substituationToTextMessage(newSubstitutions), m.PhoneNumber)
 }
 
+// Updates the substitutions for a given account and sends a message via signal
 func UpdateSubstitutionsByAccountId(accountId string) error {
 	mdb, err := database.DB.GetAccountCredentialsAndPhoneNumberAndSubstitutions(accountId)
 	if err != nil {
@@ -127,6 +131,7 @@ func UpdateSubstitutionsByAccountId(accountId string) error {
 	return UpdateSubstitutions(m)
 }
 
+// Updates all substitutions and sends a message via signal
 func UpdateAllSubstitutions() error {
 	mdbs, err := database.DB.GetAllAccountCredentialsAndPhoneNumberAndSubstitutions()
 	if err != nil {
@@ -149,6 +154,7 @@ func UpdateAllSubstitutions() error {
 	return nil
 }
 
+// Activates the scheduler to update the substitutions
 func EnableSubstitutionUpdater() {
 	scheduler.AddJob(config.SUBSTITUTIONS_UPDATECRON, func() {
 		if err := UpdateAllSubstitutions(); err != nil {

@@ -8,30 +8,30 @@ import (
 )
 
 var (
-	DOT_ENV_FILE_PATH                        string
-	USE_DOT_ENV_FILE                         bool
-	DATABASE_LOG_LEVEL                       int
-	LISTENING_PORT                           int
-	API_URL                                  string
-	AUTHORIZATION_COOKIE_DOMAIN              string
-	AUTHORIZATION_COOKIE_HTTPONLY            bool
-	AUTHORIZATION_COOKIE_SECURE              bool
-	ENABLE_API                               bool
-	ENABLE_SUBSTITUTIONS_SCHEDULER           bool
-	SUBSTITUTIONS_UPDATECRON                 string
-	MAX_ERROS_TO_STOP_UPDATING_SUBSTITUTIONS int
-	MOODLE_UPDATECRON                        string
-	DATABASE_URI                             string
-	DATABASE_TYPE                            string
-	DATABASE_AUTOMIGRATE                     bool
-	SIGNAL_CLI_GRPC_API_URL                  string
-	SIGNAL_SENDER_PHONENUMBER                string
-	JWT_SECRET                               string
-	JWT_RANDOM_SECRET                        string // Gets generated on init
-	SUBSTITUTION_URL                         string
-	LOGGING_FILE                             string
-	LOG_LEVEL                                int // 0-5: 0:silent, 1:fatal, 2:error, 3:warn, 4:info, 5:debug
-	DNT_VERSION                              string
+	DOT_ENV_FILE_PATH                        string // Path to the .env file, only needed if USE_DOT_ENV_FILE is set to true
+	USE_DOT_ENV_FILE                         bool   // If true, the .env file will be loaded
+	DATABASE_LOG_LEVEL                       int    // Log level for the database: 1-4: 1:Silent, 2:Error, 3:Warn, 4: Info
+	LISTENING_PORT                           int    // The port the api will listen on
+	API_URL                                  string // The url the api will be available at, used for the phone number confirmation message link
+	AUTHORIZATION_COOKIE_DOMAIN              string // If set, in the authorization cookie will be set the domain
+	AUTHORIZATION_COOKIE_HTTPONLY            bool   // If true, the cookie will be set as httponly
+	AUTHORIZATION_COOKIE_SECURE              bool   // If true, the cookie will be set as secure
+	ENABLE_API                               bool   // If true, the api will be enabled, otherwise there will be no listener
+	ENABLE_SUBSTITUTIONS_SCHEDULER           bool   // If true, the substitutions scheduler will be enabled
+	SUBSTITUTIONS_UPDATECRON                 string // Cron expression for the substitutions scheduler
+	MAX_ERROS_TO_STOP_UPDATING_SUBSTITUTIONS int    // If the substitutions scheduler encounters more than this number of errors, it will stop
+	MOODLE_UPDATECRON                        string // Cron expression for the moodle scheduler
+	DATABASE_URI                             string // The database uri in the format of the given database type
+	DATABASE_TYPE                            string // The database type: SQLITE, POSTGRES, MYSQL
+	DATABASE_AUTOMIGRATE                     bool   // If true, the database will be automatically migrated on startup
+	SIGNAL_CLI_GRPC_API_URL                  string // The url of the signal cli grpc api
+	SIGNAL_SENDER_PHONENUMBER                string // The phonenumber of the signal sender
+	JWT_SECRET                               string // The secret used to sign the jwt tokens
+	DNT_JWT_RANDOM_SECRET                    string // Gets generated on init, so DO NOT TOUCH
+	SUBSTITUTION_URL                         string // The url of the substitution website
+	LOGGING_FILE                             string // The file to log to, if empty, logs to stdout
+	LOG_LEVEL                                int    // 0-5: 0:silent, 1:fatal, 2:error, 3:warn, 4:info, 5:debug
+	DNT_VERSION                              string // The version of this application. It is automatically set by docker, so DO NOT TOUCH
 )
 
 func Init() error {
@@ -117,7 +117,7 @@ func Init() error {
 		return err
 	}
 
-	JWT_RANDOM_SECRET = utils.GenerateString(128)
+	DNT_JWT_RANDOM_SECRET = utils.GenerateString(128)
 
 	SUBSTITUTION_URL, err = utils.GetEnvInDev("SUBSTITUTION_URL", "https://vertretungsplan.hpg-speyer.de")
 	if err != nil {
