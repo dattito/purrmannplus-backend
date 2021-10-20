@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed default version to ""
 - Changed response of login with cookie
 - Sending 401 if jwt is missing
+- Now exposes port in Dockerfile
 ## [v0.5.2] - 2021-10-13
 ### Added
 - Route to check if the user is logged in
