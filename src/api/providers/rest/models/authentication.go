@@ -4,6 +4,7 @@ import "github.com/dattito/purrmannplus-backend/app/models"
 
 type PostLoginRequest struct {
 	StoreInCookie bool   `json:"store_in_cookie"`
+	StayLoggedIn  bool   `json:"stay_logged_in"`
 	Username      string `json:"username"`
 	Password      string `json:"password"`
 }

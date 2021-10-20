@@ -47,7 +47,10 @@ func AccountLogin(c *fiber.Ctx) error {
 		cookie := new(fiber.Cookie)
 		cookie.Name = "Authorization"
 		cookie.Value = token
-		cookie.Expires = time.Now().Add(24 * 30 * time.Hour)
+
+		if a.StayLoggedIn {
+			cookie.Expires = time.Now().Add(time.Hour * 24 * 30)
+		}
 		cookie.HTTPOnly = true
 
 		if config.AUTHORIZATION_COOKIE_DOMAIN != "" {
@@ -56,10 +59,12 @@ func AccountLogin(c *fiber.Ctx) error {
 
 		c.Cookie(cookie)
 
-		return c.SendStatus(fiber.StatusCreated)
+		return c.Status(fiber.StatusCreated).JSON(&fiber.Map{
+			"ok": true,
+		})
 	}
 
-	return c.JSON(&fiber.Map{
+	return c.Status(fiber.StatusCreated).JSON(&fiber.Map{
 		"token": token,
 	})
 }
@@ -70,7 +75,9 @@ func AccountLogout(c *fiber.Ctx) error {
 	cookie.Name = "Authorization"
 	cookie.Value = ""
 	cookie.Expires = time.Now().Add(-1 * time.Hour)
-	cookie.HTTPOnly = true
+	cookie.HTTPOnly = config.AUTHORIZATION_COOKIE_HTTPONLY
+
+	cookie.Secure = config.AUTHORIZATION_COOKIE_SECURE
 
 	if config.AUTHORIZATION_COOKIE_DOMAIN != "" {
 		cookie.Domain = config.AUTHORIZATION_COOKIE_DOMAIN
