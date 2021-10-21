@@ -6,6 +6,7 @@ import (
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/controllers"
 	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	jwtware "github.com/gofiber/jwt/v3"
 )
 
@@ -43,6 +44,13 @@ type RestProvider struct {
 // Initialize the fiber app and sets the routes and middlewares
 func (r *RestProvider) Init() error {
 	r.app = fiber.New()
+
+	if config.CORS_ALLOWED_ORIGINS != "" {
+		r.app.Use(cors.New(cors.Config{
+			AllowOrigins: config.CORS_ALLOWED_ORIGINS,
+			AllowHeaders:  "Origin, Content-Type, Accept",
+		}))
+	}
 
 	r.app.Get(HealthRoute, controllers.GetHealth)
 	r.app.Get(AboutRoute, controllers.About)

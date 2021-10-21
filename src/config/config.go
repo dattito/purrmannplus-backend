@@ -13,6 +13,7 @@ var (
 	DATABASE_LOG_LEVEL                       int    // Log level for the database: 1-4: 1:Silent, 2:Error, 3:Warn, 4: Info
 	LISTENING_PORT                           int    // The port the api will listen on
 	API_URL                                  string // The url the api will be available at, used for the phone number confirmation message link
+	CORS_ALLOWED_ORIGINS                     string // Comma separated list of allowed origins or "*"
 	AUTHORIZATION_COOKIE_DOMAIN              string // If set, in the authorization cookie will be set the domain
 	AUTHORIZATION_COOKIE_HTTPONLY            bool   // If true, the cookie will be set as httponly
 	AUTHORIZATION_COOKIE_SECURE              bool   // If true, the cookie will be set as secure
@@ -65,6 +66,8 @@ func Init() error {
 	}
 
 	API_URL = utils.GetEnv("API_URL", fmt.Sprintf("http://localhost:%d", LISTENING_PORT))
+
+	CORS_ALLOWED_ORIGINS = utils.GetEnv("CORS_ALLOWED_ORIGINS", "")
 
 	// If set, in the authorization cookie will be set the domain
 	AUTHORIZATION_COOKIE_DOMAIN = utils.GetEnv("AUTHORIZATION_COOKIE_DOMAIN", "")
