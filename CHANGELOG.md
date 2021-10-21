@@ -18,9 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - More comments in the code
-
-### Added
-
 - Possibility to just login for this session
 
 ### Changed
