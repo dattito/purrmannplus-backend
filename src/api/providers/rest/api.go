@@ -48,7 +48,7 @@ func (r *RestProvider) Init() error {
 	if config.CORS_ALLOWED_ORIGINS != "" {
 		r.app.Use(cors.New(cors.Config{
 			AllowOrigins: config.CORS_ALLOWED_ORIGINS,
-			AllowHeaders:  "Origin, Content-Type, Accept",
+			AllowHeaders: "Origin, Content-Type, Accept",
 		}))
 	}
 
