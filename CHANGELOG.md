@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.5.3] - 2021-10-21
+
 ### Added
 
 - Ability to specify CORS origins
@@ -125,7 +127,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (Un)register to the substitution updater which automatically sends updates on
   new substitutions
 
-[Unreleased]: https://github.com/Dattito/purrmannplus-backend/compare/v0.5.3...dev
+[Unreleased]: https://github.com/Dattito/purrmannplus-backend/compare/v0.5.4...dev
+[v0.5.4]: https://github.com/Dattito/purrmannplus-backend/compare/v0.5.3...v0.5.4
 [v0.5.3]: https://github.com/Dattito/purrmannplus-backend/compare/v0.5.2...v0.5.3
 [v0.5.2]: https://github.com/Dattito/purrmannplus-backend/compare/v0.5.1...v0.5.2
 [v0.5.1]: https://github.com/Dattito/purrmannplus-backend/compare/v0.5.0...v0.5.1
