@@ -17,6 +17,7 @@ type _SignalMessageSender struct {
 	Client                  proto.SignalServiceClient
 }
 
+// Sends a message to a given phone number
 func (sms *_SignalMessageSender) Send(message, recipientPhoneNumber string) error {
 	_, err := sms.Client.SendV2(
 		context.Background(),
@@ -36,6 +37,7 @@ func (sms *_SignalMessageSender) Send(message, recipientPhoneNumber string) erro
 	return err
 }
 
+// Creates a new signal message sender object from the given parameters
 func newSignalMessageSender(senderNumber, signalCliGrpcApiUrl string) (*_SignalMessageSender, error) {
 	conn, err := grpc.Dial(signalCliGrpcApiUrl, grpc.WithInsecure())
 	if err != nil {
@@ -49,6 +51,7 @@ func newSignalMessageSender(senderNumber, signalCliGrpcApiUrl string) (*_SignalM
 	}, nil
 }
 
+// Initializes the signal message sender
 func Init() error {
 	var err error
 	SignalMessageSender, err = newSignalMessageSender(config.SIGNAL_SENDER_PHONENUMBER, config.SIGNAL_CLI_GRPC_API_URL)

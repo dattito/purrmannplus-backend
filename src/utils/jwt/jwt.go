@@ -8,6 +8,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
+// Creates a new JWT token for the given user including the account_id
 func NewAccountIdToken(accountId string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
@@ -23,6 +24,7 @@ func NewAccountIdToken(accountId string) (string, error) {
 	return t, nil
 }
 
+// Creates a new short living JWT token for the user including the account_id and the phone_number
 func NewAccountIdPhoneNumberToken(accountId, phone_number string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
@@ -31,7 +33,7 @@ func NewAccountIdPhoneNumberToken(accountId, phone_number string) (string, error
 	claims["phone_number"] = phone_number
 	claims["exp"] = time.Now().Add(time.Minute * 10).Unix()
 
-	t, err := token.SignedString([]byte(config.JWT_RANDOM_SECRET))
+	t, err := token.SignedString([]byte(config.DNT_JWT_RANDOM_SECRET))
 	if err != nil {
 		return "", err
 	}
@@ -39,6 +41,7 @@ func NewAccountIdPhoneNumberToken(accountId, phone_number string) (string, error
 	return t, nil
 }
 
+// Returns the account_id from the given token
 func ParseAccountIdToken(tokenString string) (string, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -55,13 +58,14 @@ func ParseAccountIdToken(tokenString string) (string, error) {
 	return claims["account_id"].(string), nil
 }
 
+// Returns the account_id and phone_number from the given token
 func ParseAccountIdPhoneNumberToken(tokenString string) (string, string, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return []byte(config.JWT_RANDOM_SECRET), nil
+		return []byte(config.DNT_JWT_RANDOM_SECRET), nil
 	})
 	if err != nil {
 		return "", "", err

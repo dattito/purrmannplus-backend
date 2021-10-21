@@ -33,6 +33,7 @@ func CreateAccount(username, password string) (models.Account, error, error) {
 	return models.AcccountDBModelToAccount(a), nil, err
 }
 
+// Returns the id and the credentials of all accounts
 func GetAllAccounts() ([]models.Account, error) {
 
 	accounts, err := database.DB.GetAccounts()
@@ -48,6 +49,7 @@ func GetAllAccounts() ([]models.Account, error) {
 	return accs, nil
 }
 
+// Returns the accountId and the credentials of the account
 func GetAccount(accountId string) (models.Account, error) {
 	a, err := database.DB.GetAccount(accountId)
 	if err != nil {
@@ -57,6 +59,7 @@ func GetAccount(accountId string) (models.Account, error) {
 	return models.AcccountDBModelToAccount(a), nil
 }
 
+// Returns true if the accountId was found in the database
 func ValidAccountId(accountId string) (bool, error) {
 	_, err := GetAccount(accountId)
 	if err != nil {
@@ -69,6 +72,7 @@ func ValidAccountId(accountId string) (bool, error) {
 	return true, nil
 }
 
+// Returns the accountId and the credentials of the account matching the credentials
 func GetAccountByCredentials(authId, authPw string) (models.Account, error) {
 	if authId == "" {
 		return models.Account{}, errors.New("missing authId")
@@ -86,6 +90,7 @@ func GetAccountByCredentials(authId, authPw string) (models.Account, error) {
 	return models.AcccountDBModelToAccount(a), nil
 }
 
+// Deleting an account
 func DeleteAccount(accountId string) error {
 	err := database.DB.DeleteAccount(accountId)
 	if err == nil {

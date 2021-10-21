@@ -8,6 +8,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
+// Creates a new account and returns the account id
 func AddAccount(c *fiber.Ctx) error {
 	accApi := new(api_models.PostAccountRequest)
 	if err := c.BodyParser(accApi); err != nil {
@@ -35,6 +36,7 @@ func AddAccount(c *fiber.Ctx) error {
 	return c.JSON(api_models.AccountToPostAccountResponse(&acc))
 }
 
+// Retruns the account_id and the credentials of all accounts
 func GetAccounts(c *fiber.Ctx) error {
 	accs, err := commands.GetAllAccounts()
 	if err != nil {
@@ -47,6 +49,7 @@ func GetAccounts(c *fiber.Ctx) error {
 	return c.JSON(api_models.AccountsToGetAccountResponses(accs))
 }
 
+// Delets an account
 func DeleteAccount(c *fiber.Ctx) error {
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)

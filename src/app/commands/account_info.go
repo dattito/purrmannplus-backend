@@ -30,6 +30,7 @@ func AddAccountInfo(accountId, phoneNumber string) (models.AccountInfo, error, e
 	return f, nil, err
 }
 
+// Returns true if an phone number was added to this user
 func HasPhoneNumber(account_id string) (bool, error) {
 	ai, err := database.DB.GetAccountInfo(account_id)
 	if err != nil {

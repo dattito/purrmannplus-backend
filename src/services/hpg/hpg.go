@@ -10,6 +10,7 @@ import (
 	"github.com/dattito/purrmannplus-backend/config"
 )
 
+// Checks if the credentials are correct
 func CheckCredentials(authId, authPw string) (bool, error) {
 
 	data := url.Values{

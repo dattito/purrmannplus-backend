@@ -6,9 +6,11 @@ import (
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/controllers"
 	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	jwtware "github.com/gofiber/jwt/v3"
 )
 
+// Get the JWT configuration for the api
 func getJWTConfig() jwtware.Config {
 	return jwtware.Config{
 		SigningKey: []byte(config.JWT_SECRET),
@@ -30,6 +32,7 @@ func getJWTConfig() jwtware.Config {
 	}
 }
 
+// Protected is a middleware that checks if the user is logged in
 func Protected() fiber.Handler {
 	return jwtware.New(getJWTConfig())
 }
@@ -38,8 +41,16 @@ type RestProvider struct {
 	app *fiber.App
 }
 
+// Initialize the fiber app and sets the routes and middlewares
 func (r *RestProvider) Init() error {
 	r.app = fiber.New()
+
+	if config.CORS_ALLOWED_ORIGINS != "" {
+		r.app.Use(cors.New(cors.Config{
+			AllowOrigins: config.CORS_ALLOWED_ORIGINS,
+			AllowHeaders:  "Origin, Content-Type, Accept",
+		}))
+	}
 
 	r.app.Get(HealthRoute, controllers.GetHealth)
 	r.app.Get(AboutRoute, controllers.About)
@@ -62,6 +73,7 @@ func (r *RestProvider) Init() error {
 	return nil
 }
 
+// Start the fiber app and listen on the specified port
 func (r *RestProvider) StartListening() error {
 	return r.app.Listen(fmt.Sprintf(":%d", config.LISTENING_PORT))
 }

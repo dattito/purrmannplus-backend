@@ -18,6 +18,7 @@ type GormProvider struct {
 	DB *gorm.DB
 }
 
+// Returns a GormProvider object with a connection to the database
 func NewGormProvider() (*GormProvider, error) {
 
 	type Open func(string) gorm.Dialector
@@ -44,6 +45,7 @@ func NewGormProvider() (*GormProvider, error) {
 	return &GormProvider{DB: db}, nil
 }
 
+// Creates all tables in the database using AutoMigrate()
 func (g *GormProvider) CreateTables() error {
 	var err error
 	err = g.DB.AutoMigrate(&models.AccountDB{})
@@ -63,6 +65,7 @@ func (g *GormProvider) CreateTables() error {
 	return nil
 }
 
+// Closes the database connection
 func (g *GormProvider) CloseDB() error {
 	dialect, err := g.DB.DB()
 	if err != nil {
@@ -224,6 +227,7 @@ func (g *GormProvider) GetSubstitutions(accountId string) (provider_models.Subst
 	return models.SubstitutionDBToSubstitutionDBModel(subdb), nil
 }
 
+// Returns all information needed to update the substitution of a given account in one list of models
 func (g *GormProvider) GetAllAccountCredentialsAndPhoneNumberAndSubstitutions() ([]provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel, error) {
 	m := []models.AccountCredentialsAndPhoneNumberAndSubstitutionsDB{}
 

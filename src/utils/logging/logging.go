@@ -26,6 +26,7 @@ const (
 	LEVEL_SILENT  = 0
 )
 
+// Initialize the logging objects
 func Init(loglevel int) error {
 	logLevel = loglevel
 
@@ -49,6 +50,7 @@ func Init(loglevel int) error {
 	return nil
 }
 
+// Logs a message if the log level is bigger than 0
 func Fatal(v ...interface{}) {
 	if logLevel < LEVEL_FATAL {
 		return
@@ -57,6 +59,7 @@ func Fatal(v ...interface{}) {
 	fatalLogger.Fatalln(v...)
 }
 
+// Logs a message if the log level is bigger than 0
 func Fatalf(format string, v ...interface{}) {
 	if logLevel < LEVEL_FATAL {
 		return
@@ -65,6 +68,7 @@ func Fatalf(format string, v ...interface{}) {
 	fatalLogger.Fatalf(format, v...)
 }
 
+// Logs a message if the log level is bigger than 1
 func Error(v ...interface{}) {
 	if logLevel < LEVEL_ERROR {
 		return
@@ -73,6 +77,7 @@ func Error(v ...interface{}) {
 	errorLogger.Println(v...)
 }
 
+// Logs a message if the log level is bigger than 1
 func Errorf(format string, v ...interface{}) {
 	if logLevel < LEVEL_ERROR {
 		return
@@ -81,6 +86,7 @@ func Errorf(format string, v ...interface{}) {
 	errorLogger.Printf(format, v...)
 }
 
+// Logs a message if the log level is bigger than 2
 func Warning(v ...interface{}) {
 	if logLevel < LEVEL_WARNING {
 		return
@@ -89,6 +95,7 @@ func Warning(v ...interface{}) {
 	warningLogger.Println(v...)
 }
 
+// Logs a message if the log level is bigger than 2
 func Warningf(format string, v ...interface{}) {
 	if logLevel < LEVEL_WARNING {
 		return
@@ -97,6 +104,7 @@ func Warningf(format string, v ...interface{}) {
 	warningLogger.Printf(format, v...)
 }
 
+// Logs a message if the log level is bigger than 3
 func Info(v ...interface{}) {
 	if logLevel < LEVEL_INFO {
 		return
@@ -105,6 +113,7 @@ func Info(v ...interface{}) {
 	infoLogger.Println(v...)
 }
 
+// Logs a message if the log level is bigger than 3
 func Infof(format string, v ...interface{}) {
 	if logLevel < LEVEL_INFO {
 		return
@@ -113,6 +122,7 @@ func Infof(format string, v ...interface{}) {
 	infoLogger.Printf(format, v...)
 }
 
+// Logs a message if the log level is bigger than 4
 func Debug(v ...interface{}) {
 	if logLevel < LEVEL_DEBUG {
 		return
@@ -121,6 +131,7 @@ func Debug(v ...interface{}) {
 	debugLogger.Println(v...)
 }
 
+// Logs a message if the log level is bigger than 4
 func Debugf(format string, v ...interface{}) {
 	if logLevel < LEVEL_DEBUG {
 		return

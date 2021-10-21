@@ -7,6 +7,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
+// Adds an account to the substitution updater
 func RegisterToSubstitutionUpdater(c *fiber.Ctx) error {
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
@@ -44,6 +45,7 @@ func RegisterToSubstitutionUpdater(c *fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusCreated)
 }
 
+// Removes an account from the substitution updater
 func UnregisterFromSubstitutionUpdater(c *fiber.Ctx) error {
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)

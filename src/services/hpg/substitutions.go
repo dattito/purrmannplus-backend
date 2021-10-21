@@ -13,6 +13,7 @@ import (
 
 var weekdays = [5]string{"Mo", "Di", "Mi", "Do", "Fr"}
 
+// Returns true if the given string begins with a weekday
 func beginsWithAWeekday(s string) bool {
 	b := strings.Fields(s)[0]
 	for _, weekday := range weekdays {

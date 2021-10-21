@@ -20,6 +20,7 @@ const (
 
 var src = rand.NewSource(time.Now().UnixNano())
 
+// Generates a random string of length n
 func GenerateString(n int) string {
 	sb := strings.Builder{}
 	sb.Grow(n)
@@ -39,6 +40,7 @@ func GenerateString(n int) string {
 	return sb.String()
 }
 
+// Converts a string to a format supporting more caracters
 func ConvertStringToLatin1(str string) (string, error) {
 	charset := "latin1"
 	e, err := ianaindex.MIME.Encoding(charset)
