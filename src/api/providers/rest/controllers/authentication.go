@@ -57,6 +57,9 @@ func AccountLogin(c *fiber.Ctx) error {
 			cookie.Domain = config.AUTHORIZATION_COOKIE_DOMAIN
 		}
 
+		cookie.Secure = config.AUTHORIZATION_COOKIE_SECURE
+		cookie.SameSite = config.AUTHORIZATION_COOKIE_SAMESITE
+
 		c.Cookie(cookie)
 
 		return c.Status(fiber.StatusCreated).JSON(&fiber.Map{

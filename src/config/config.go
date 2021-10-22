@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/dattito/purrmannplus-backend/utils"
 )
@@ -17,6 +18,7 @@ var (
 	AUTHORIZATION_COOKIE_DOMAIN              string // If set, in the authorization cookie will be set the domain
 	AUTHORIZATION_COOKIE_HTTPONLY            bool   // If true, the cookie will be set as httponly
 	AUTHORIZATION_COOKIE_SECURE              bool   // If true, the cookie will be set as secure
+	AUTHORIZATION_COOKIE_SAMESITE            string // Either "lax" (default), "strict", "disabled" or "none"
 	ENABLE_API                               bool   // If true, the api will be enabled, otherwise there will be no listener
 	ENABLE_SUBSTITUTIONS_SCHEDULER           bool   // If true, the substitutions scheduler will be enabled
 	SUBSTITUTIONS_UPDATECRON                 string // Cron expression for the substitutions scheduler
@@ -80,6 +82,11 @@ func Init() error {
 	AUTHORIZATION_COOKIE_SECURE, err = utils.GetBoolEnv("AUTHORIZATION_COOKIE_SECURE", false)
 	if err != nil {
 		return err
+	}
+
+	AUTHORIZATION_COOKIE_SAMESITE = utils.GetEnv("AUTHORIZATION_COOKIE_SAMESITE", "lax")
+	if !utils.Contains([]string{"lax", "strict", "disabled", "none"}, strings.ToLower(AUTHORIZATION_COOKIE_SAMESITE)) {
+		return fmt.Errorf("AUTHORIZATION_COOKIE_SAMESITE must be one of lax, strict, disabled, none")
 	}
 
 	ENABLE_API, err = utils.GetBoolEnv("ENABLE_API", true)
