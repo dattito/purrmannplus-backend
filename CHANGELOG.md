@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Cookie attributes weren't used
+- Scheduler can't run without api
 
 ## [v0.5.3] - 2021-10-21
 
