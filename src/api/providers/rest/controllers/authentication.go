@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"errors"
-	"time"
 
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/models"
 	"github.com/dattito/purrmannplus-backend/app/commands"
@@ -35,7 +34,7 @@ func AccountLogin(c *fiber.Ctx) error {
 		})
 	}
 
-	token, err := jwt.NewAccountIdToken(dbAcc.Id)
+	token, expires, err := jwt.NewAccountIdToken(dbAcc.Id)
 	if err != nil {
 		logging.Errorf("Error while creating token: %v", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
@@ -49,7 +48,7 @@ func AccountLogin(c *fiber.Ctx) error {
 		cookie.Value = token
 
 		if a.StayLoggedIn {
-			cookie.Expires = time.Now().Add(time.Duration(config.AUTHORIZATION_EXPIRATION_TIME))
+			cookie.Expires = expires
 		}
 		cookie.HTTPOnly = true
 
@@ -63,12 +62,14 @@ func AccountLogin(c *fiber.Ctx) error {
 		c.Cookie(cookie)
 
 		return c.Status(fiber.StatusCreated).JSON(&fiber.Map{
-			"ok": true,
+			"ok":  true,
+			"exp": expires.Unix(),
 		})
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(&fiber.Map{
 		"token": token,
+		"exp":   expires.Unix(),
 	})
 }
 

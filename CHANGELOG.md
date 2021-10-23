@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Experation time of token in response
+
 ## [v0.5.5] - 2021-10-23
 
 ### Added

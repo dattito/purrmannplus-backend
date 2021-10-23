@@ -9,19 +9,21 @@ import (
 )
 
 // Creates a new JWT token for the given user including the account_id
-func NewAccountIdToken(accountId string) (string, error) {
+func NewAccountIdToken(accountId string) (string, time.Time, error) {
+	expires := time.Now().Add(time.Duration(config.AUTHORIZATION_EXPIRATION_TIME) * time.Second)
+
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
 	claims["account_id"] = accountId
-	claims["exp"] = time.Now().Add(time.Duration(config.AUTHORIZATION_EXPIRATION_TIME)).Unix()
+	claims["exp"] = expires.Unix()
 
 	t, err := token.SignedString([]byte(config.JWT_SECRET))
 	if err != nil {
-		return "", err
+		return "", time.Time{}, err
 	}
 
-	return t, nil
+	return t, expires, nil
 }
 
 // Creates a new short living JWT token for the user including the account_id and the phone_number
