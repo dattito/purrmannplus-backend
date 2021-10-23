@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Custom auth jwt token / auth cookie expiration
+
 ### Fixed
 
 - Cookie attributes weren't used

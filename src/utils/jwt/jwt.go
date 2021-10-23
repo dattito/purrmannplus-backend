@@ -14,7 +14,7 @@ func NewAccountIdToken(accountId string) (string, error) {
 
 	claims := token.Claims.(jwt.MapClaims)
 	claims["account_id"] = accountId
-	claims["exp"] = time.Now().Add(time.Hour * 24 * 30).Unix()
+	claims["exp"] = time.Now().Add(time.Duration(config.AUTHORIZATION_EXPIRATION_TIME)).Unix()
 
 	t, err := token.SignedString([]byte(config.JWT_SECRET))
 	if err != nil {
@@ -33,7 +33,7 @@ func NewAccountIdPhoneNumberToken(accountId, phone_number string) (string, error
 	claims["phone_number"] = phone_number
 	claims["exp"] = time.Now().Add(time.Minute * 10).Unix()
 
-	t, err := token.SignedString([]byte(config.DNT_JWT_RANDOM_SECRET))
+	t, err := token.SignedString([]byte(config.JWT_SHORTLIVING_SECRET))
 	if err != nil {
 		return "", err
 	}
@@ -65,7 +65,7 @@ func ParseAccountIdPhoneNumberToken(tokenString string) (string, string, error) 
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return []byte(config.DNT_JWT_RANDOM_SECRET), nil
+		return []byte(config.JWT_SHORTLIVING_SECRET), nil
 	})
 	if err != nil {
 		return "", "", err
