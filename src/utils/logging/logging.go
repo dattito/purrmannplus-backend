@@ -27,8 +27,8 @@ const (
 )
 
 // Initialize the logging objects
-func Init(loglevel int) error {
-	logLevel = loglevel
+func Init() error {
+	logLevel = config.LOG_LEVEL
 
 	var f *os.File
 	if config.LOGGING_FILE != "" {

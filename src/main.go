@@ -19,7 +19,7 @@ func main() {
 		log.Fatalf("Failed to load configuration: %v", err)
 	}
 
-	if err := logging.Init(config.LOG_LEVEL); err != nil {
+	if err := logging.Init(); err != nil {
 		log.Fatalf("Failed to initialize logging: %s", err)
 	}
 
