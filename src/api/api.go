@@ -17,8 +17,5 @@ func Init() error {
 // Start the api to listen on the configured port
 func StartListening() error {
 	logging.Infof("Starting listening on port %d", config.LISTENING_PORT)
-	if config.ENABLE_API {
-		return api.StartListening()
-	}
-	return nil
+	return api.StartListening()
 }

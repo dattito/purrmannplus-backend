@@ -16,10 +16,14 @@ func main() {
 
 	// Load configuration
 	if err := config.Init(); err != nil {
-		log.Fatalf("Failed to load configuration: %v", err)
+		log.Fatalf("Failed to load configuration: %s", err)
 	}
 
-	if err := logging.Init(config.LOG_LEVEL); err != nil {
+	if !config.ENABLE_API && !config.ENABLE_SUBSTITUTIONS_SCHEDULER {
+		log.Fatal("No API or scheduler enabled. Exiting.")
+	}
+
+	if err := logging.Init(); err != nil {
 		log.Fatalf("Failed to initialize logging: %s", err)
 	}
 
@@ -37,9 +41,18 @@ func main() {
 
 	api.Init()
 
-	// Start scheduler
-	scheduler.StartScheduler()
+	if config.ENABLE_API && config.ENABLE_SUBSTITUTIONS_SCHEDULER {
+		// Start scheduler
+		scheduler.StartAsync()
+	}
 
-	// Start API
-	logging.Fatal(api.StartListening())
+	if config.ENABLE_API {
+		// Start API
+		logging.Fatal(api.StartListening())
+	}
+
+	if !config.ENABLE_API && config.ENABLE_SUBSTITUTIONS_SCHEDULER {
+		// Start scheduler
+		scheduler.StartBlocking()
+	}
 }

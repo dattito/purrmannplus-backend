@@ -49,13 +49,16 @@ func AccountLogin(c *fiber.Ctx) error {
 		cookie.Value = token
 
 		if a.StayLoggedIn {
-			cookie.Expires = time.Now().Add(time.Hour * 24 * 30)
+			cookie.Expires = time.Now().Add(time.Duration(config.AUTHORIZATION_EXPIRATION_TIME))
 		}
 		cookie.HTTPOnly = true
 
 		if config.AUTHORIZATION_COOKIE_DOMAIN != "" {
 			cookie.Domain = config.AUTHORIZATION_COOKIE_DOMAIN
 		}
+
+		cookie.Secure = config.AUTHORIZATION_COOKIE_SECURE
+		cookie.SameSite = config.AUTHORIZATION_COOKIE_SAMESITE
 
 		c.Cookie(cookie)
 
@@ -71,21 +74,9 @@ func AccountLogin(c *fiber.Ctx) error {
 
 // AccountLogout deletes the authorization cookie (logs out the user)
 func AccountLogout(c *fiber.Ctx) error {
-	cookie := new(fiber.Cookie)
-	cookie.Name = "Authorization"
-	cookie.Value = ""
-	cookie.Expires = time.Now().Add(-1 * time.Hour)
-	cookie.HTTPOnly = config.AUTHORIZATION_COOKIE_HTTPONLY
+	c.ClearCookie("Authorization")
 
-	cookie.Secure = config.AUTHORIZATION_COOKIE_SECURE
-
-	if config.AUTHORIZATION_COOKIE_DOMAIN != "" {
-		cookie.Domain = config.AUTHORIZATION_COOKIE_DOMAIN
-	}
-
-	c.Cookie(cookie)
-
-	return c.SendStatus(fiber.StatusOK)
+	return c.SendStatus(fiber.StatusNoContent)
 }
 
 // Checks if the credentials are correct
