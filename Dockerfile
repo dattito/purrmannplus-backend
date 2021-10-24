@@ -19,7 +19,7 @@ COPY --from=build /bin/app /bin/app
 
 WORKDIR /data
 
-ARG DNT_VERSION=0.0.0
+ARG DNT_VERSION=""
 
 ENV DNT_VERSION ${DNT_VERSION}
 

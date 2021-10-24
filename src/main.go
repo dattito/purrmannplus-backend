@@ -41,6 +41,8 @@ func main() {
 
 	api.Init()
 
+	logging.Infof("Starting PurrmannPlus-Backend %s", config.DNT_VERSION)
+
 	if config.ENABLE_API && config.ENABLE_SUBSTITUTIONS_SCHEDULER {
 		// Start scheduler
 		scheduler.StartAsync()
