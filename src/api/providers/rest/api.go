@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	jwtware "github.com/gofiber/jwt/v3"
+	"github.com/gofiber/template/amber"
 )
 
 // Get the JWT configuration for the api
@@ -43,7 +44,11 @@ type RestProvider struct {
 
 // Initialize the fiber app and sets the routes and middlewares
 func (r *RestProvider) Init() error {
-	r.app = fiber.New()
+	r.app = fiber.New(fiber.Config{
+		Views: amber.New("./api/providers/rest/views", ".amber"),
+	})
+
+	r.app.Static("/static", "./api/providers/rest/static")
 
 	if config.CORS_ALLOWED_ORIGINS != "" {
 		r.app.Use(cors.New(cors.Config{
@@ -69,6 +74,8 @@ func (r *RestProvider) Init() error {
 
 	v1.Post(RegisterToSubstitutionUpdaterRoute, Protected(), controllers.RegisterToSubstitutionUpdater)
 	v1.Delete(UnregisterFromSubstitutionUpdaterRoute, Protected(), controllers.UnregisterFromSubstitutionUpdater)
+
+	r.app.Get(SubstitutionSpeedFormRoute, controllers.GetSubstitutionSpeedForm)
 
 	return nil
 }

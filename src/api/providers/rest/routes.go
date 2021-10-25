@@ -13,4 +13,6 @@ const (
 	AddPhoneNumberRoute                    = "/accounts/phone_number/validate"
 	RegisterToSubstitutionUpdaterRoute     = "/substitution_updater"
 	UnregisterFromSubstitutionUpdaterRoute = "/substitution_updater"
+
+	SubstitutionSpeedFormRoute = "/substitution_speed_form"
 )
