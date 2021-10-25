@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/controllers"
+	"github.com/dattito/purrmannplus-backend/api/providers/rest/session"
 	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -76,6 +77,8 @@ func (r *RestProvider) Init() error {
 	v1.Delete(UnregisterFromSubstitutionUpdaterRoute, Protected(), controllers.UnregisterFromSubstitutionUpdater)
 
 	r.app.Get(SubstitutionSpeedFormRoute, controllers.GetSubstitutionSpeedForm)
+
+	session.Init()
 
 	return nil
 }
