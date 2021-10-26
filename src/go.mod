@@ -3,7 +3,7 @@ module github.com/dattito/purrmannplus-backend
 go 1.17
 
 require (
-	github.com/PuerkitoBio/goquery v1.7.1
+	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/andybalholm/brotli v1.0.3 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/go-co-op/gocron v1.9.0
