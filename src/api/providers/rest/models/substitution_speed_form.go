@@ -1,7 +1,11 @@
 package models
 
-type GetSubstitutionSpeedFormRequest struct {
-	Username    string `json:"username"`
-	Password    string `json:"password"`
-	PhoneNumber string `json:"phone_number"`
+type PostSubstitutionSpeedFormRequest struct {
+	Username    string `form:"username"`
+	Password    string `form:"password"`
+	PhoneNumber string `form:"phone_number"`
+}
+
+type PostValidateSubstitutionSpeedFormRequest struct {
+	Code string `form:"code"`
 }

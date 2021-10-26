@@ -1,11 +1,13 @@
 import ./api/providers/rest/views/partials/header
 
+import ./api/providers/rest/views/partials/error
+
 div.col-sm-9.col-md-7.col-lg-6.m-auto
     div.card.border-0.shadow.rounded-3.my-5
         div.card-body.px-2.pb-4.p-sm-5
             img.mb-1.mx-auto.d-block[src="/static/PurrmannPlus.svg"][alt="Logo"]
             h2.text-center Anmelden
-            form.p-3[action="#"][method="post"]
+            form.p-3[method="POST"][action=FormPostRoute]
                 div.form-floating.mb-3
                     input.form-control#username
                         [type="text"]

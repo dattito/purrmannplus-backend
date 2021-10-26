@@ -12,6 +12,9 @@ import (
 
 // Checks if the credentials are correct
 func CheckCredentials(authId, authPw string) (bool, error) {
+	if authId == "" || authPw == "" {
+		return false, nil
+	}
 
 	data := url.Values{
 		"authid": {authId},

@@ -1,4 +1,4 @@
-package rest
+package routes
 
 const (
 	HealthRoute                            = "/health"
@@ -15,4 +15,5 @@ const (
 	UnregisterFromSubstitutionUpdaterRoute = "/substitution_updater"
 
 	SubstitutionSpeedFormRoute = "/substitution_speed_form"
+	ValidateSubstitutionSpeedFormRoute = "/substitution_speed_form/validate"
 )

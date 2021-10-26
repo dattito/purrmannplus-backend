@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/controllers"
+	"github.com/dattito/purrmannplus-backend/api/providers/rest/routes"
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/session"
 	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/gofiber/fiber/v2"
@@ -58,25 +59,25 @@ func (r *RestProvider) Init() error {
 		}))
 	}
 
-	r.app.Get(HealthRoute, controllers.GetHealth)
-	r.app.Get(AboutRoute, controllers.About)
+	r.app.Get(routes.HealthRoute, controllers.GetHealth)
+	r.app.Get(routes.AboutRoute, controllers.About)
 
 	v1 := r.app.Group("/v1")
 
-	v1.Post(AccountLoginRoute, controllers.AccountLogin)
-	v1.Get(AccountLogoutRoute, controllers.AccountLogout)
-	v1.Get(IsLoggedInRoute, Protected(), controllers.IsLoggedIn)
+	v1.Post(routes.AccountLoginRoute, controllers.AccountLogin)
+	v1.Get(routes.AccountLogoutRoute, controllers.AccountLogout)
+	v1.Get(routes.IsLoggedInRoute, Protected(), controllers.IsLoggedIn)
 
-	v1.Post(AddAccountRoute, controllers.AddAccount)
-	v1.Delete(DeleteAccountRoute, Protected(), controllers.DeleteAccount)
+	v1.Post(routes.AddAccountRoute, controllers.AddAccount)
+	v1.Delete(routes.DeleteAccountRoute, Protected(), controllers.DeleteAccount)
 	//v1.Get(GetAccountsRoute, controllers.GetAccounts)
-	v1.Post(SendPhoneNumberConfirmationLinkRoute, Protected(), controllers.SendPhoneNumberConfirmationLink)
-	v1.Get(AddPhoneNumberRoute, controllers.AddPhoneNumber)
+	v1.Post(routes.SendPhoneNumberConfirmationLinkRoute, Protected(), controllers.SendPhoneNumberConfirmationLink)
+	v1.Get(routes.AddPhoneNumberRoute, controllers.AddPhoneNumber)
 
-	v1.Post(RegisterToSubstitutionUpdaterRoute, Protected(), controllers.RegisterToSubstitutionUpdater)
-	v1.Delete(UnregisterFromSubstitutionUpdaterRoute, Protected(), controllers.UnregisterFromSubstitutionUpdater)
+	v1.Post(routes.RegisterToSubstitutionUpdaterRoute, Protected(), controllers.RegisterToSubstitutionUpdater)
+	v1.Delete(routes.UnregisterFromSubstitutionUpdaterRoute, Protected(), controllers.UnregisterFromSubstitutionUpdater)
 
-	r.app.Get(SubstitutionSpeedFormRoute, controllers.GetSubstitutionSpeedForm)
+	r.app.All(routes.SubstitutionSpeedFormRoute, controllers.SubstitutionSpeedForm)
 
 	session.Init()
 

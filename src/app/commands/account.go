@@ -99,3 +99,7 @@ func DeleteAccount(accountId string) error {
 
 	return err
 }
+
+func CheckCredentials(username, password string) (bool, error) {
+	return hpg.CheckCredentials(username, password)
+}
