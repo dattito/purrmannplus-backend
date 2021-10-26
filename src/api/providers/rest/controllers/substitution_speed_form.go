@@ -124,8 +124,6 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 				"error": "Something went wrong",
 			})
 		}
-
 	}
-
 	return fiber.ErrMethodNotAllowed
 }
