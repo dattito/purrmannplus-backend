@@ -26,7 +26,7 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/mattn/go-sqlite3 v1.14.8 // indirect
-	github.com/nyaruka/phonenumbers v1.0.72
+	github.com/nyaruka/phonenumbers v1.0.73
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.30.0 // indirect

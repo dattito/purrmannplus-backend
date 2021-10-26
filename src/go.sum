@@ -156,8 +156,8 @@ github.com/mattn/go-isatty v0.0.7/go.mod h1:Iq45c/XA43vh69/j3iqttzPXn0bhXyGjM0Hd
 github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Kysco4FUpU=
 github.com/mattn/go-sqlite3 v1.14.8 h1:gDp86IdQsN/xWjIEmr9MF6o9mpksUgh0fu+9ByFxzIU=
 github.com/mattn/go-sqlite3 v1.14.8/go.mod h1:NyWgC/yNuGj7Q9rpYnZvas74GogHl5/Z4A/KQRfk6bU=
-github.com/nyaruka/phonenumbers v1.0.72 h1:l1ClBSmRpEN6lfp28emOGPk7nzcuZ1hgWLtWk5lZXpM=
-github.com/nyaruka/phonenumbers v1.0.72/go.mod h1:DTw5PBWllLZuh8TwMfgiC+g3+4wmowrsO+4HhnSENkc=
+github.com/nyaruka/phonenumbers v1.0.73 h1:bP2WN8/NUP8tQebR+WCIejFaibwYMHOaB7MQVayclUo=
+github.com/nyaruka/phonenumbers v1.0.73/go.mod h1:3aiS+PS3DuYwkbK3xdcmRwMiPNECZ0oENH8qUT1lY7Q=
 github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
