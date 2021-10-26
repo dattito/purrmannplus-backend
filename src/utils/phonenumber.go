@@ -8,5 +8,6 @@ func FormatPhoneNumber(phoneNumber string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	return phonenumbers.Format(num, phonenumbers.INTERNATIONAL), nil
 }

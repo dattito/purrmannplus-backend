@@ -9,23 +9,26 @@ div.col-sm-9.col-md-7.col-lg-6.m-auto
             h2.text-center Anmelden
             form.p-3[method="POST"][action=FormPostRoute]
                 div.form-floating.mb-3
-                    input.form-control#username
+                    input.form-control
+                        [name="username"]
                         [type="text"]
                         [placeholder="Benutzername"]
                         [required]
                     label[for="username"] Benutzername
                 div.form-floating.mb-3
-                    input.form-control#password
+                    input.form-control
+                        [name="password"]
                         [type="password"]
                         [placeholder="Passwort"]
                         [required]
                     label[for="password"] Passwort
                 div.form-floating.mb-3
-                    input.form-control#phoneNumber
+                    input.form-control
+                        [name="phoneNumber"]
                         [type="phoneNumber"]
                         [placeholder="Telefonnummer"]
                         [required]
                     label[for="phoneNumber"] Telefonnummer
                 p.form-text 
                     i Es sind die selben Anmeldedaten wie bei dem Vertretungsplan und Moodle
-                button.btn.btn-primary.btn-block Anmelden
+                input.btn.btn-primary.btn-block[type="submit"] Anmlden
