@@ -39,4 +39,4 @@ div.container
                         | Bevor du dich registrierst, lese dir vorher diese 
                         a[href=InfoRoute][rel="nofollow"] Informationen
                         | durch. Wenn du dich registrierst, stimmst du diesen zu.
-                    input.btn.btn-primary.btn-block[type="submit"] Anmelden
+                    input.btn.btn-primary.btn-block[type="submit"][value="Registrieren"]
