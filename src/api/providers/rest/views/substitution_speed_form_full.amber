@@ -2,33 +2,38 @@ import ./api/providers/rest/views/partials/header
 
 import ./api/providers/rest/views/partials/error
 
-div.col-sm-9.col-md-7.col-lg-6.m-auto
-    div.card.border-0.shadow.rounded-3.my-5
-        div.card-body.px-2.pb-4.p-sm-5
-            img.mb-1.mx-auto.d-block[src="/static/PurrmannPlus.svg"][alt="Logo"]
-            h2.text-center Anmelden
-            form.p-3[method="POST"][action=FormPostRoute]
-                div.form-floating.mb-3
-                    input.form-control
-                        [name="username"]
-                        [type="text"]
-                        [placeholder="Benutzername"]
-                        [required]
-                    label[for="username"] Benutzername
-                div.form-floating.mb-3
-                    input.form-control
-                        [name="password"]
-                        [type="password"]
-                        [placeholder="Passwort"]
-                        [required]
-                    label[for="password"] Passwort
-                div.form-floating.mb-3
-                    input.form-control
-                        [name="phoneNumber"]
-                        [type="phoneNumber"]
-                        [placeholder="Telefonnummer"]
-                        [required]
-                    label[for="phoneNumber"] Telefonnummer
-                p.form-text 
-                    i Es sind die selben Anmeldedaten wie bei dem Vertretungsplan und Moodle
-                input.btn.btn-primary.btn-block[type="submit"] Anmelden
+div.container
+    div.col-sm-9.col-md-7.col-lg-6.m-auto
+        div.card.border-0.shadow.rounded-3.my-5
+            div.card-body.px-2.pb-4.p-sm-5
+                img.mb-1.mx-auto.d-block[src="/static/PurrmannPlus.svg"][alt="Logo"]
+                h2.text-center Anmelden
+                form.p-3[method="POST"][action=FormPostRoute]
+                    div.form-floating.mb-3
+                        input.form-control
+                            [name="username"]
+                            [type="text"]
+                            [placeholder="Benutzername"]
+                            [required]
+                        label[for="username"] Benutzername
+                    div.form-floating.mb-3
+                        input.form-control
+                            [name="password"]
+                            [type="password"]
+                            [placeholder="Passwort"]
+                            [required]
+                        label[for="password"] Passwort
+                    div.form-floating.mb-3
+                        input.form-control
+                            [name="phoneNumber"]
+                            [type="phoneNumber"]
+                            [placeholder="Telefonnummer"]
+                            [required]
+                        label[for="phoneNumber"] Telefonnummer
+                    p.form-text 
+                        i Es sind die selben Anmeldedaten wie bei dem Vertretungsplan und Moodle
+                    p.form-text
+                        | Bevor du dich registrierst, lese dir vorher diese 
+                        a[href=InfoRoute][rel="nofollow"] Informationen
+                        | durch. Wenn du dich registrierst, stimmst du diesen zu.
+                    input.btn.btn-primary.btn-block[type="submit"] Anmelden

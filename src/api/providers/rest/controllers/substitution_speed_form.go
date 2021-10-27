@@ -33,10 +33,12 @@ func SaveRequestInSession(c *fiber.Ctx, pr models.PostSubstitutionSpeedFormReque
 func SubstitutionSpeedForm(c *fiber.Ctx) error {
 	if c.Method() == fiber.MethodGet {
 		return c.Render("substitution_speed_form_full", fiber.Map{
+			"InfoRoute":     routes.SubstitutionSpeedFormInfoRoute,
 			"FormPostRoute": routes.SubstitutionSpeedFormRoute,
 		}, "layouts/main")
 	} else if c.Method() == fiber.MethodPost {
 		internalServerErrorResponse := c.Status(fiber.StatusInternalServerError).Render("substitution_speed_form_full", fiber.Map{
+			"InfoRoute":     routes.SubstitutionSpeedFormInfoRoute,
 			"FormPostRoute": routes.SubstitutionSpeedFormRoute,
 			"ErrorMessage":  "Etwas ist schiefgelaufen...",
 		}, "layouts/main")
@@ -55,6 +57,7 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 
 		if !correct {
 			return c.Status(fiber.StatusUnauthorized).Render("substitution_speed_form_full", fiber.Map{
+				"InfoRoute":     routes.SubstitutionSpeedFormInfoRoute,
 				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
 				"ErrorMessage":  "Falsche Anmeldedaten",
 			}, "layouts/main")
@@ -69,6 +72,7 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 
 		if account.Username != "" {
 			return c.Status(fiber.StatusUnauthorized).Render("substitution_speed_form_full", fiber.Map{
+				"InfoRoute":     routes.SubstitutionSpeedFormInfoRoute,
 				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
 				"ErrorMessage":  "Das Konto exestiert bereits",
 			}, "layouts/main")
@@ -78,6 +82,7 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 		if err != nil {
 			if errors.Is(err, phonenumbers.ErrNotANumber) {
 				return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_form_full", fiber.Map{
+					"InfoRoute":     routes.SubstitutionSpeedFormInfoRoute,
 					"FormPostRoute": routes.SubstitutionSpeedFormRoute,
 					"ErrorMessage":  "Bitte gebe eine gültige Telefonnummer an",
 				}, "layouts/main")
@@ -190,4 +195,8 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 
 func FinishSubstitutionSpeedForm(c *fiber.Ctx) error {
 	return c.Render("substitution_speed_finish", fiber.Map{}, "layouts/main")
+}
+
+func InfoSubstitutionSpeedForm(c *fiber.Ctx) error {
+	return c.Render("substitution_speed_info", fiber.Map{}, "layouts/main")
 }
