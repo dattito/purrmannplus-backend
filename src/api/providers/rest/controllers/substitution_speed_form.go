@@ -35,28 +35,41 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 			"FormPostRoute": routes.SubstitutionSpeedFormRoute,
 		}, "layouts/main")
 	} else if c.Method() == fiber.MethodPost {
+		internalServerErrorResponse := c.Status(fiber.StatusInternalServerError).Render("substitution_speed_form_full", fiber.Map{
+			"FormPostRoute": routes.SubstitutionSpeedFormRoute,
+			"ErrorMessage":  "Etwas ist schiefgelaufen...",
+		}, "layouts/main")
+
 		var pr models.PostSubstitutionSpeedFormRequest
 		if err := c.BodyParser(&pr); err != nil {
 			logging.Errorf("Error parsing body: %v", err)
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_form_full", fiber.Map{
-				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Etwas ist schiefgelaufen...",
-			}, "layouts/main")
+			return internalServerErrorResponse
 		}
 
 		correct, err := commands.CheckCredentials(pr.Username, pr.Password)
 		if err != nil {
 			logging.Errorf("Error checking credentials: %v", err)
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_form_full", fiber.Map{
-				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Etwas ist schiefgelaufen...",
-			}, "layouts/main")
+			return internalServerErrorResponse
 		}
 
 		if !correct {
 			return c.Status(fiber.StatusUnauthorized).Render("substitution_speed_form_full", fiber.Map{
 				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
 				"ErrorMessage":  "Falsche Anmeldedaten",
+			}, "layouts/main")
+		}
+
+		// Check if accounts already exist
+		account, err := commands.GetAccountByCredentials(pr.Username, pr.Password)
+		if err != nil {
+			logging.Errorf("Error getting account by credentials: %v", err)
+			return internalServerErrorResponse
+		}
+
+		if account.Username != "" {
+			return c.Status(fiber.StatusUnauthorized).Render("substitution_speed_form_full", fiber.Map{
+				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
+				"ErrorMessage":  "Das Konto exestiert bereits",
 			}, "layouts/main")
 		}
 
@@ -69,10 +82,7 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 				}, "layouts/main")
 			}
 			logging.Errorf("Error formatting number: %v", err)
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_form_full", fiber.Map{
-				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Etwas ist schiefgelaufen...",
-			}, "layouts/main")
+			return internalServerErrorResponse
 		}
 
 		code := utils.GenerateValidationCode(6)
@@ -81,19 +91,13 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 			fmt.Sprintf("Willkommen bei PurrmannPlus! Dein Bestätigungscode lautet: %s", code),
 			validNumber,
 		); err != nil {
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_form_full", fiber.Map{
-				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Etwas ist schiefgelaufen...",
-			}, "layouts/main")
+			return internalServerErrorResponse
 		}
 
 		err = SaveRequestInSession(c, pr, code)
 		if err != nil {
 			logging.Errorf("Error saving request in session: %v", err)
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_form_full", fiber.Map{
-				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Etwas ist schiefgelaufen...",
-			}, "layouts/main")
+			return internalServerErrorResponse
 		}
 
 		return c.Redirect(routes.ValidateSubstitutionSpeedFormRoute)
@@ -103,10 +107,16 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 }
 
 func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
+
+	internalServerErrorResponse := c.Status(fiber.StatusInternalServerError).Render("substitution_speed_pn_validate", fiber.Map{
+		"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
+		"ErrorMessage":  "Etwas ist schiefgelaufen...",
+	}, "layouts/main")
+
 	if c.Method() == fiber.MethodGet {
 		session, err := session.SessionStore.Get(c)
 		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_pn_validate", fiber.Map{
+			return c.Render("substitution_speed_pn_validate", fiber.Map{
 				"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
 			}, "layouts/main")
 		}
@@ -124,9 +134,7 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 	if c.Method() == fiber.MethodPost {
 		session, err := session.SessionStore.Get(c)
 		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_pn_validate", fiber.Map{
-				"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
-			}, "layouts/main")
+			return internalServerErrorResponse
 		}
 
 		username := session.Get("username")
@@ -138,10 +146,7 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 		if err := c.BodyParser(&pr); err != nil {
 			logging.Errorf("Error parsing body: %v", err)
 			session.Destroy()
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_pn_validate", fiber.Map{
-				"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Etwas ist schiefgelaufen...",
-			}, "layouts/main")
+			return internalServerErrorResponse
 		}
 
 		if pr.Code != session.Get("code") {
@@ -154,40 +159,25 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 		acc, userErr, internalErr := commands.CreateAccount(session.Get("username").(string), session.Get("password").(string))
 		if internalErr != nil {
 			session.Destroy()
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_pn_validate", fiber.Map{
-				"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Etwas ist schiefgelaufen...",
-			}, "layouts/main")
+			return internalServerErrorResponse
 		}
 		if userErr != nil {
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_pn_validate", fiber.Map{
-				"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Etwas ist schiefgelaufen...",
-			}, "layouts/main")
+			return internalServerErrorResponse
 		}
 
 		_, userErr, internalErr = commands.AddAccountInfo(acc.Id, session.Get("phoneNumber").(string))
 		if internalErr != nil {
 			session.Destroy()
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_pn_validate", fiber.Map{
-				"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Etwas ist schiefgelaufen...",
-			}, "layouts/main")
+			return internalServerErrorResponse
 		}
 		if userErr != nil {
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_pn_validate", fiber.Map{
-				"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Etwas ist schiefgelaufen...",
-			}, "layouts/main")
+			return internalServerErrorResponse
 		}
 
 		_, err = commands.AddToSubstitutionUpdater(acc.Id)
 		if err != nil {
 			session.Destroy()
-			return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_pn_validate", fiber.Map{
-				"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Etwas ist schiefgelaufen...",
-			}, "layouts/main")
+			return internalServerErrorResponse
 		}
 
 		session.Destroy()
