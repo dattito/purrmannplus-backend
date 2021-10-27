@@ -34,13 +34,13 @@ div.container
     div.row
         h2.my-4
             | Infos über die Daten
-        ul
-            li Wenn du dich registrierst, werden deine Daten an den Server gesendet. Diese Daten werden nicht an Dritte weitergegeben.
-            li Registrieren können sich momentan nur Schüler der Oberstufe, da hier jede Person einen eigenen Account hat. Unterstützung für Schüler anderer Jahrgänge folgt.
-            li Ein Account kann nur einmal registriert werden.
-            li Die Anmeldedaten werden unverschlüsselt gespeichert. Das ist notwendig, weil die Daten direkt zum Server geschickt werden müssen.
-            li Mit den Anmeldedaten wird nichts unrechtmäßiges getan, jedoch dürfen sie zu Testzwecken für neue Funktionen verwendet werden.
-            li Die Anmeldung verläuft auf eigene Gefahr. Es wird keine Verantwortung übernommen, sollte irgendwas passieren.
-            li Auch die Funktion dieser Seite ist nicht garantiert. Es kann zum Beispiel jederzeit zu Ausfällen kommen.
-            li Wenn du den Bot benutzt und dich registrierst, bist du mit diesen Informationen einverstanden und hast es mit betroffenden Personen abgesprochen, sollte eine 
-                | Registrierung oder die daraus resultierenden Daten und Aktionen mehrere Personen betreffen.
+    ol
+        li Wenn du dich registrierst, werden deine Daten an den Server gesendet. Diese Daten werden nicht an Dritte weitergegeben.
+        li Registrieren können sich momentan nur Schüler der Oberstufe, da hier jede Person einen eigenen Account hat. Unterstützung für Schüler anderer Jahrgänge folgt.
+        li Ein Account kann nur einmal registriert werden.
+        li Die Anmeldedaten werden unverschlüsselt gespeichert. Das ist notwendig, weil die Daten direkt zum Server geschickt werden müssen.
+        li Mit den Anmeldedaten wird nichts unrechtmäßiges getan, jedoch dürfen sie zu Testzwecken für neue Funktionen verwendet werden.
+        li Die Anmeldung verläuft auf eigene Gefahr. Es wird keine Verantwortung übernommen, sollte irgendwas passieren.
+        li Auch die Funktion dieser Seite ist nicht garantiert. Es kann zum Beispiel jederzeit zu Ausfällen kommen.
+        li Wenn du den Bot benutzt und dich registrierst, bist du mit diesen Informationen einverstanden und hast es mit betroffenden Personen abgesprochen, sollte eine 
+            | Registrierung oder die daraus resultierenden Daten und Aktionen mehrere Personen betreffen.
