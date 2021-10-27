@@ -12,6 +12,8 @@ div.container
                     p.form-text Zum Anmelden brauchst du die App 
                         a[href="https://signal.org"][rel="nofollow"][target="_blank"] Signal
                         | .
+                    p.form-text.text-info
+                        | Momentant können sich nur Schüler der Oberstufe anmelden
                     div.form-floating.mb-3
                         input.form-control
                             [name="username"]

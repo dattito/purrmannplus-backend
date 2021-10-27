@@ -51,6 +51,13 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 		}
 
 		pr.Username = strings.ToLower(pr.Username)
+		if len(pr.Username) < 4 && utils.NumberInString(pr.Username) {
+			return c.Status(fiber.StatusBadRequest).Render("substitution_speed_form_full", fiber.Map{
+				"InfoRoute":     routes.SubstitutionSpeedFormInfoRoute,
+				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
+				"ErrorMessage":  "Momentan können sich nur Schüler der Oberstufe anmelden...",
+			}, "layouts/main")
+		}
 
 		correct, err := commands.CheckCredentials(pr.Username, pr.Password)
 		if err != nil {
