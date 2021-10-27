@@ -38,6 +38,8 @@ var (
 	DNT_VERSION                              string // The version of this application. It is automatically set by docker, so DO NOT TOUCH
 	PATH_TO_API_VIEWS                        string // The path to the api views, default is "./api/providers/rest/views"
 	PATH_TO_API_STATIC                       string // The path to the static files of the api, default is "./api/providers/rest/static"
+	CONTACT_EMAIL                            string // The email address users can send emails to
+	CONTACT_INSTAGRAM                        string // The instagram account users can send messages to
 )
 
 // END OF ENDVIRONMENT VARIABLES
@@ -159,6 +161,10 @@ func Init() error {
 	PATH_TO_API_VIEWS = utils.GetEnv("PATH_TO_API_VIEWS", "./api/providers/rest/views")
 
 	PATH_TO_API_STATIC = utils.GetEnv("PATH_TO_API_STATIC", "./api/providers/rest/static")
+
+	CONTACT_EMAIL = utils.GetEnv("CONTACT_EMAIL", "")
+
+	CONTACT_INSTAGRAM = utils.GetEnv("CONTACT_INSTAGRAM", "")
 
 	return nil
 }

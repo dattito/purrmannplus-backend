@@ -13,7 +13,7 @@ div.container
                         a[href="https://signal.org"][rel="nofollow"][target="_blank"] Signal
                         | .
                     p.form-text.text-info
-                        | Momentant können sich nur Schüler der Oberstufe anmelden
+                        | Momentan können sich nur Schüler der Oberstufe anmelden
                     div.form-floating.mb-3
                         input.form-control
                             [name="username"]
@@ -44,3 +44,26 @@ div.container
                         a[href=InfoRoute][rel="nofollow"] Informationen
                         | durch. Wenn du dich registrierst, stimmst du diesen zu.
                     input.btn.btn-primary.btn-block[type="submit"][value="Registrieren"]
+    
+    if ContactEmail || ContactInstagram
+        div.col-sm-9.col-md-7.col-lg-6.m-auto.mb-3
+            div.card.border-0.shadow.rounded-3.bg-dark.text-white
+                div.card-header Kontakt
+                div.card-body.pb-4.p-sm-5
+                    if ContactEmail
+                        h5.card-title Über Email
+                        div.card-text
+                            | Falls du Hilfe brauchst, schreibe eine E-Mail an
+                            a.text-decoration-none[href="mailto:" + ContactEmail] #{ContactEmail}
+                            | .
+                    if ContactEmail && ContactInstagram
+                        br
+                    if ContactInstagram
+                        h5.card-title Über Instagram
+                        div.card-text
+                            | Schreibe eine Nachricht über Instagram: 
+                            a.text-decoration-none
+                                [href="https://www.instagram.com/" + ContactInstagram + "/"]
+                                [target="_blank"]
+                                [rel="nofollow"]
+                                | @#{ContactInstagram}

@@ -9,6 +9,7 @@ import (
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/routes"
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/session"
 	"github.com/dattito/purrmannplus-backend/app/commands"
+	"github.com/dattito/purrmannplus-backend/config"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
 	"github.com/dattito/purrmannplus-backend/utils"
@@ -34,14 +35,18 @@ func SaveRequestInSession(c *fiber.Ctx, username, password, phoneNumber, code st
 func SubstitutionSpeedForm(c *fiber.Ctx) error {
 	if c.Method() == fiber.MethodGet {
 		return c.Render("substitution_speed_form_full", fiber.Map{
-			"InfoRoute":     routes.SubstitutionSpeedFormInfoRoute,
-			"FormPostRoute": routes.SubstitutionSpeedFormRoute,
+			"InfoRoute":        routes.SubstitutionSpeedFormInfoRoute,
+			"FormPostRoute":    routes.SubstitutionSpeedFormRoute,
+			"ContactEmail":     config.CONTACT_EMAIL,
+			"ContactInstagram": config.CONTACT_INSTAGRAM,
 		}, "layouts/main")
 	} else if c.Method() == fiber.MethodPost {
 		internalServerErrorResponse := c.Status(fiber.StatusInternalServerError).Render("substitution_speed_form_full", fiber.Map{
-			"InfoRoute":     routes.SubstitutionSpeedFormInfoRoute,
-			"FormPostRoute": routes.SubstitutionSpeedFormRoute,
-			"ErrorMessage":  "Etwas ist schiefgelaufen...",
+			"InfoRoute":        routes.SubstitutionSpeedFormInfoRoute,
+			"FormPostRoute":    routes.SubstitutionSpeedFormRoute,
+			"ErrorMessage":     "Etwas ist schiefgelaufen...",
+			"ContactEmail":     config.CONTACT_EMAIL,
+			"ContactInstagram": config.CONTACT_INSTAGRAM,
 		}, "layouts/main")
 
 		var pr models.PostSubstitutionSpeedFormRequest
@@ -53,9 +58,11 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 		pr.Username = strings.ToLower(pr.Username)
 		if len(pr.Username) < 4 && utils.NumberInString(pr.Username) {
 			return c.Status(fiber.StatusBadRequest).Render("substitution_speed_form_full", fiber.Map{
-				"InfoRoute":     routes.SubstitutionSpeedFormInfoRoute,
-				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Momentan können sich nur Schüler der Oberstufe anmelden...",
+				"InfoRoute":        routes.SubstitutionSpeedFormInfoRoute,
+				"FormPostRoute":    routes.SubstitutionSpeedFormRoute,
+				"ErrorMessage":     "Momentan können sich nur Schüler der Oberstufe anmelden...",
+				"ContactEmail":     config.CONTACT_EMAIL,
+				"ContactInstagram": config.CONTACT_INSTAGRAM,
 			}, "layouts/main")
 		}
 
@@ -67,9 +74,11 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 
 		if !correct {
 			return c.Status(fiber.StatusUnauthorized).Render("substitution_speed_form_full", fiber.Map{
-				"InfoRoute":     routes.SubstitutionSpeedFormInfoRoute,
-				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Falsche Anmeldedaten",
+				"InfoRoute":        routes.SubstitutionSpeedFormInfoRoute,
+				"FormPostRoute":    routes.SubstitutionSpeedFormRoute,
+				"ErrorMessage":     "Falsche Anmeldedaten",
+				"ContactEmail":     config.CONTACT_EMAIL,
+				"ContactInstagram": config.CONTACT_INSTAGRAM,
 			}, "layouts/main")
 		}
 
@@ -82,9 +91,11 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 
 		if account.Username != "" {
 			return c.Status(fiber.StatusUnauthorized).Render("substitution_speed_form_full", fiber.Map{
-				"InfoRoute":     routes.SubstitutionSpeedFormInfoRoute,
-				"FormPostRoute": routes.SubstitutionSpeedFormRoute,
-				"ErrorMessage":  "Das Konto exestiert bereits",
+				"InfoRoute":        routes.SubstitutionSpeedFormInfoRoute,
+				"FormPostRoute":    routes.SubstitutionSpeedFormRoute,
+				"ErrorMessage":     "Das Konto exestiert bereits",
+				"ContactEmail":     config.CONTACT_EMAIL,
+				"ContactInstagram": config.CONTACT_INSTAGRAM,
 			}, "layouts/main")
 		}
 
@@ -92,9 +103,11 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 		if err != nil {
 			if errors.Is(err, phonenumbers.ErrNotANumber) {
 				return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_form_full", fiber.Map{
-					"InfoRoute":     routes.SubstitutionSpeedFormInfoRoute,
-					"FormPostRoute": routes.SubstitutionSpeedFormRoute,
-					"ErrorMessage":  "Bitte gebe eine gültige Telefonnummer an",
+					"InfoRoute":        routes.SubstitutionSpeedFormInfoRoute,
+					"FormPostRoute":    routes.SubstitutionSpeedFormRoute,
+					"ErrorMessage":     "Bitte gebe eine gültige Telefonnummer an",
+					"ContactEmail":     config.CONTACT_EMAIL,
+					"ContactInstagram": config.CONTACT_INSTAGRAM,
 				}, "layouts/main")
 			}
 			logging.Errorf("Error formatting number: %v", err)
