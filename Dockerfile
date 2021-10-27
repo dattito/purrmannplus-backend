@@ -16,7 +16,7 @@ RUN CGO_ENABLED=1 go build -o /bin/app .
 FROM alpine:3
 
 COPY --from=build /bin/app /bin/app
-COPY --from=build /build/api/providers/rest/views /bin/views
+COPY --from=build /build/api/providers/rest/views /bin/api/providers/rest/views
 
 WORKDIR /data
 
