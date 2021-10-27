@@ -8,6 +8,7 @@ import (
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/routes"
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/session"
 	"github.com/dattito/purrmannplus-backend/app/commands"
+	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
 	"github.com/dattito/purrmannplus-backend/utils"
 	"github.com/dattito/purrmannplus-backend/utils/logging"
@@ -61,7 +62,7 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 
 		// Check if accounts already exist
 		account, err := commands.GetAccountByCredentials(pr.Username, pr.Password)
-		if err != nil {
+		if err != &db_errors.ErrRecordNotFound && err != nil {
 			logging.Errorf("Error getting account by credentials: %v", err)
 			return internalServerErrorResponse
 		}
@@ -161,11 +162,12 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 			session.Destroy()
 			return internalServerErrorResponse
 		}
+
 		if userErr != nil {
 			return internalServerErrorResponse
 		}
 
-		_, userErr, internalErr = commands.AddAccountInfo(acc.Id, session.Get("phoneNumber").(string))
+		_, userErr, internalErr = commands.AddAccountInfo(acc.Id, session.Get("phone_number").(string))
 		if internalErr != nil {
 			session.Destroy()
 			return internalServerErrorResponse
