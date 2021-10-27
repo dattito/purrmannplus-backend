@@ -79,6 +79,7 @@ func (r *RestProvider) Init() error {
 
 	r.app.All(routes.SubstitutionSpeedFormRoute, controllers.SubstitutionSpeedForm)
 	r.app.All(routes.ValidateSubstitutionSpeedFormRoute, controllers.ValidateSubstitutionSpeedForm)
+	r.app.Get(routes.FinishSubstitutionSpeedFormRoute, controllers.FinishSubstitutionSpeedForm)
 
 	session.Init()
 

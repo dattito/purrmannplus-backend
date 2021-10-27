@@ -16,4 +16,5 @@ const (
 
 	SubstitutionSpeedFormRoute         = "/substitution_speed_form"
 	ValidateSubstitutionSpeedFormRoute = "/substitution_speed_form/validate"
+	FinishSubstitutionSpeedFormRoute   = "/substitution_speed_form/finish"
 )

@@ -31,4 +31,4 @@ div.col-sm-9.col-md-7.col-lg-6.m-auto
                     label[for="phoneNumber"] Telefonnummer
                 p.form-text 
                     i Es sind die selben Anmeldedaten wie bei dem Vertretungsplan und Moodle
-                input.btn.btn-primary.btn-block[type="submit"] Anmlden
+                input.btn.btn-primary.btn-block[type="submit"] Anmelden
