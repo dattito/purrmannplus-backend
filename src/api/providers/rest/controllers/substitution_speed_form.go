@@ -3,6 +3,7 @@ package controllers
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/models"
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/routes"
@@ -48,6 +49,8 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 			logging.Errorf("Error parsing body: %v", err)
 			return internalServerErrorResponse
 		}
+
+		pr.Username = strings.ToLower(pr.Username)
 
 		correct, err := commands.CheckCredentials(pr.Username, pr.Password)
 		if err != nil {
