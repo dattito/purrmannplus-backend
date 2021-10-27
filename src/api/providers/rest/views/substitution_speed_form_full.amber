@@ -9,6 +9,9 @@ div.container
                 img.mb-1.mx-auto.d-block[src="/static/PurrmannPlus.svg"][alt="Logo"]
                 h2.text-center Anmelden
                 form.p-3[method="POST"][action=FormPostRoute]
+                    p.form-text Zum Anmelden brauchst du die App 
+                        a[href="https://signal.org"][rel="nofollow"][target="_blank"] Signal
+                        | .
                     div.form-floating.mb-3
                         input.form-control
                             [name="username"]
@@ -23,6 +26,7 @@ div.container
                             [placeholder="Passwort"]
                             [required]
                         label[for="password"] Passwort
+                        p.form-text Die Benutzerdaten sind dieselben wie bei Moodle.
                     div.form-floating.mb-3
                         input.form-control
                             [name="phoneNumber"]
@@ -30,8 +34,7 @@ div.container
                             [placeholder="Telefonnummer"]
                             [required]
                         label[for="phoneNumber"] Telefonnummer
-                    p.form-text 
-                        i Es sind die selben Anmeldedaten wie bei dem Vertretungsplan und Moodle
+                        p.form-text An diese Nummer werden die Nachrichten über Signal gesendet.
                     p.form-text
                         | Bevor du dich registrierst, lese dir vorher diese 
                         a[href=InfoRoute][rel="nofollow"] Informationen
