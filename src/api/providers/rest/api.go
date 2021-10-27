@@ -50,7 +50,7 @@ func (r *RestProvider) Init() error {
 		Views: amber.New(config.PATH_TO_API_VIEWS, ".amber"),
 	})
 
-	r.app.Static("/static", "./api/providers/rest/static")
+	r.app.Static("/static", config.PATH_TO_API_STATIC)
 
 	if config.CORS_ALLOWED_ORIGINS != "" {
 		r.app.Use(cors.New(cors.Config{

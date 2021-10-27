@@ -19,8 +19,10 @@ WORKDIR /app
 
 COPY --from=build /app/app /app/app
 
-ENV PATH_TO_API_VIEWS="/app/api/providers/rest/views"
+ENV PATH_TO_API_VIEWS="/app/api/providers/rest/views" \
+    PATH_TO_API_STATIC="/app/api/providers/rest/static"
 COPY --from=build /build/api/providers/rest/views ${PATH_TO_API_VIEWS}
+COPY --from=build /build/api/providers/rest/static ${PATH_TO_API_STATIC}
 
 RUN mkdir /data
 

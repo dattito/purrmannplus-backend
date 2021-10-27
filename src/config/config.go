@@ -37,6 +37,7 @@ var (
 	LOG_LEVEL                                int    // 0-5: 0:silent, 1:fatal, 2:error, 3:warn, 4:info, 5:debug
 	DNT_VERSION                              string // The version of this application. It is automatically set by docker, so DO NOT TOUCH
 	PATH_TO_API_VIEWS                        string // The path to the api views, default is "./api/providers/rest/views"
+	PATH_TO_API_STATIC                       string // The path to the static files of the api, default is "./api/providers/rest/static"
 )
 
 // END OF ENDVIRONMENT VARIABLES
@@ -156,6 +157,8 @@ func Init() error {
 	DNT_VERSION = utils.GetEnv("DNT_VERSION", "")
 
 	PATH_TO_API_VIEWS = utils.GetEnv("PATH_TO_API_VIEWS", "./api/providers/rest/views")
+
+	PATH_TO_API_STATIC = utils.GetEnv("PATH_TO_API_STATIC", "./api/providers/rest/static")
 
 	return nil
 }
