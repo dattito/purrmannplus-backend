@@ -44,3 +44,6 @@ div.container
         li Auch die Funktion dieser Seite ist nicht garantiert. Es kann zum Beispiel jederzeit zu Ausfällen kommen.
         li Wenn du den Bot benutzt und dich registrierst, bist du mit diesen Informationen einverstanden und hast es mit betroffenden Personen abgesprochen, sollte eine 
             | Registrierung oder die daraus resultierenden Daten und Aktionen mehrere Personen betreffen.
+    div.alert.alert-success.mt-3[role=alert] 
+        a.alert-link[href=FormRoute]
+            | Zurück zur Registrierung

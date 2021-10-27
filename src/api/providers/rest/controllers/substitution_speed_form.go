@@ -198,5 +198,7 @@ func FinishSubstitutionSpeedForm(c *fiber.Ctx) error {
 }
 
 func InfoSubstitutionSpeedForm(c *fiber.Ctx) error {
-	return c.Render("substitution_speed_info", fiber.Map{}, "layouts/main")
+	return c.Render("substitution_speed_info", fiber.Map{
+		"FormRoute": routes.SubstitutionSpeedFormRoute,
+	}, "layouts/main")
 }
