@@ -78,8 +78,8 @@ func (r *RestProvider) Init() error {
 	v1.Delete(routes.UnregisterFromSubstitutionUpdaterRoute, Protected(), controllers.UnregisterFromSubstitutionUpdater)
 
 	r.app.All(routes.SubstitutionSpeedFormRoute, controllers.SubstitutionSpeedForm)
-	r.app.All(routes.ValidateSubstitutionSpeedFormRoute, controllers.ValidateSubstitutionSpeedForm)
-	r.app.Get(routes.FinishSubstitutionSpeedFormRoute, controllers.FinishSubstitutionSpeedForm)
+	r.app.All(routes.SubstitutionSpeedFormValidationRoute, controllers.ValidateSubstitutionSpeedForm)
+	r.app.Get(routes.SubstitutionSpeedFormFinishRoute, controllers.FinishSubstitutionSpeedForm)
 
 	session.Init()
 

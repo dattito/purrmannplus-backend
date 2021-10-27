@@ -101,7 +101,7 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 			return internalServerErrorResponse
 		}
 
-		return c.Redirect(routes.ValidateSubstitutionSpeedFormRoute)
+		return c.Redirect(routes.SubstitutionSpeedFormValidationRoute)
 	} else {
 		return fiber.ErrMethodNotAllowed
 	}
@@ -110,7 +110,7 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 
 	internalServerErrorResponse := c.Status(fiber.StatusInternalServerError).Render("substitution_speed_pn_validate", fiber.Map{
-		"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
+		"FormPostRoute": routes.SubstitutionSpeedFormValidationRoute,
 		"ErrorMessage":  "Etwas ist schiefgelaufen...",
 	}, "layouts/main")
 
@@ -118,7 +118,7 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 		session, err := session.SessionStore.Get(c)
 		if err != nil {
 			return c.Render("substitution_speed_pn_validate", fiber.Map{
-				"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
+				"FormPostRoute": routes.SubstitutionSpeedFormValidationRoute,
 			}, "layouts/main")
 		}
 
@@ -128,7 +128,7 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 		}
 
 		return c.Render("substitution_speed_pn_validate", fiber.Map{
-			"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
+			"FormPostRoute": routes.SubstitutionSpeedFormValidationRoute,
 		}, "layouts/main")
 	}
 
@@ -152,7 +152,7 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 
 		if pr.Code != session.Get("code") {
 			return c.Status(fiber.StatusUnauthorized).Render("substitution_speed_pn_validate", fiber.Map{
-				"FormPostRoute": routes.ValidateSubstitutionSpeedFormRoute,
+				"FormPostRoute": routes.SubstitutionSpeedFormValidationRoute,
 				"ErrorMessage":  "Falscher Code",
 			}, "layouts/main")
 		}
@@ -183,7 +183,7 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 		}
 
 		session.Destroy()
-		return c.Redirect(routes.FinishSubstitutionSpeedFormRoute)
+		return c.Redirect(routes.SubstitutionSpeedFormFinishRoute)
 	}
 	return fiber.ErrMethodNotAllowed
 }
