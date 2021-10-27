@@ -47,7 +47,7 @@ type RestProvider struct {
 // Initialize the fiber app and sets the routes and middlewares
 func (r *RestProvider) Init() error {
 	r.app = fiber.New(fiber.Config{
-		Views: amber.New("./api/providers/rest/views", ".amber"),
+		Views: amber.New(config.PATH_TO_API_VIEWS, ".amber"),
 	})
 
 	r.app.Static("/static", "./api/providers/rest/static")
