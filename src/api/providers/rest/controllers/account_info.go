@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	api_models "github.com/dattito/purrmannplus-backend/api/providers/rest/models"
+	"github.com/dattito/purrmannplus-backend/api/providers/rest/routes"
 	"github.com/dattito/purrmannplus-backend/app/commands"
 	"github.com/dattito/purrmannplus-backend/app/models"
 	"github.com/dattito/purrmannplus-backend/config"
@@ -72,8 +73,8 @@ func SendPhoneNumberConfirmationLink(c *fiber.Ctx) error {
 
 	text := fmt.Sprintf("Willkommen bei PurrmannPlus. Um deine Telefonnummer zu bestätigen, drücke "+
 		"auf den nachfolgenden Link. Er ist 10 Minuten lang gültig. Du hast den Link nicht angefordert? Dann kannst du ihn ignorieren. "+
-		"%s/v1/accounts/phone_number/validate?token=%s",
-		config.API_URL, token)
+		"%s/v1%s?token=%s",
+		config.API_URL, routes.AddPhoneNumberRoute, token)
 
 	err = signal_message_sender.SignalMessageSender.Send(text, account_info.PhoneNumber)
 
