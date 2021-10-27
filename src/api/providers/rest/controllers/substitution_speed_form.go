@@ -16,15 +16,15 @@ import (
 	"github.com/nyaruka/phonenumbers"
 )
 
-func SaveRequestInSession(c *fiber.Ctx, pr models.PostSubstitutionSpeedFormRequest, code string) error {
+func SaveRequestInSession(c *fiber.Ctx, username, password, phoneNumber, code string) error {
 	session, err := session.SessionStore.Get(c)
 	if err != nil {
 		return err
 	}
 
-	session.Set("username", pr.Username)
-	session.Set("password", pr.Password)
-	session.Set("phone_number", pr.PhoneNumber)
+	session.Set("username", username)
+	session.Set("password", password)
+	session.Set("phone_number", phoneNumber)
 	session.Set("code", code)
 
 	return session.Save()
@@ -100,7 +100,7 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 			return internalServerErrorResponse
 		}
 
-		err = SaveRequestInSession(c, pr, code)
+		err = SaveRequestInSession(c, pr.Username, pr.Password, validNumber, code)
 		if err != nil {
 			logging.Errorf("Error saving request in session: %v", err)
 			return internalServerErrorResponse
