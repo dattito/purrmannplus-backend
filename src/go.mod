@@ -25,7 +25,7 @@ require (
 	github.com/jinzhu/now v1.1.2 // indirect
 	github.com/joho/godotenv v1.4.0
 	github.com/klauspost/compress v1.13.6 // indirect
-	github.com/mattn/go-sqlite3 v1.14.8 // indirect
+	github.com/mattn/go-sqlite3 v1.14.9 // indirect
 	github.com/nyaruka/phonenumbers v1.0.73
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
@@ -41,6 +41,6 @@ require (
 	google.golang.org/protobuf v1.27.1
 	gorm.io/driver/mysql v1.1.2
 	gorm.io/driver/postgres v1.1.2
-	gorm.io/driver/sqlite v1.1.6
+	gorm.io/driver/sqlite v1.2.0
 	gorm.io/gorm v1.21.16
 )
