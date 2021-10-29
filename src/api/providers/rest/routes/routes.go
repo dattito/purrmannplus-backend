@@ -14,8 +14,8 @@ const (
 	RegisterToSubstitutionUpdaterRoute     = "/substitution_updater"
 	UnregisterFromSubstitutionUpdaterRoute = "/substitution_updater"
 
-	SubstitutionSpeedFormRoute         = "/substitution_speed_form"
+	SubstitutionSpeedFormRoute           = "/substitution_speed_form"
 	SubstitutionSpeedFormValidationRoute = "/substitution_speed_form/validate"
-	SubstitutionSpeedFormFinishRoute   = "/substitution_speed_form/finish"
-	SubstitutionSpeedFormInfoRoute   = "/substitution_speed_form/info"
+	SubstitutionSpeedFormFinishRoute     = "/substitution_speed_form/finish"
+	SubstitutionSpeedFormInfoRoute       = "/substitution_speed_form/info"
 )
