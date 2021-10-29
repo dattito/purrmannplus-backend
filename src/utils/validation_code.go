@@ -1,19 +1,15 @@
 package utils
 
 import (
-	"math/rand"
-	"time"
+	"crypto/rand"
+	"math/big"
 )
 
 func GenerateValidationCode(length int) string {
-	numbers := "0123456789"
-
-	rand.Seed(time.Now().UnixNano())
-
-	var code string
-
+	code := ""
 	for i := 0; i < length; i++ {
-		code += string(numbers[rand.Intn(len(numbers))])
+		result, _ := rand.Int(rand.Reader, big.NewInt(100))
+		code += string(rune(result.Int64()%10 + 48))
 	}
 
 	return code
