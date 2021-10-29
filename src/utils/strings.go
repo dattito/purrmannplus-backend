@@ -55,3 +55,7 @@ func ConvertStringToLatin1(str string) (string, error) {
 
 	return string(result), nil
 }
+
+func NumberInString(str string) bool {
+	return strings.ContainsAny(str, "0123456789")
+}

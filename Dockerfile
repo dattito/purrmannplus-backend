@@ -11,20 +11,28 @@ RUN go mod download
 
 COPY ./src .
 
-RUN CGO_ENABLED=1 go build -o /bin/app .
+RUN CGO_ENABLED=1 go build -o /app/app .
 
 FROM alpine:3
 
-COPY --from=build /bin/app /bin/app
+WORKDIR /app
 
-WORKDIR /data
+COPY --from=build /app/app /app/app
+
+ENV PATH_TO_API_VIEWS="/app/api/providers/rest/views" \
+    PATH_TO_API_STATIC="/app/api/providers/rest/static"
+COPY --from=build /build/api/providers/rest/views ${PATH_TO_API_VIEWS}
+COPY --from=build /build/api/providers/rest/static ${PATH_TO_API_STATIC}
+
+RUN mkdir /data
 
 ARG DNT_VERSION=""
-
 ENV DNT_VERSION ${DNT_VERSION}
+ENV DATABASE_TYPE SQLITE
+ENV DATABASE_URI /data/db.sqlite
 
 ENV LISTENING_PORT=3000
 
 EXPOSE ${LISTENING_PORT}
 
-ENTRYPOINT ["/bin/app"]
+ENTRYPOINT ["/app/app"]

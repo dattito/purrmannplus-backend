@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="PurrmannPlus.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   width="27.0px"
+   height="27.0px"
+   viewBox="0 0 27.0 27.0"
+   version="1.1"
+   id="SVGRoot">
+  <defs
+     id="defs162">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath151">
+      <circle
+         d="M 12,9 A 3,3 0 0 1 9,12 3,3 0 0 1 6,9 3,3 0 0 1 9,6 3,3 0 0 1 12,9"
+         style="display:none;fill:#ffffff"
+         id="circle153"
+         cx="9"
+         cy="9"
+         r="3" />
+      <path
+         id="lpe_path-effect155"
+         style="fill:#ffffff"
+         class="powerclip"
+         d="M -5,-5 H 23 V 23 H -5 Z M 12,9 A 3,3 0 0 0 9,6 3,3 0 0 0 6,9 3,3 0 0 0 9,12 3,3 0 0 0 12,9" />
+    </clipPath>
+    <inkscape:path-effect
+       effect="powerclip"
+       id="path-effect155"
+       is_visible="true"
+       lpeversion="1"
+       inverse="true"
+       flatten="false"
+       hide_clip="false"
+       message="Füllregel Gerade-Ungerade im &lt;b&gt;Füllung und Kontur&lt;/b&gt;-Dialog verwenden, wenn das Anwenden des Ausschnitts mit nachfolgendem Umwandeln in Pfade kein Ergebnis bringt" />
+  </defs>
+  <sodipodi:namedview
+     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-x="156"
+     inkscape:window-height="1041"
+     inkscape:window-width="1256"
+     showgrid="true"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     inkscape:cy="11.158717"
+     inkscape:cx="14.065801"
+     inkscape:zoom="22.4"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base">
+    <inkscape:grid
+       type="xygrid"
+       id="grid171" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata165">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Ebene 1">
+    <path
+       d="M 18,9 A 9,9 0 0 1 9,18 9,9 0 0 1 0,9 9,9 0 0 1 9,0 9,9 0 0 1 18,9 Z"
+       style="display:inline;fill:#000000"
+       id="path131"
+       clip-path="url(#clipPath151)"
+       inkscape:path-effect="#path-effect155"
+       sodipodi:type="arc"
+       sodipodi:cx="9"
+       sodipodi:cy="9"
+       sodipodi:rx="9"
+       sodipodi:ry="9" />
+    <rect
+       style="display:inline;fill:#000000"
+       id="rect137"
+       width="6"
+       height="15"
+       x="0"
+       y="9" />
+    <circle
+       style="display:inline;fill:#000000"
+       id="path140"
+       cx="3"
+       cy="24"
+       r="3" />
+    <rect
+       style="display:inline;fill:#000000"
+       id="rect142"
+       width="15"
+       height="6"
+       x="9"
+       y="12" />
+    <circle
+       style="display:inline;fill:#000000"
+       id="path145"
+       cx="24"
+       cy="15"
+       r="3" />
+  </g>
+</svg>
