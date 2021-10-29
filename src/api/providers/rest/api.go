@@ -8,6 +8,7 @@ import (
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/session"
 	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	jwtware "github.com/gofiber/jwt/v3"
 	"github.com/gofiber/template/amber"
@@ -58,6 +59,8 @@ func (r *RestProvider) Init() error {
 			AllowHeaders: "Origin, Content-Type, Accept",
 		}))
 	}
+
+	r.app.Use(compress.New())
 
 	r.app.Get(routes.HealthRoute, controllers.GetHealth)
 	r.app.Get(routes.AboutRoute, controllers.About)
