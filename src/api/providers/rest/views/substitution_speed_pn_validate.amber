@@ -22,4 +22,4 @@ div.container
                             [placeholder="Code"]
                             [required]
                         label[for="code"] Code
-                    input.btn.btn-primary.btn-block[type="submit"] Anmelden
+                    input.btn.btn-primary.btn-block[type="submit"][value="Code überprüfen"]
