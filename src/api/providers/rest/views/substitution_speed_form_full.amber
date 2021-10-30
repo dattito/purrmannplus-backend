@@ -13,9 +13,12 @@ div.container
                 img.mb-1.mx-auto.d-block[src="/static/PurrmannPlus.svg"][alt="Logo"]
                 h2.text-center Anmelden
                 form.p-3[method="POST"][action=FormPostRoute]
-                    p.form-text Zum Anmelden brauchst du die App 
+                    p.form-text Zum Anmelden brauchst du die Messenger-App 
                         a[href="https://signal.org"][rel="nofollow"][target="_blank"] Signal
-                        | .
+                        span
+                            img[src="/static/SignalIcon.svg"][alt="Signal"]
+                        |! Über den Messenger bekommst du deine Vertretungen zugesendet.
+                    hr
                     p.form-text.text-info
                         | Momentan können sich nur Schüler der Oberstufe anmelden
                     div.form-floating.mb-3
@@ -43,6 +46,19 @@ div.container
                             [required]
                         label[for="phoneNumber"] Telefonnummer
                         p.form-text An diese Nummer werden die Nachrichten über Signal gesendet.
+                    div.form-check
+                        input.form-check-input
+                            [type="checkbox"]
+                            [value=""]
+                            [id="signalInstalled"]
+                            [required]
+                        label.form-check-label
+                            [for="signalInstalled"]
+                            [aria-label="required"]
+                            | Ich habe die Messenger-App
+                            a[href="https://signal.org"][rel="nofollow"][target="_blank"] Signal
+                            | installiert
+
                     p.form-text
                         | Bevor du dich registrierst, lese dir vorher diese 
                         a[href=InfoRoute][rel="nofollow"] Informationen
