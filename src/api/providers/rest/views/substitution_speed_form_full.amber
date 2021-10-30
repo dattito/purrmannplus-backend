@@ -108,7 +108,7 @@ div.container
                         [href="https://www.instagram.com/" + ContactInstagram + "/"]
                         [target="_blank"]
                         [rel="nofollow"]
-                        | Folge mir auf Instagram
+                        | Auf Instagram folgen
                         svg
                             [xmlns="http://www.w3.org/2000/svg"]
                             [width="24"][height="24"]
