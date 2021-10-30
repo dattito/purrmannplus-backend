@@ -36,6 +36,7 @@ div.container
             | Infos über die Daten
     ol
         li Wenn du dich registrierst, werden deine Daten an den Server gesendet. Diese Daten werden nicht an Dritte weitergegeben.
+        li Deine Telefonnummer wird nur dafür verwendet, dir automatisierte Nachrichten zu senden.
         li Registrieren können sich momentan nur Schüler der Oberstufe, da hier jede Person einen eigenen Account hat. Unterstützung für Schüler anderer Jahrgänge folgt.
         li Ein Account kann nur einmal registriert werden.
         li Die Anmeldedaten werden unverschlüsselt gespeichert. Das ist notwendig, weil die Daten direkt zum Server geschickt werden müssen.
