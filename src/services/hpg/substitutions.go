@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/dattito/purrmannplus-backend/utils"
 )
 
 var weekdays = [5]string{"Mo", "Di", "Mi", "Do", "Fr"}
@@ -54,7 +53,10 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 	// Find the review items
 	s := doc.Find("table") // if s.Length()=4, there are new substituations
 
-	if s.Length() < 4 {
+	// Check if there are substitutions
+	substitutionTableLength := doc.Find("#wikitext").Find("div").First().Find("table").Length()
+
+	if substitutionTableLength < 1 {
 		return map[string][]string{}, nil
 	}
 
@@ -62,37 +64,22 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 
 	spMap := map[string][]string{}
 
-	lastW := ""
-	var spErr error
+	weekday := ""
 	sp.Find("tr").Each(func(i int, s *goquery.Selection) {
-		if spErr != nil {
+		textToAdd := ""
+
+		txt := strings.ReplaceAll(s.Text(), "\n", "")
+		if beginsWithAWeekday(txt) {
+			weekday = txt
 			return
 		}
 
-		outp := ""
-		s.Find("td").Each(func(j int, k *goquery.Selection) {
-			t := strings.TrimSpace(k.Text())
-
-			if beginsWithAWeekday(t) {
-				lastW = t
-			} else {
-				outp += t + " "
-			}
-
+		s.Find("td").Each(func(j int, t *goquery.Selection) {
+			textToAdd += strings.TrimSpace(t.Text()) + " "
 		})
-		outpt, err := utils.ConvertStringToLatin1(strings.TrimSuffix(outp, " "))
-		if err != nil {
-			spErr = err
-			return
-		}
-		if outpt != "" {
-			spMap[lastW] = append(spMap[lastW], outpt)
-		}
-	})
 
-	if spErr != nil {
-		return map[string][]string{}, spErr
-	}
+		spMap[weekday] = append(spMap[weekday], strings.ReplaceAll(textToAdd, "\n", ""))
+	})
 
 	return spMap, nil
 }

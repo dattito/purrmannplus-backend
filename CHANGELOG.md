@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - compression
 - a html substitution speed form
 
+### Fixed
+
+- Removed strange letters from substitutions
+
 ### Added
 
 - Text on startup showing the version
