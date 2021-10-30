@@ -3,6 +3,7 @@ package rest
 import (
 	"fmt"
 
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/controllers"
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/routes"
 	"github.com/dattito/purrmannplus-backend/api/providers/rest/session"
@@ -12,6 +13,8 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	jwtware "github.com/gofiber/jwt/v3"
 	"github.com/gofiber/template/amber"
+
+	_ "github.com/dattito/purrmannplus-backend/api/providers/rest/docs"
 )
 
 // Get the JWT configuration for the api
@@ -46,12 +49,17 @@ type RestProvider struct {
 }
 
 // Initialize the fiber app and sets the routes and middlewares
+// @title PurrmannPlus-Backend API
+// @version 1
+// @description This is the swagger documentation for the PurrmannPlus-Backend API
+// @license.name GNU Affero General Public License
+// @license.url https://www.gnu.org/licenses/agpl-3.0.de.html
+// @host localhost:3000
+// @BasePath /
 func (r *RestProvider) Init() error {
 	r.app = fiber.New(fiber.Config{
 		Views: amber.New(config.PATH_TO_API_VIEWS, ".amber"),
 	})
-
-	r.app.Static("/static", config.PATH_TO_API_STATIC)
 
 	if config.CORS_ALLOWED_ORIGINS != "" {
 		r.app.Use(cors.New(cors.Config{
@@ -61,6 +69,10 @@ func (r *RestProvider) Init() error {
 	}
 
 	r.app.Use(compress.New())
+
+	r.app.Get("/docs/*", swagger.Handler)
+
+	r.app.Static("/static", config.PATH_TO_API_STATIC)
 
 	r.app.Get(routes.HealthRoute, controllers.GetHealth)
 	r.app.Get(routes.AboutRoute, controllers.About)

@@ -1,0 +1,12 @@
+basePath: /
+host: localhost:3000
+info:
+  contact: {}
+  description: This is the swagger documentation for the PurrmannPlus-Backend API
+  license:
+    name: GNU Affero General Public License
+    url: https://www.gnu.org/licenses/agpl-3.0.de.html
+  title: PurrmannPlus-Backend API
+  version: "1"
+paths: {}
+swagger: "2.0"
