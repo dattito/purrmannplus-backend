@@ -210,6 +210,14 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 			return internalServerErrorResponse
 		}
 
+		if err := signal_message_sender.SignalMessageSender.Send(
+			fmt.Sprintf("Dein Account '%s' wurde mit dieser Telefonnummer verbunden. Ab jetzt erhälst du über diesen Chat neue Infos über Vertretungen!",
+				acc.Username),
+			session.Get("phone_number").(string),
+		); err != nil {
+			return internalServerErrorResponse
+		}
+
 		session.Destroy()
 		return c.Redirect(routes.SubstitutionSpeedFormFinishRoute)
 	}
