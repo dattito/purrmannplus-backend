@@ -33,6 +33,7 @@ var (
 	SIGNAL_SENDER_PHONENUMBER                string // The phonenumber of the signal sender
 	JWT_SECRET                               string // The secret used to sign the jwt tokens
 	SUBSTITUTION_URL                         string // The url of the substitution website
+	MOODLE_URL                               string // The url of the moodle website
 	LOGGING_FILE                             string // The file to log to, if empty, logs to stdout
 	LOG_LEVEL                                int    // 0-5: 0:silent, 1:fatal, 2:error, 3:warn, 4:info, 5:debug
 	DNT_VERSION                              string // The version of this application. It is automatically set by docker, so DO NOT TOUCH
@@ -143,10 +144,9 @@ func Init() error {
 
 	JWT_SHORTLIVING_SECRET = utils.GenerateString(128)
 
-	SUBSTITUTION_URL, err = utils.GetEnvInDev("SUBSTITUTION_URL", "https://vertretungsplan.hpg-speyer.de")
-	if err != nil {
-		return err
-	}
+	SUBSTITUTION_URL = utils.GetEnv("SUBSTITUTION_URL", "")
+
+	MOODLE_URL = utils.GetEnv("MOODLE_URL", "https://moodle.hpg-speyer.de")
 
 	LOGGING_FILE = utils.GetEnv("LOGGING_FILE", "")
 

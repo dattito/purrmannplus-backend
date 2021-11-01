@@ -1,4 +1,4 @@
-package hpg
+package substitutions
 
 type wrongCredentialsError struct{}
 

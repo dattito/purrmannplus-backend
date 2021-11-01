@@ -8,9 +8,9 @@ import (
 	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/dattito/purrmannplus-backend/database"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
-	"github.com/dattito/purrmannplus-backend/services/hpg"
 	"github.com/dattito/purrmannplus-backend/services/scheduler"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
+	"github.com/dattito/purrmannplus-backend/services/substitutions"
 	"github.com/dattito/purrmannplus-backend/utils/logging"
 )
 
@@ -94,7 +94,7 @@ func RemoveFromSubstitutionUpdater(accountId string) error {
 // Updates the substitutions for a given account and sends a message via signal
 func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 	logging.Debugf("Updating substitutions of account %s (id: %s)", m.AuthId, m.AccountId)
-	mayNewSubstitutions, err := hpg.GetSubstituationOfStudent(m.AuthId, m.AuthPw)
+	mayNewSubstitutions, err := substitutions.GetSubstituationOfStudent(m.AuthId, m.AuthPw)
 	if err != nil {
 		return err
 	}

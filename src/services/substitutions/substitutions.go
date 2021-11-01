@@ -1,14 +1,50 @@
-package hpg
+package substitutions
 
 import (
 	"fmt"
-	"log"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/dattito/purrmannplus-backend/config"
+	"github.com/dattito/purrmannplus-backend/utils/logging"
 )
+
+// Checks if the credentials are correct, should be the same as moodle.CheckCredentials()
+func CheckCredentials(authId, authPw string) (bool, error) {
+	if authId == "" || authPw == "" {
+		return false, nil
+	}
+
+	data := url.Values{
+		"authid": {authId},
+		"authpw": {authPw},
+	}
+
+	if config.SUBSTITUTION_URL == "" {
+		return false, fmt.Errorf("substitution URL not set")
+	}
+
+	resp, err := http.PostForm(fmt.Sprintf("%s/pmwiki/pmwiki.php?n=Main.%s", config.SUBSTITUTION_URL, authId), data)
+	if err != nil {
+		logging.Errorf("Error while checking hpg credentials: %s", err)
+		return false, err
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		return false, err
+	}
+
+	sb := string(body)
+
+	return strings.Contains(sb, "abmelden"), nil
+}
 
 var weekdays = [5]string{"Mo", "Di", "Mi", "Do", "Fr"}
 
@@ -24,9 +60,12 @@ func beginsWithAWeekday(s string) bool {
 }
 
 func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, error) {
+	if config.SUBSTITUTION_URL == "" {
+		return nil, fmt.Errorf("substitution URL is not set")
+	}
 
 	// Request the HTML page.
-	res, err := http.PostForm(fmt.Sprintf("https://vertretungsplan.hpg-speyer.de/pmwiki/pmwiki.php?n=Main.%s", strings.ToLower(authid)),
+	res, err := http.PostForm(fmt.Sprintf("%s/pmwiki/pmwiki.php?n=Main.%s", config.SUBSTITUTION_URL, strings.ToLower(authid)),
 		url.Values{
 			"authid": {authid},
 			"authpw": {authpw},
@@ -34,7 +73,7 @@ func GetSubstituationOfStudent(authid, authpw string) (map[string][]string, erro
 	)
 
 	if err != nil {
-		log.Println(err)
+		logging.Errorf("Error while getting substitutions: %s", err)
 		return nil, err
 	}
 

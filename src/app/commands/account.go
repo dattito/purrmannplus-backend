@@ -6,7 +6,7 @@ import (
 	"github.com/dattito/purrmannplus-backend/app/models"
 	"github.com/dattito/purrmannplus-backend/database"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
-	"github.com/dattito/purrmannplus-backend/services/hpg"
+	"github.com/dattito/purrmannplus-backend/services/substitutions"
 	"github.com/dattito/purrmannplus-backend/utils/logging"
 )
 
@@ -16,7 +16,7 @@ func CreateAccount(username, password string) (models.Account, error, error) {
 		return models.Account{}, err, nil
 	}
 
-	correct, err := hpg.CheckCredentials(username, password)
+	correct, err := substitutions.CheckCredentials(username, password)
 	if err != nil {
 		return models.Account{}, nil, err
 	}
@@ -100,6 +100,7 @@ func DeleteAccount(accountId string) error {
 	return err
 }
 
+// Checks the credentials of an account, should be the same as mooodle.CheckCredentials(username, password)
 func CheckCredentials(username, password string) (bool, error) {
-	return hpg.CheckCredentials(username, password)
+	return substitutions.CheckCredentials(username, password)
 }
