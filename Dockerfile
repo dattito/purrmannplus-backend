@@ -15,6 +15,10 @@ RUN CGO_ENABLED=1 go build -o /app/app .
 
 FROM alpine:3
 
+RUN apk add --no-cache tzdata
+
+ENV TZ Europe/Berlin
+
 WORKDIR /app
 
 COPY --from=build /app/app /app/app

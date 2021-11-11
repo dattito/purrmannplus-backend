@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - favicons
 - compression
 - a html substitution speed form
+- changeable timezone
 
 ### Fixed
 
