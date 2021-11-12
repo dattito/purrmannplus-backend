@@ -36,7 +36,6 @@ var (
 	MOODLE_URL                               string // The url of the moodle website
 	LOGGING_FILE                             string // The file to log to, if empty, logs to stdout
 	LOG_LEVEL                                int    // 0-5: 0:silent, 1:fatal, 2:error, 3:warn, 4:info, 5:debug
-	DNT_VERSION                              string // The version of this application. It is automatically set by docker, so DO NOT TOUCH
 	PATH_TO_API_VIEWS                        string // The path to the api views, default is "./api/providers/rest/views"
 	PATH_TO_API_STATIC                       string // The path to the static files of the api, default is "./api/providers/rest/static"
 	CONTACT_EMAIL                            string // The email address users can send emails to
@@ -154,9 +153,6 @@ func Init() error {
 	if err != nil {
 		return err
 	}
-
-	// Gots passed by the build script (DNT=DO NOT TOUCH)
-	DNT_VERSION = utils.GetEnv("DNT_VERSION", "")
 
 	PATH_TO_API_VIEWS = utils.GetEnv("PATH_TO_API_VIEWS", "./api/providers/rest/views")
 
