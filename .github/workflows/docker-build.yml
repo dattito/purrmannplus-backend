@@ -6,7 +6,6 @@ on:
       - '**'
       - '!main'
       - '!dev'
-      - '!releases/v*.*.*'
   pull_request:
     branches:
       - '**'
