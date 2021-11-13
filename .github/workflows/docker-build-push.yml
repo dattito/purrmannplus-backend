@@ -28,7 +28,8 @@ jobs:
           images: dattito/purrmannplus-backend,ghcr.io/dattito/purrmannplus-backend
           tags: |
             type=ref,event=branch
-          latest: $LATEST
+          flavor: |
+            latest=$LATEST
       - 
         name: Login to DockerHub
         uses: docker/login-action@v1
