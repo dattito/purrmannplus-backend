@@ -16,7 +16,7 @@ require (
 	google.golang.org/protobuf v1.27.1
 	gorm.io/driver/mysql v1.1.3
 	gorm.io/driver/postgres v1.2.1
-	gorm.io/driver/sqlite v1.2.3
+	gorm.io/driver/sqlite v1.2.4
 	gorm.io/gorm v1.22.3
 )
 
