@@ -102,12 +102,45 @@ func GetRawAssignments(token string) (models.Assignments, error) {
 	return r, nil
 }
 
-func GetAssignmentIDs(assingments models.Assignments) ([]int, error) {
+func GetRawAssignmentsByCredentials(username, password string) (models.Assignments, error) {
+	token, err := GetToken(username, password)
+	if err != nil {
+		return models.Assignments{}, err
+	}
+
+	return GetRawAssignments(token)
+}
+
+func GetAssignmentIDs(assingments models.Assignments) []int {
 	var ids []int
 	for _, course := range assingments.Courses {
 		for _, assignment := range course.Assignments {
 			ids = append(ids, assignment.ID)
 		}
 	}
-	return ids, nil
+	return ids
+}
+
+func GetAssignmentIDsByCredentials(username, password string) ([]int, error) {
+	token, err := GetToken(username, password)
+	if err != nil {
+		return []int{}, err
+	}
+
+	assingments, err := GetRawAssignments(token)
+	if err != nil {
+		return []int{}, err
+	}
+
+	return GetAssignmentIDs(assingments), nil
+}
+
+func GetAssignmentIdToCourseNameMap(assingments models.Assignments) map[int]string {
+	var idsToCourses map[int]string = make(map[int]string)
+	for _, course := range assingments.Courses {
+		for _, assignment := range course.Assignments {
+			idsToCourses[assignment.ID] = course.FullName
+		}
+	}
+	return idsToCourses
 }

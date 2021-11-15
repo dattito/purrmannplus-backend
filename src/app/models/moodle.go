@@ -8,3 +8,13 @@ type Assignments struct {
 		} `json:"assignments"`
 	} `json:"courses"`
 }
+
+type MoodleAssignmentUpdateInfos struct {
+	AuthId                  string
+	AuthPw                  string
+	PhoneNumber             string
+	AccountId               string
+	MoodleUserAssignmentsId string
+	AssignmentIds           []int
+	NotSetYet               bool
+}

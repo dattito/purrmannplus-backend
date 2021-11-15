@@ -11,22 +11,12 @@ import (
 	"github.com/dattito/purrmannplus-backend/services/scheduler"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
 	"github.com/dattito/purrmannplus-backend/services/substitutions"
+	"github.com/dattito/purrmannplus-backend/utils"
 	"github.com/dattito/purrmannplus-backend/utils/logging"
 )
 
-// Checks if a string is in a slice of strings
-func contains(s []string, str string) bool {
-	for _, v := range s {
-		if v == str {
-			return true
-		}
-	}
-
-	return false
-}
-
 // Returns a map of the differences between two maps (difference amount)
-func differenceAmount(newSubstituations, oldSubstituations map[string][]string) map[string][]string {
+func substitutionsDifferenceAmount(newSubstituations, oldSubstituations map[string][]string) map[string][]string {
 	s := map[string][]string{}
 
 	for day, lessons := range newSubstituations {
@@ -36,7 +26,7 @@ func differenceAmount(newSubstituations, oldSubstituations map[string][]string) 
 		}
 
 		for _, lesson := range lessons {
-			if !contains(oldSubstituations[day], lesson) {
+			if !utils.Contains(oldSubstituations[day], lesson) {
 				s[day] = append(s[day], lesson)
 			}
 		}
@@ -101,9 +91,13 @@ func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 
 	old_substitutions := m.Entries
 
-	newSubstitutions := differenceAmount(mayNewSubstitutions, old_substitutions)
+	newSubstitutions := substitutionsDifferenceAmount(mayNewSubstitutions, old_substitutions)
 
 	// If there are no new substitutions, we don't need to do anything
+	if len(newSubstitutions) == 0 {
+		return nil
+	}
+
 	_, err = database.DB.SetSubstitutions(m.AccountId, mayNewSubstitutions, false)
 	if err != nil {
 		return err
@@ -116,6 +110,7 @@ func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 		return nil
 	}
 
+	// Send a message to the user if there are new substitutions
 	return signal_message_sender.SignalMessageSender.Send(substituationToTextMessage(newSubstitutions), m.PhoneNumber)
 }
 
