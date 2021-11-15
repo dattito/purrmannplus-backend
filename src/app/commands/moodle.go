@@ -1,10 +1,12 @@
 package commands
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/dattito/purrmannplus-backend/app/models"
 	"github.com/dattito/purrmannplus-backend/database"
+	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
 	"github.com/dattito/purrmannplus-backend/services/moodle"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
 	"github.com/dattito/purrmannplus-backend/utils"
@@ -46,6 +48,32 @@ func moodleAssignmentsToTextMessage(newAssignments []int, assignmentIdToCourseNa
 	return text
 }
 
+// Returns error produced by user; error not produced by user
+func AddToMoodleAssignmentUpdater(accountId string) (error, error) {
+	ai, err := database.DB.GetAccountInfo(accountId)
+	if err != nil {
+		if errors.Is(err, &db_errors.ErrRecordNotFound) {
+			return errors.New("phone number has to be added first"), nil
+		}
+		return nil, err
+	}
+
+	if ai.PhoneNumber == "" {
+		return errors.New("phone number has to be added first"), nil
+	}
+
+	if _, err := database.DB.GetMoodleAssignments(accountId); err != nil || !errors.Is(err, &db_errors.ErrRecordNotFound) {
+		return errors.New("moodle assignments already exist"), nil
+	}
+
+	_, err = database.DB.SetMoodleAssignments(accountId, []int{}, true)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, UpdateMoodleAssignmentsByAccountId(accountId)
+}
+
 func UpdateMoodleAssignments(m models.MoodleAssignmentUpdateInfos) error {
 	logging.Debugf("Updating moodle assignments of account %s (id: %s)", m.AuthId, m.AccountId)
 
@@ -77,4 +105,18 @@ func UpdateMoodleAssignments(m models.MoodleAssignmentUpdateInfos) error {
 
 	// Send a message to the user if there are new assignments
 	return signal_message_sender.SignalMessageSender.Send(moodleAssignmentsToTextMessage(newAssignments, moodle.GetAssignmentIdToCourseNameMap(rawAssignments)), m.PhoneNumber)
+}
+
+func UpdateMoodleAssignmentsByAccountId(accountId string) error {
+	mdb, err := database.DB.GetAccountCredentialsAndPhoneNumberAndSMoodleAssignments(accountId)
+	if err != nil {
+		return err
+	}
+	m := models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModelToMoodleAssignmentUpdateInfos(&mdb)
+
+	return UpdateMoodleAssignments(m)
+}
+
+func RemoveAccountFromMoodleAssignmentUpdater(accountId string) error {
+	return database.DB.RemoveAccountFromMoodleAssignmentUpdater(accountId)
 }

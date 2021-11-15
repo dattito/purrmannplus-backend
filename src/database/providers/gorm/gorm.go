@@ -62,6 +62,11 @@ func (g *GormProvider) CreateTables() error {
 	if err != nil {
 		return err
 	}
+
+	err = g.DB.AutoMigrate(&models.MoodleUserAssignmentsDB{})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -306,7 +311,7 @@ func (g *GormProvider) GetMoodleAssignments(accountId string) (provider_models.M
 	return models.MoodleUserAssignmentsDBTMoodleUserAssignmentsDBModel(m), nil
 }
 
-func (g *GormProvider) GetAllAccountMoodleAssignments() ([]provider_models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel, error) {
+func (g *GormProvider) GetAllAccountCredentialsAndPhoneNumberAndSMoodleAssignments() ([]provider_models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel, error) {
 	m := []models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDB{}
 
 	g.DB.Model(models.AccountDB{}).Select("accounts.auth_id", "accounts.auth_pw", "account_infos.phone_number", "accounts.id AS 'account_id'", "moodle_user_assignments.assignment_ids", "moodle_user_assignments.not_set_yet").Joins("INNER JOIN moodle_user_assignments ON moodle_user_assignments.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Scan(&m)
@@ -319,7 +324,7 @@ func (g *GormProvider) GetAllAccountMoodleAssignments() ([]provider_models.Accou
 	return mm, nil
 }
 
-func (g *GormProvider) GetAccountMoodleAssignments(accountId string) (provider_models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel, error) {
+func (g *GormProvider) GetAccountCredentialsAndPhoneNumberAndSMoodleAssignments(accountId string) (provider_models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel, error) {
 	m := models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDB{}
 	err := g.DB.Model(models.AccountDB{}).Select("accounts.auth_id", "accounts.auth_pw", "account_infos.phone_number", "accounts.id AS 'account_id'", "moodle_user_assignments.assignment_ids", "moodle_user_assignments.not_set_yet").Joins("INNER JOIN moodle_user_assignments ON moodle_user_assignments.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Where("accounts.id = ?", accountId).Scan(&m).Error
 	if err != nil {

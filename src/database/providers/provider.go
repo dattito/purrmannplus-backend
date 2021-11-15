@@ -26,8 +26,8 @@ type Provider interface {
 	SetMoodleAssignments(accountId string, assignmentIds []int, notSetYet bool) (models.MoodleUserAssignmentsDBModel, error)
 	RemoveAccountFromMoodleAssignmentUpdater(accountId string) error
 	GetMoodleAssignments(accountId string) (models.MoodleUserAssignmentsDBModel, error)
-	GetAllAccountMoodleAssignments() ([]models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel, error)
-	GetAccountMoodleAssignments(accountId string) (models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel, error)
+	GetAllAccountCredentialsAndPhoneNumberAndSMoodleAssignments() ([]models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel, error)
+	GetAccountCredentialsAndPhoneNumberAndSMoodleAssignments(accountId string) (models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel, error)
 }
 
 func GetProvider() (Provider, error) {
