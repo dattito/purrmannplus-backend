@@ -8,5 +8,6 @@ import (
 func Init() {
 	if config.ENABLE_SUBSTITUTIONS_SCHEDULER {
 		commands.EnableSubstitutionUpdater()
+		commands.EnableMoodleAssignmentUpdater()
 	}
 }

@@ -5,9 +5,11 @@ import (
 	"fmt"
 
 	"github.com/dattito/purrmannplus-backend/app/models"
+	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/dattito/purrmannplus-backend/database"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
 	"github.com/dattito/purrmannplus-backend/services/moodle"
+	"github.com/dattito/purrmannplus-backend/services/scheduler"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
 	"github.com/dattito/purrmannplus-backend/utils"
 	"github.com/dattito/purrmannplus-backend/utils/logging"
@@ -74,6 +76,10 @@ func AddToMoodleAssignmentUpdater(accountId string) (error, error) {
 	return nil, UpdateMoodleAssignmentsByAccountId(accountId)
 }
 
+func RemoveAccountFromMoodleAssignmentUpdater(accountId string) error {
+	return database.DB.RemoveAccountFromMoodleAssignmentUpdater(accountId)
+}
+
 func UpdateMoodleAssignments(m models.MoodleAssignmentUpdateInfos) error {
 	logging.Debugf("Updating moodle assignments of account %s (id: %s)", m.AuthId, m.AccountId)
 
@@ -117,6 +123,33 @@ func UpdateMoodleAssignmentsByAccountId(accountId string) error {
 	return UpdateMoodleAssignments(m)
 }
 
-func RemoveAccountFromMoodleAssignmentUpdater(accountId string) error {
-	return database.DB.RemoveAccountFromMoodleAssignmentUpdater(accountId)
+func UpdateAllMoodleAssignments() error {
+	mdbs, err := database.DB.GetAllAccountCredentialsAndPhoneNumberAndSMoodleAssignments()
+	if err != nil {
+		return err
+	}
+
+	errCount := 0
+
+	for _, mdb := range mdbs {
+		m := models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModelToMoodleAssignmentUpdateInfos(&mdb)
+		err = UpdateMoodleAssignments(m)
+		if err != nil {
+			logging.Errorf("Error while updating moodle assignments of %s: %s", m.AuthId, err.Error())
+			errCount++
+			if errCount > config.MAX_ERROS_TO_STOP_UPDATING_MOODLE_ASSIGNMENTS {
+				return errors.New("got too many errors while updating moodle assignments, stopping")
+			}
+		}
+	}
+
+	return nil
+}
+
+func EnableMoodleAssignmentUpdater() {
+	scheduler.AddJob(config.MOODLE_UPDATECRON, func() {
+		if err := UpdateAllMoodleAssignments(); err != nil {
+			logging.Errorf("Error while updating moodle assignments: %s", err.Error())
+		}
+	})
 }
