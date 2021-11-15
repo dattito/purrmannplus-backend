@@ -3,23 +3,27 @@ name: Docker Build
 on:
   push:
     branches:
-      - '**'
-      - '!main'
-      - '!dev'
+      - "**"
+      - "!main"
+      - "!dev"
   pull_request:
     branches:
-      - '**'
+      - "**"
+
+env:
+  TEST_TAG: dattito/purrmannplus-backend:test
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v2
-      -
-        name: Build
+      - name: Build
         uses: docker/build-push-action@v2
         with:
           context: .
-          tags: dattito/purrmannplus-backend:test
+          tags: ${{ env.TEST_TAG }}
+      - name: Test
+        run: |
+          docker run --rm ${{ env.TEST_TAG }}
