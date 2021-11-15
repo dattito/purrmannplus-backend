@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/dattito/purrmannplus-backend/database/models"
 )
@@ -22,7 +23,7 @@ func NewValidAccount(username, password string) (*Account, error) {
 	}
 
 	return &Account{
-		Username: username,
+		Username: strings.ToLower(username),
 		Password: password,
 	}, nil
 }
