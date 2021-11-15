@@ -15,7 +15,7 @@ import (
 func main() {
 
 	// Load configuration
-	if err := config.Init(); err != nil {
+	if err := cofnfig.Init(); err != nil {
 		log.Fatalf("Failed to load configuration: %s", err)
 	}
 
