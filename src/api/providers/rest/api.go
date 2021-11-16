@@ -77,8 +77,8 @@ func (r *RestProvider) Init() error {
 	v1.Post(routes.SendPhoneNumberConfirmationLinkRoute, Protected(), controllers.SendPhoneNumberConfirmationLink)
 	v1.Get(routes.AddPhoneNumberRoute, controllers.AddPhoneNumber)
 
-	v1.Post(routes.RegisterToSubstitutionUpdaterRoute, Protected(), controllers.RegisterToSubstitutionUpdater)
-	v1.Delete(routes.UnregisterFromSubstitutionUpdaterRoute, Protected(), controllers.UnregisterFromSubstitutionUpdater)
+	v1.Post(routes.AddAccountToSubstitutionUpdaterRoute, Protected(), controllers.AddAccountToSubstitutionUpdater)
+	v1.Delete(routes.RemoveAccountFromSubstitutionUpdaterRoute, Protected(), controllers.RemoveAccountFromSubstitutionUpdater)
 
 	r.app.All(routes.SubstitutionSpeedFormRoute, controllers.SubstitutionSpeedForm)
 	r.app.All(routes.SubstitutionSpeedFormValidationRoute, controllers.ValidateSubstitutionSpeedForm)

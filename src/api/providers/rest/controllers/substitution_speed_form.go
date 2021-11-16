@@ -204,7 +204,7 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 			return internalServerErrorResponse
 		}
 
-		_, err = commands.AddToSubstitutionUpdater(acc.Id)
+		_, err = commands.AddAccountToSubstitutionUpdater(acc.Id)
 		if err != nil {
 			session.Destroy()
 			return internalServerErrorResponse

@@ -51,7 +51,7 @@ func moodleAssignmentsToTextMessage(newAssignments []int, assignmentIdToCourseNa
 }
 
 // Returns error produced by user; error not produced by user
-func AddToMoodleAssignmentUpdater(accountId string) (error, error) {
+func AddAccountToMoodleAssignmentUpdater(accountId string) (error, error) {
 	ai, err := database.DB.GetAccountInfo(accountId)
 	if err != nil {
 		if errors.Is(err, &db_errors.ErrRecordNotFound) {

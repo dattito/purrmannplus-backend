@@ -52,7 +52,7 @@ func substituationToTextMessage(substitution map[string][]string) string {
 }
 
 // Returns error produced by user; error not produced by user
-func AddToSubstitutionUpdater(accountId string) (error, error) {
+func AddAccountToSubstitutionUpdater(accountId string) (error, error) {
 	ai, err := database.DB.GetAccountInfo(accountId)
 	if err != nil {
 		if errors.Is(err, &db_errors.ErrRecordNotFound) {
@@ -77,7 +77,7 @@ func AddToSubstitutionUpdater(accountId string) (error, error) {
 	return nil, UpdateSubstitutionsByAccountId(accountId)
 }
 
-func RemoveFromSubstitutionUpdater(accountId string) error {
+func RemoveAccountFromSubstitutionUpdater(accountId string) error {
 	return database.DB.RemoveAccountFromSubstitutionUpdater(accountId)
 }
 
