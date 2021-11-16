@@ -14,7 +14,7 @@ require (
 	github.com/nyaruka/phonenumbers v1.0.73
 	google.golang.org/grpc v1.42.0
 	google.golang.org/protobuf v1.27.1
-	gorm.io/driver/mysql v1.1.3
+	gorm.io/driver/mysql v1.2.0
 	gorm.io/driver/postgres v1.2.2
 	gorm.io/driver/sqlite v1.2.4
 	gorm.io/gorm v1.22.3
