@@ -152,7 +152,7 @@ func Init() error {
 
 	SUBSTITUTION_URL = utils.GetEnv("SUBSTITUTION_URL", "")
 
-	MOODLE_URL = utils.GetEnv("MOODLE_URL", "https://moodle.hpg-speyer.de")
+	MOODLE_URL = utils.GetEnv("MOODLE_URL", "")
 
 	LOGGING_FILE = utils.GetEnv("LOGGING_FILE", "")
 

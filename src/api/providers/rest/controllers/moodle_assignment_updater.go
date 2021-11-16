@@ -29,7 +29,7 @@ func AddAccountToMoodleAssignmentUpdater(c *fiber.Ctx) error {
 	user_err, db_err := commands.AddAccountToMoodleAssignmentUpdater(accountId)
 
 	if db_err != nil {
-		logging.Errorf("Error while adding account to moodle assignment updater: %s", err.Error())
+		logging.Errorf("Error while adding account to moodle assignment updater: %s", db_err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "Something went wrong",
 		})
@@ -37,7 +37,7 @@ func AddAccountToMoodleAssignmentUpdater(c *fiber.Ctx) error {
 
 	if user_err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
-			"error": err.Error(),
+			"error": user_err.Error(),
 		})
 	}
 

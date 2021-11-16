@@ -53,6 +53,14 @@ func substituationToTextMessage(substitution map[string][]string) string {
 
 // Returns error produced by user; error not produced by user
 func AddAccountToSubstitutionUpdater(accountId string) (error, error) {
+	if _, err := database.DB.GetSubstitutions(accountId); err != nil {
+		if !errors.Is(err, &db_errors.ErrRecordNotFound) {
+			return nil, err
+		}
+	} else {
+		return errors.New("account is already in substitution updater"), nil
+	}
+
 	ai, err := database.DB.GetAccountInfo(accountId)
 	if err != nil {
 		if errors.Is(err, &db_errors.ErrRecordNotFound) {
@@ -65,8 +73,18 @@ func AddAccountToSubstitutionUpdater(accountId string) (error, error) {
 		return errors.New("phone number has to be added first"), nil
 	}
 
-	if _, err := database.DB.GetSubstitutions(accountId); err == nil || !errors.Is(err, &db_errors.ErrRecordNotFound) {
-		return errors.New("substitutions already exist"), nil
+	a, err := database.DB.GetAccount(accountId)
+	if err != nil {
+		return nil, err
+	}
+
+	correct, err := substitutions.CheckCredentials(a.Username, a.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	if !correct {
+		return errors.New("credentials are incorrect for the substitution updater"), nil
 	}
 
 	_, err = database.DB.SetSubstitutions(accountId, map[string][]string{}, true)

@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"sort"
 
 	"github.com/dattito/purrmannplus-backend/app/models"
 	"github.com/dattito/purrmannplus-backend/config"
@@ -118,6 +119,7 @@ func GetAssignmentIDs(assingments models.Assignments) []int {
 			ids = append(ids, assignment.ID)
 		}
 	}
+	sort.Ints(ids)
 	return ids
 }
 

@@ -30,7 +30,7 @@ func AddAccountToSubstitutionUpdater(c *fiber.Ctx) error {
 	user_err, db_err := commands.AddAccountToSubstitutionUpdater(accountId)
 
 	if db_err != nil {
-		logging.Errorf("Error while adding account to substitution updater: %v", err)
+		logging.Errorf("Error while adding account to substitution updater: %v", db_err)
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "Something went wrong",
 		})

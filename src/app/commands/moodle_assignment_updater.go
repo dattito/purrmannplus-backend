@@ -52,6 +52,14 @@ func moodleAssignmentsToTextMessage(newAssignments []int, assignmentIdToCourseNa
 
 // Returns error produced by user; error not produced by user
 func AddAccountToMoodleAssignmentUpdater(accountId string) (error, error) {
+	if _, err := database.DB.GetMoodleAssignments(accountId); err != nil {
+		if !errors.Is(err, &db_errors.ErrRecordNotFound) {
+			return nil, err
+		}
+	} else {
+		return errors.New("account is already in moodle assignment updater"), nil
+	}
+
 	ai, err := database.DB.GetAccountInfo(accountId)
 	if err != nil {
 		if errors.Is(err, &db_errors.ErrRecordNotFound) {
@@ -64,8 +72,18 @@ func AddAccountToMoodleAssignmentUpdater(accountId string) (error, error) {
 		return errors.New("phone number has to be added first"), nil
 	}
 
-	if _, err := database.DB.GetMoodleAssignments(accountId); err != nil || !errors.Is(err, &db_errors.ErrRecordNotFound) {
-		return errors.New("moodle assignments already exist"), nil
+	a, err := database.DB.GetAccount(accountId)
+	if err != nil {
+		return nil, err
+	}
+
+	correct, err := moodle.CheckCredentials(a.Username, a.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	if !correct {
+		return errors.New("credentials are incorrect for moodle"), nil
 	}
 
 	_, err = database.DB.SetMoodleAssignments(accountId, []int{}, true)
@@ -104,8 +122,7 @@ func UpdateMoodleAssignments(m models.MoodleAssignmentUpdateInfos) error {
 	}
 
 	logging.Debugf("Successfully updated moodle assignments of %s", m.AuthId)
-
-	if m.NotSetYet || len(m.AssignmentIds) == 0 {
+	if m.NotSetYet || len(newAssignments) == 0 {
 		return nil
 	}
 
