@@ -9,7 +9,9 @@ div.container
         h2.my-4
             | Was macht der Bot?
         p.lead
-            | Der Bot aktualisiert in Regelmäßigen Abständen die Vertretungen des Vertretungsplans. Wenn es neue Vertretungen gibt, wird das dem Benutzer über eine Signal-Nachricht mitgeteilt.
+            | Der Bot aktualisiert in regelmäßigen Abständen die Vertretungen des Vertretungsplans. Wenn es neue Vertretungen gibt, wird das dem Benutzer über eine Signal-Nachricht mitgeteilt.
+            br
+            | Der Bot aktualisiert in regelmäßigen Abständen die Aufgaben von Moodle. Wenn es neue Aufgaben gibt, wird das dem Benutzer über eine Signal-Nachricht mitgeteilt.
         p
             | Um den Bot zu benutzen, ist die Chat-App 
             a[href="https://signal.org"][rel="nofollow"][target="_blank"] Signal
@@ -21,10 +23,10 @@ div.container
             | Über die App Signal
         p
             | Die App "Signal" ist eine Chat-App genau wie WhatsApp. Sie kann auf dem Smartphone oder Tablet genutzt werden, sowohl unter iOS als auch Android.
-            | Der Unterschied ist der Umgang mit den Daten. Während WhatsApp deine komplette Kontaktliste speichert und festhält, wem du wann eine Nachricht sendest,
-            | verspricht Signal keine Speicherung von Daten. Ein kompletter Umstieg ist daher auch sehr zu empfehlen. 
+            |  Der Unterschied ist der Umgang mit den Daten. Während WhatsApp deine komplette Kontaktliste speichert und festhält, wem du wann eine Nachricht sendest,
+            |  verspricht Signal keine Speicherung von Daten. Ein kompletter Umstieg ist daher auch sehr zu empfehlen. 
 
-        p.lead Wenn du mehr herausfinden möchtest, kannst dich dich zum Beispiel bei 
+        p.lead Wenn du mehr herausfinden möchtest, kannst dich dich zum Beispiel auf 
             a
                 [href="https://www.gq-magazin.de/entertainment/artikel/signal-messenger-was-steckt-hinter-der-whatsapp-alternative-die-elon-musk-empfiehlt"]
                 [rel="nofollow"]
@@ -36,13 +38,14 @@ div.container
             | Infos über die Daten
     ol
         li Wenn du dich registrierst, werden deine Daten an den Server gesendet. Diese Daten werden nicht an Dritte weitergegeben.
-        li Deine Telefonnummer wird nur dafür verwendet, dir automatisierte Nachrichten zu senden.
+        li Deine Telefonnummer wird nur dafür verwendet, dir Nachrichten zu senden, wie z.B. die automatisierten Mitteilungen.
         li Registrieren können sich momentan nur Schüler der Oberstufe, da hier jede Person einen eigenen Account hat. Unterstützung für Schüler anderer Jahrgänge folgt.
         li Ein Account kann nur einmal registriert werden.
         li Die Anmeldedaten werden unverschlüsselt gespeichert. Das ist notwendig, weil die Daten direkt zum Server geschickt werden müssen.
         li Mit den Anmeldedaten wird nichts unrechtmäßiges getan, jedoch dürfen sie zu Testzwecken für neue Funktionen verwendet werden.
         li Die Anmeldung verläuft auf eigene Gefahr. Es wird keine Verantwortung übernommen, sollte irgendwas passieren.
         li Auch die Funktion dieser Seite ist nicht garantiert. Es kann zum Beispiel jederzeit zu Ausfällen kommen.
+        li Es kann jeder Zeit zu einer Änderung von Funktionen kommen, oder es kommen neue Funktionen dazu, ohne dass du darüber informiert wirst.
         li Wenn du den Bot benutzt und dich registrierst, bist du mit diesen Informationen einverstanden und hast es mit betroffenden Personen abgesprochen, sollte eine 
             | Registrierung oder die daraus resultierenden Daten und Aktionen mehrere Personen betreffen.
     div.alert.alert-success.mt-3[role=alert] 

@@ -12,14 +12,14 @@ const (
 	SendPhoneNumberConfirmationLinkRoute = "/accounts/phone_number"
 	AddPhoneNumberRoute                  = "/accounts/phone_number/validate"
 
-	AddAccountToSubstitutionUpdaterRoute     = "/substitution_updater"
+	AddAccountToSubstitutionUpdaterRoute      = "/substitution_updater"
 	RemoveAccountFromSubstitutionUpdaterRoute = "/substitution_updater"
 
-	AddAccountToMoodleAssignmentUpdaterRoute     = "/moodle_assignment_updater"
+	AddAccountToMoodleAssignmentUpdaterRoute      = "/moodle_assignment_updater"
 	RemoveAccountFromMoodleAssignmentUpdaterRoute = "/moodle_assignment_updater"
 
-	SubstitutionSpeedFormRoute           = "/substitution_speed_form"
-	SubstitutionSpeedFormValidationRoute = "/substitution_speed_form/validate"
-	SubstitutionSpeedFormFinishRoute     = "/substitution_speed_form/finish"
-	SubstitutionSpeedFormInfoRoute       = "/substitution_speed_form/info"
+	RegistrationSpeedFormRoute           = "/registration_speed_form"
+	RegistrationSpeedFormValidationRoute = "/registration_speed_form/validate"
+	RegistrationSpeedFormFinishRoute     = "/registration_speed_form/finish"
+	RegistrationSpeedFormInfoRoute       = "/registration_speed_form/info"
 )

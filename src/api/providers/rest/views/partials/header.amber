@@ -1,5 +1,5 @@
 nav.navbar.navbar-light.bg-light
     div.container-fluid
-        a.navbar-brand
+        a.navbar-brand[href=FormRoute]
             img.d-inline-block.align-top[src="/static/PurrmannPlus.svg"][alt="logo"]    
             | PurrmannPlus

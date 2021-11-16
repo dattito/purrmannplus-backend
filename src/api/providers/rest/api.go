@@ -83,10 +83,10 @@ func (r *RestProvider) Init() error {
 	v1.Post(routes.AddAccountToMoodleAssignmentUpdaterRoute, Protected(), controllers.AddAccountToMoodleAssignmentUpdater)
 	v1.Delete(routes.RemoveAccountFromMoodleAssignmentUpdaterRoute, Protected(), controllers.RemoveAccountFromMoodleAssignmentUpdater)
 
-	r.app.All(routes.SubstitutionSpeedFormRoute, controllers.SubstitutionSpeedForm)
-	r.app.All(routes.SubstitutionSpeedFormValidationRoute, controllers.ValidateSubstitutionSpeedForm)
-	r.app.Get(routes.SubstitutionSpeedFormFinishRoute, controllers.FinishSubstitutionSpeedForm)
-	r.app.Get(routes.SubstitutionSpeedFormInfoRoute, controllers.InfoSubstitutionSpeedForm)
+	r.app.All(routes.RegistrationSpeedFormRoute, controllers.RegistrationSpeedForm)
+	r.app.All(routes.RegistrationSpeedFormValidationRoute, controllers.ValidateRegistrationSpeedForm)
+	r.app.Get(routes.RegistrationSpeedFormFinishRoute, controllers.FinishRegistrationSpeedForm)
+	r.app.Get(routes.RegistrationSpeedFormInfoRoute, controllers.InfoRegsitrationSpeedForm)
 
 	session.Init()
 
