@@ -24,6 +24,3 @@ jobs:
         with:
           context: .
           tags: ${{ env.TEST_TAG }}
-      - name: Test
-        run: |
-          docker run --rm ${{ env.TEST_TAG }}
