@@ -15,7 +15,7 @@ import (
 	"github.com/dattito/purrmannplus-backend/utils/logging"
 )
 
-func moodleAssignmentsDifferenceAmount(mayNewAssignments []int, old_assignments []int) []int {
+func moodleAssignmentsDifferenceAmount(mayNewAssignments, old_assignments []int) []int {
 	var difference []int
 	for _, new_assignment := range mayNewAssignments {
 		found := false
