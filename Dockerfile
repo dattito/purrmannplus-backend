@@ -15,7 +15,7 @@ RUN CGO_ENABLED=1 go build -o /app/app .
 
 FROM alpine:3
 
-RUN apk add --no-cache tzdata
+RUN apk add --no-cache tzdata=2021e-r0 
 
 ENV TZ Europe/Berlin
 
