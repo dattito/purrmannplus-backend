@@ -7,8 +7,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-// Adds an account to the substitution updater
-func AddAccountToSubstitutionUpdater(c *fiber.Ctx) error {
+func AddAccountToMoodleAssignmentUpdater(c *fiber.Ctx) error {
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	accountId := claims["account_id"].(string)
@@ -27,10 +26,10 @@ func AddAccountToSubstitutionUpdater(c *fiber.Ctx) error {
 		})
 	}
 
-	user_err, db_err := commands.AddAccountToSubstitutionUpdater(accountId)
+	user_err, db_err := commands.AddAccountToMoodleAssignmentUpdater(accountId)
 
 	if db_err != nil {
-		logging.Errorf("Error while adding account to substitution updater: %v", db_err)
+		logging.Errorf("Error while adding account to moodle assignment updater: %s", db_err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "Something went wrong",
 		})
@@ -45,15 +44,15 @@ func AddAccountToSubstitutionUpdater(c *fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusCreated)
 }
 
-// Removes an account from the substitution updater
-func RemoveAccountFromSubstitutionUpdater(c *fiber.Ctx) error {
+func RemoveAccountFromMoodleAssignmentUpdater(c *fiber.Ctx) error {
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	accountId := claims["account_id"].(string)
 
-	err := commands.RemoveAccountFromSubstitutionUpdater(accountId)
+	err := commands.RemoveAccountFromMoodleAssignmentUpdater(accountId)
+
 	if err != nil {
-		logging.Errorf("Error while removing account from substitution updater: %v", err)
+		logging.Errorf("Error while removing account from moodle assignment updater: %s", err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"error": "Something went wrong",
 		})

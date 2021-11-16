@@ -1,6 +1,0 @@
-import ./api/providers/rest/views/partials/header
-
-import ./api/providers/rest/views/partials/error
-
-div.container
-        div.alert.alert-success.mt-3[role=alert] Fertig! Du wurdest erfolgreich eingetragen und erhälst ab jetzt Updates zum Vertretungsplan.

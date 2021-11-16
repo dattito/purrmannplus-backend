@@ -77,13 +77,16 @@ func (r *RestProvider) Init() error {
 	v1.Post(routes.SendPhoneNumberConfirmationLinkRoute, Protected(), controllers.SendPhoneNumberConfirmationLink)
 	v1.Get(routes.AddPhoneNumberRoute, controllers.AddPhoneNumber)
 
-	v1.Post(routes.RegisterToSubstitutionUpdaterRoute, Protected(), controllers.RegisterToSubstitutionUpdater)
-	v1.Delete(routes.UnregisterFromSubstitutionUpdaterRoute, Protected(), controllers.UnregisterFromSubstitutionUpdater)
+	v1.Post(routes.AddAccountToSubstitutionUpdaterRoute, Protected(), controllers.AddAccountToSubstitutionUpdater)
+	v1.Delete(routes.RemoveAccountFromSubstitutionUpdaterRoute, Protected(), controllers.RemoveAccountFromSubstitutionUpdater)
 
-	r.app.All(routes.SubstitutionSpeedFormRoute, controllers.SubstitutionSpeedForm)
-	r.app.All(routes.SubstitutionSpeedFormValidationRoute, controllers.ValidateSubstitutionSpeedForm)
-	r.app.Get(routes.SubstitutionSpeedFormFinishRoute, controllers.FinishSubstitutionSpeedForm)
-	r.app.Get(routes.SubstitutionSpeedFormInfoRoute, controllers.InfoSubstitutionSpeedForm)
+	v1.Post(routes.AddAccountToMoodleAssignmentUpdaterRoute, Protected(), controllers.AddAccountToMoodleAssignmentUpdater)
+	v1.Delete(routes.RemoveAccountFromMoodleAssignmentUpdaterRoute, Protected(), controllers.RemoveAccountFromMoodleAssignmentUpdater)
+
+	r.app.All(routes.RegistrationSpeedFormRoute, controllers.RegistrationSpeedForm)
+	r.app.All(routes.RegistrationSpeedFormValidationRoute, controllers.ValidateRegistrationSpeedForm)
+	r.app.Get(routes.RegistrationSpeedFormFinishRoute, controllers.FinishRegistrationSpeedForm)
+	r.app.Get(routes.RegistrationSpeedFormInfoRoute, controllers.InfoRegsitrationSpeedForm)
 
 	session.Init()
 

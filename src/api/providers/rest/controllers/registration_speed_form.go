@@ -32,24 +32,24 @@ func SaveRequestInSession(c *fiber.Ctx, username, password, phoneNumber, code st
 	return session.Save()
 }
 
-func SubstitutionSpeedForm(c *fiber.Ctx) error {
+func RegistrationSpeedForm(c *fiber.Ctx) error {
 	if c.Method() == fiber.MethodGet {
-		return c.Render("substitution_speed_form_full", fiber.Map{
-			"InfoRoute":        routes.SubstitutionSpeedFormInfoRoute,
-			"FormPostRoute":    routes.SubstitutionSpeedFormRoute,
+		return c.Render("registration_speed_form", fiber.Map{
+			"InfoRoute":        routes.RegistrationSpeedFormInfoRoute,
+			"FormPostRoute":    routes.RegistrationSpeedFormRoute,
 			"ContactEmail":     config.CONTACT_EMAIL,
 			"ContactInstagram": config.CONTACT_INSTAGRAM,
 		}, "layouts/main")
 	} else if c.Method() == fiber.MethodPost {
-		internalServerErrorResponse := c.Status(fiber.StatusInternalServerError).Render("substitution_speed_form_full", fiber.Map{
-			"InfoRoute":        routes.SubstitutionSpeedFormInfoRoute,
-			"FormPostRoute":    routes.SubstitutionSpeedFormRoute,
+		internalServerErrorResponse := c.Status(fiber.StatusInternalServerError).Render("registration_speed_form", fiber.Map{
+			"InfoRoute":        routes.RegistrationSpeedFormInfoRoute,
+			"FormPostRoute":    routes.RegistrationSpeedFormRoute,
 			"ErrorMessage":     "Etwas ist schiefgelaufen...",
 			"ContactEmail":     config.CONTACT_EMAIL,
 			"ContactInstagram": config.CONTACT_INSTAGRAM,
 		}, "layouts/main")
 
-		var pr models.PostSubstitutionSpeedFormRequest
+		var pr models.PostRegistrationSpeedFormRequest
 		if err := c.BodyParser(&pr); err != nil {
 			logging.Errorf("Error parsing body: %v", err)
 			return internalServerErrorResponse
@@ -57,9 +57,9 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 
 		pr.Username = strings.ToLower(pr.Username)
 		if len(pr.Username) < 4 && utils.NumberInString(pr.Username) {
-			return c.Status(fiber.StatusBadRequest).Render("substitution_speed_form_full", fiber.Map{
-				"InfoRoute":        routes.SubstitutionSpeedFormInfoRoute,
-				"FormPostRoute":    routes.SubstitutionSpeedFormRoute,
+			return c.Status(fiber.StatusBadRequest).Render("registration_speed_form", fiber.Map{
+				"InfoRoute":        routes.RegistrationSpeedFormInfoRoute,
+				"FormPostRoute":    routes.RegistrationSpeedFormRoute,
 				"ErrorMessage":     "Momentan können sich nur Schüler der Oberstufe anmelden...",
 				"ContactEmail":     config.CONTACT_EMAIL,
 				"ContactInstagram": config.CONTACT_INSTAGRAM,
@@ -73,9 +73,9 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 		}
 
 		if !correct {
-			return c.Status(fiber.StatusUnauthorized).Render("substitution_speed_form_full", fiber.Map{
-				"InfoRoute":        routes.SubstitutionSpeedFormInfoRoute,
-				"FormPostRoute":    routes.SubstitutionSpeedFormRoute,
+			return c.Status(fiber.StatusUnauthorized).Render("registration_speed_form", fiber.Map{
+				"InfoRoute":        routes.RegistrationSpeedFormInfoRoute,
+				"FormPostRoute":    routes.RegistrationSpeedFormRoute,
 				"ErrorMessage":     "Falsche Anmeldedaten",
 				"ContactEmail":     config.CONTACT_EMAIL,
 				"ContactInstagram": config.CONTACT_INSTAGRAM,
@@ -90,9 +90,9 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 		}
 
 		if account.Username != "" {
-			return c.Status(fiber.StatusUnauthorized).Render("substitution_speed_form_full", fiber.Map{
-				"InfoRoute":        routes.SubstitutionSpeedFormInfoRoute,
-				"FormPostRoute":    routes.SubstitutionSpeedFormRoute,
+			return c.Status(fiber.StatusUnauthorized).Render("registration_speed_form", fiber.Map{
+				"InfoRoute":        routes.RegistrationSpeedFormInfoRoute,
+				"FormPostRoute":    routes.RegistrationSpeedFormRoute,
 				"ErrorMessage":     "Das Konto exestiert bereits",
 				"ContactEmail":     config.CONTACT_EMAIL,
 				"ContactInstagram": config.CONTACT_INSTAGRAM,
@@ -102,9 +102,9 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 		validNumber, err := utils.FormatPhoneNumber(pr.PhoneNumber)
 		if err != nil {
 			if errors.Is(err, phonenumbers.ErrNotANumber) {
-				return c.Status(fiber.StatusInternalServerError).Render("substitution_speed_form_full", fiber.Map{
-					"InfoRoute":        routes.SubstitutionSpeedFormInfoRoute,
-					"FormPostRoute":    routes.SubstitutionSpeedFormRoute,
+				return c.Status(fiber.StatusInternalServerError).Render("registration_speed_form", fiber.Map{
+					"InfoRoute":        routes.RegistrationSpeedFormInfoRoute,
+					"FormPostRoute":    routes.RegistrationSpeedFormRoute,
 					"ErrorMessage":     "Bitte gebe eine gültige Telefonnummer an",
 					"ContactEmail":     config.CONTACT_EMAIL,
 					"ContactInstagram": config.CONTACT_INSTAGRAM,
@@ -129,34 +129,34 @@ func SubstitutionSpeedForm(c *fiber.Ctx) error {
 			return internalServerErrorResponse
 		}
 
-		return c.Redirect(routes.SubstitutionSpeedFormValidationRoute)
+		return c.Redirect(routes.RegistrationSpeedFormValidationRoute)
 	} else {
 		return fiber.ErrMethodNotAllowed
 	}
 }
 
-func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
+func ValidateRegistrationSpeedForm(c *fiber.Ctx) error {
 
-	internalServerErrorResponse := c.Status(fiber.StatusInternalServerError).Render("substitution_speed_pn_validate", fiber.Map{
-		"FormPostRoute": routes.SubstitutionSpeedFormValidationRoute,
+	internalServerErrorResponse := c.Status(fiber.StatusInternalServerError).Render("registration_speed_form_pn_validate", fiber.Map{
+		"FormPostRoute": routes.RegistrationSpeedFormValidationRoute,
 		"ErrorMessage":  "Etwas ist schiefgelaufen...",
 	}, "layouts/main")
 
 	if c.Method() == fiber.MethodGet {
 		session, err := session.SessionStore.Get(c)
 		if err != nil {
-			return c.Render("substitution_speed_pn_validate", fiber.Map{
-				"FormPostRoute": routes.SubstitutionSpeedFormValidationRoute,
+			return c.Render("registration_speed_form_pn_validate", fiber.Map{
+				"FormPostRoute": routes.RegistrationSpeedFormValidationRoute,
 			}, "layouts/main")
 		}
 
 		username := session.Get("username")
 		if username == nil {
-			return c.Redirect(routes.SubstitutionSpeedFormRoute)
+			return c.Redirect(routes.RegistrationSpeedFormRoute)
 		}
 
-		return c.Render("substitution_speed_pn_validate", fiber.Map{
-			"FormPostRoute": routes.SubstitutionSpeedFormValidationRoute,
+		return c.Render("registration_speed_form_pn_validate", fiber.Map{
+			"FormPostRoute": routes.RegistrationSpeedFormValidationRoute,
 		}, "layouts/main")
 	}
 
@@ -168,10 +168,10 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 
 		username := session.Get("username")
 		if username == nil {
-			return c.Redirect(routes.SubstitutionSpeedFormRoute)
+			return c.Redirect(routes.RegistrationSpeedFormRoute)
 		}
 
-		var pr models.PostValidateSubstitutionSpeedFormRequest
+		var pr models.PostValidateRegistrationSpeedFormRequest
 		if err := c.BodyParser(&pr); err != nil {
 			logging.Errorf("Error parsing body: %v", err)
 			session.Destroy()
@@ -179,8 +179,8 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 		}
 
 		if pr.Code != session.Get("code") {
-			return c.Status(fiber.StatusUnauthorized).Render("substitution_speed_pn_validate", fiber.Map{
-				"FormPostRoute": routes.SubstitutionSpeedFormValidationRoute,
+			return c.Status(fiber.StatusUnauthorized).Render("registration_speed_form_pn_validate", fiber.Map{
+				"FormPostRoute": routes.RegistrationSpeedFormValidationRoute,
 				"ErrorMessage":  "Falscher Code",
 			}, "layouts/main")
 		}
@@ -204,14 +204,18 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 			return internalServerErrorResponse
 		}
 
-		_, err = commands.AddToSubstitutionUpdater(acc.Id)
-		if err != nil {
+		if _, err := commands.AddAccountToSubstitutionUpdater(acc.Id); err != nil {
+			session.Destroy()
+			return internalServerErrorResponse
+		}
+
+		if _, err := commands.AddAccountToMoodleAssignmentUpdater(acc.Id); err != nil {
 			session.Destroy()
 			return internalServerErrorResponse
 		}
 
 		if err := signal_message_sender.SignalMessageSender.Send(
-			fmt.Sprintf("Dein Account '%s' wurde mit dieser Telefonnummer verbunden. Ab jetzt erhälst du über diesen Chat neue Infos über Vertretungen!",
+			fmt.Sprintf("Dein Account '%s' wurde mit dieser Telefonnummer verbunden. Ab jetzt erhälst du über diesen Chat neue Infos über Vertretungen und Moodle-Aufgaben!",
 				acc.Username),
 			session.Get("phone_number").(string),
 		); err != nil {
@@ -219,17 +223,17 @@ func ValidateSubstitutionSpeedForm(c *fiber.Ctx) error {
 		}
 
 		session.Destroy()
-		return c.Redirect(routes.SubstitutionSpeedFormFinishRoute)
+		return c.Redirect(routes.RegistrationSpeedFormFinishRoute)
 	}
 	return fiber.ErrMethodNotAllowed
 }
 
-func FinishSubstitutionSpeedForm(c *fiber.Ctx) error {
-	return c.Render("substitution_speed_finish", fiber.Map{}, "layouts/main")
+func FinishRegistrationSpeedForm(c *fiber.Ctx) error {
+	return c.Render("registration_speed_form_finish", fiber.Map{}, "layouts/main")
 }
 
-func InfoSubstitutionSpeedForm(c *fiber.Ctx) error {
-	return c.Render("substitution_speed_info", fiber.Map{
-		"FormRoute": routes.SubstitutionSpeedFormRoute,
+func InfoRegsitrationSpeedForm(c *fiber.Ctx) error {
+	return c.Render("registration_speed_form_info", fiber.Map{
+		"FormRoute": routes.RegistrationSpeedFormRoute,
 	}, "layouts/main")
 }

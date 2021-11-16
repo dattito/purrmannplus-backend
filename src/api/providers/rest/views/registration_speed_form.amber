@@ -3,7 +3,7 @@ import ./api/providers/rest/views/partials/header
 import ./api/providers/rest/views/partials/error
 
 h1.text-center.mt-2
-    | Vertretungsplan-Bot
+    | Vertretungsplan- und Moodle-Notifier
     span.badge.bg-secondary Neu
 
 div.container
@@ -17,7 +17,7 @@ div.container
                         a[href="https://signal.org"][rel="nofollow"][target="_blank"] Signal
                         span
                             img[src="/static/SignalIcon.svg"][alt="Signal"]
-                        |! Über den Messenger bekommst du deine Vertretungen zugesendet.
+                        |! Über den Messenger bekommst du deine Benachrichtigungen zugesendet.
                     hr
                     p.form-text.text-info
                         | Momentan können sich nur Schüler der Oberstufe anmelden

@@ -8,25 +8,15 @@ import (
 	"github.com/dattito/purrmannplus-backend/config"
 	"github.com/dattito/purrmannplus-backend/database"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
-	"github.com/dattito/purrmannplus-backend/services/hpg"
 	"github.com/dattito/purrmannplus-backend/services/scheduler"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
+	"github.com/dattito/purrmannplus-backend/services/substitutions"
+	"github.com/dattito/purrmannplus-backend/utils"
 	"github.com/dattito/purrmannplus-backend/utils/logging"
 )
 
-// Checks if a string is in a slice of strings
-func contains(s []string, str string) bool {
-	for _, v := range s {
-		if v == str {
-			return true
-		}
-	}
-
-	return false
-}
-
 // Returns a map of the differences between two maps (difference amount)
-func differenceAmount(newSubstituations, oldSubstituations map[string][]string) map[string][]string {
+func substitutionsDifferenceAmount(newSubstituations, oldSubstituations map[string][]string) map[string][]string {
 	s := map[string][]string{}
 
 	for day, lessons := range newSubstituations {
@@ -36,7 +26,7 @@ func differenceAmount(newSubstituations, oldSubstituations map[string][]string) 
 		}
 
 		for _, lesson := range lessons {
-			if !contains(oldSubstituations[day], lesson) {
+			if !utils.Contains(oldSubstituations[day], lesson) {
 				s[day] = append(s[day], lesson)
 			}
 		}
@@ -62,7 +52,15 @@ func substituationToTextMessage(substitution map[string][]string) string {
 }
 
 // Returns error produced by user; error not produced by user
-func AddToSubstitutionUpdater(accountId string) (error, error) {
+func AddAccountToSubstitutionUpdater(accountId string) (error, error) {
+	if _, err := database.DB.GetSubstitutions(accountId); err != nil {
+		if !errors.Is(err, &db_errors.ErrRecordNotFound) {
+			return nil, err
+		}
+	} else {
+		return errors.New("account is already in substitution updater"), nil
+	}
+
 	ai, err := database.DB.GetAccountInfo(accountId)
 	if err != nil {
 		if errors.Is(err, &db_errors.ErrRecordNotFound) {
@@ -75,8 +73,18 @@ func AddToSubstitutionUpdater(accountId string) (error, error) {
 		return errors.New("phone number has to be added first"), nil
 	}
 
-	if _, err := database.DB.GetSubstitutions(accountId); err == nil || !errors.Is(err, &db_errors.ErrRecordNotFound) {
-		return errors.New("substitutions already exist"), nil
+	a, err := database.DB.GetAccount(accountId)
+	if err != nil {
+		return nil, err
+	}
+
+	correct, err := substitutions.CheckCredentials(a.Username, a.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	if !correct {
+		return errors.New("credentials are incorrect for the substitution updater"), nil
 	}
 
 	_, err = database.DB.SetSubstitutions(accountId, map[string][]string{}, true)
@@ -87,23 +95,27 @@ func AddToSubstitutionUpdater(accountId string) (error, error) {
 	return nil, UpdateSubstitutionsByAccountId(accountId)
 }
 
-func RemoveFromSubstitutionUpdater(accountId string) error {
+func RemoveAccountFromSubstitutionUpdater(accountId string) error {
 	return database.DB.RemoveAccountFromSubstitutionUpdater(accountId)
 }
 
 // Updates the substitutions for a given account and sends a message via signal
 func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 	logging.Debugf("Updating substitutions of account %s (id: %s)", m.AuthId, m.AccountId)
-	mayNewSubstitutions, err := hpg.GetSubstituationOfStudent(m.AuthId, m.AuthPw)
+	mayNewSubstitutions, err := substitutions.GetSubstituationOfStudent(m.AuthId, m.AuthPw)
 	if err != nil {
 		return err
 	}
 
 	old_substitutions := m.Entries
 
-	newSubstitutions := differenceAmount(mayNewSubstitutions, old_substitutions)
+	newSubstitutions := substitutionsDifferenceAmount(mayNewSubstitutions, old_substitutions)
 
 	// If there are no new substitutions, we don't need to do anything
+	if len(newSubstitutions) == 0 {
+		return nil
+	}
+
 	_, err = database.DB.SetSubstitutions(m.AccountId, mayNewSubstitutions, false)
 	if err != nil {
 		return err
@@ -116,6 +128,7 @@ func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 		return nil
 	}
 
+	// Send a message to the user if there are new substitutions
 	return signal_message_sender.SignalMessageSender.Send(substituationToTextMessage(newSubstitutions), m.PhoneNumber)
 }
 

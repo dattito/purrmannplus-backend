@@ -22,6 +22,12 @@ type Provider interface {
 	GetSubstitutions(accountId string) (models.SubstitutionDBModel, error)
 	GetAllAccountCredentialsAndPhoneNumberAndSubstitutions() ([]models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel, error)
 	GetAccountCredentialsAndPhoneNumberAndSubstitutions(accountId string) (models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel, error)
+
+	SetMoodleAssignments(accountId string, assignmentIds []int, notSetYet bool) (models.MoodleUserAssignmentsDBModel, error)
+	RemoveAccountFromMoodleAssignmentUpdater(accountId string) error
+	GetMoodleAssignments(accountId string) (models.MoodleUserAssignmentsDBModel, error)
+	GetAllAccountCredentialsAndPhoneNumberAndSMoodleAssignments() ([]models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel, error)
+	GetAccountCredentialsAndPhoneNumberAndSMoodleAssignments(accountId string) (models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel, error)
 }
 
 func GetProvider() (Provider, error) {

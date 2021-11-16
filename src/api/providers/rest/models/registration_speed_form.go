@@ -1,11 +1,11 @@
 package models
 
-type PostSubstitutionSpeedFormRequest struct {
+type PostRegistrationSpeedFormRequest struct {
 	Username    string `form:"username"`
 	Password    string `form:"password"`
 	PhoneNumber string `form:"phoneNumber"`
 }
 
-type PostValidateSubstitutionSpeedFormRequest struct {
+type PostValidateRegistrationSpeedFormRequest struct {
 	Code string `form:"code"`
 }

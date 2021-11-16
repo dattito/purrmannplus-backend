@@ -15,6 +15,10 @@ RUN CGO_ENABLED=1 go build -o /app/app .
 
 FROM alpine:3
 
+RUN apk add --no-cache tzdata
+
+ENV TZ Europe/Berlin
+
 WORKDIR /app
 
 COPY --from=build /app/app /app/app
@@ -26,8 +30,6 @@ COPY --from=build /build/api/providers/rest/static ${PATH_TO_API_STATIC}
 
 RUN mkdir /data
 
-ARG DNT_VERSION=""
-ENV DNT_VERSION ${DNT_VERSION}
 ENV DATABASE_TYPE SQLITE
 ENV DATABASE_URI /data/db.sqlite
 
