@@ -322,11 +322,13 @@ func ValidateRegistrationSpeedForm(c *fiber.Ctx) error {
 		if needsCustomSubstitutionCredentials != nil && needsCustomSubstitutionCredentials == true {
 			if _, err := commands.AddAccountToSubstitutionUpdaterWithCustomCredentials(acc.Id, session.Get("custom_substitution_auth_id").(string), session.Get("custom_substitution_auth_pw").(string)); err != nil {
 				session.Destroy()
+				logging.Errorf("Error adding account to substitution updater with custom credentials: %v", err)
 				return internalServerErrorResponse
 			}
 		} else {
 			if _, err := commands.AddAccountToSubstitutionUpdater(acc.Id); err != nil {
 				session.Destroy()
+				logging.Errorf("Error adding account to substitution updater: %v", err)
 				return internalServerErrorResponse
 			}
 		}

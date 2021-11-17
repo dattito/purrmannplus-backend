@@ -20,6 +20,10 @@ func (a *AccountDB) BeforeDelete(tx *gorm.DB) error {
 		return err
 	}
 
+	if err := tx.Where("account_id = ?", a.Id).Delete(&MoodleUserAssignmentsDB{}).Error; err != nil {
+		return err
+	}
+
 	return tx.Where("account_id = ?", a.Id).Delete(&AccountInfoDB{}).Error
 }
 
