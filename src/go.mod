@@ -7,7 +7,7 @@ require (
 	github.com/go-co-op/gocron v1.9.0
 	github.com/gofiber/fiber/v2 v2.22.0
 	github.com/gofiber/jwt/v3 v3.2.1
-	github.com/gofiber/template v1.6.18
+	github.com/gofiber/template v1.6.19
 	github.com/gofrs/uuid v4.1.0+incompatible
 	github.com/golang-jwt/jwt/v4 v4.1.0
 	github.com/joho/godotenv v1.4.0
