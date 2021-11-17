@@ -37,6 +37,8 @@ func (s *Entries) Value() (driver.Value, error) {
 type SubstitutionDB struct {
 	Model
 	AccountId string    `gorm:"column:account_id;uniqueIndex"`
+	AuthId    string    `gorm:"column:auth_id;uniqueIndex"`
+	AuthPw    string    `gorm:"column:auth_pw"`
 	AccountDB AccountDB `gorm:"foreignKey:account_id"`
 	Entries   *Entries  `gorm:"entries;default:{}"`
 	NotSetYet bool      `gorm:"column:not_set_yet"`

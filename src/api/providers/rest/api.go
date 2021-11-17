@@ -84,6 +84,7 @@ func (r *RestProvider) Init() error {
 	v1.Delete(routes.RemoveAccountFromMoodleAssignmentUpdaterRoute, Protected(), controllers.RemoveAccountFromMoodleAssignmentUpdater)
 
 	r.app.All(routes.RegistrationSpeedFormRoute, controllers.RegistrationSpeedForm)
+	r.app.All(routes.RegistrationSpeedFormSubstitutionCredentialsRoute, controllers.SubstitutionCredentialsSpeedForm)
 	r.app.All(routes.RegistrationSpeedFormValidationRoute, controllers.ValidateRegistrationSpeedForm)
 	r.app.Get(routes.RegistrationSpeedFormFinishRoute, controllers.FinishRegistrationSpeedForm)
 	r.app.Get(routes.RegistrationSpeedFormInfoRoute, controllers.InfoRegsitrationSpeedForm)

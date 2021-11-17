@@ -189,6 +189,23 @@ func (g *GormProvider) RemoveAccountFromSubstitutionUpdater(accountId string) er
 	return nil
 }
 
+func (g *GormProvider) AddAccountToSubstitution(accountId, authId, authPw string) error {
+
+	if _, err := g.GetSubstitutions(accountId); err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return err
+	}
+
+	substitution := models.SubstitutionDB{
+		AccountId: accountId,
+		AuthId:    authId,
+		AuthPw:    authPw,
+		Entries:   &models.Entries{},
+		NotSetYet: true,
+	}
+
+	return g.DB.Create(&substitution).Error
+}
+
 // Updates the substitution of a given account
 func (g *GormProvider) SetSubstitutions(accountId string, entries map[string][]string, NotSetYet bool) error {
 
@@ -236,7 +253,7 @@ func (g *GormProvider) GetSubstitutions(accountId string) (app_models.Substituti
 func (g *GormProvider) GetAllSubstitutionInfos() ([]app_models.SubstitutionInfo, error) {
 	m := []models.SubstitutionInfoDB{}
 
-	g.DB.Model(models.AccountDB{}).Select("accounts.auth_id", "accounts.auth_pw", "account_infos.phone_number", "accounts.id AS 'account_id'", "substitutions.id AS 'substitutions_id'", "substitutions.entries", "substitutions.not_set_yet").Joins("INNER JOIN substitutions ON substitutions.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Scan(&m)
+	g.DB.Model(models.AccountDB{}).Select("account_infos.phone_number", "accounts.id AS 'account_id'", "substitutions.auth_id", "substitutions.auth_pw", "substitutions.id AS 'substitutions_id'", "substitutions.entries", "substitutions.not_set_yet").Joins("INNER JOIN substitutions ON substitutions.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Scan(&m)
 
 	var mm []app_models.SubstitutionInfo
 	for _, v := range m {
@@ -249,7 +266,7 @@ func (g *GormProvider) GetAllSubstitutionInfos() ([]app_models.SubstitutionInfo,
 // Returns the accountId, auth_id, auth_pw, phone_number, substitutions_id and the substitutions of a given account
 func (g *GormProvider) GetSubstitutionInfos(accountId string) (app_models.SubstitutionInfo, error) {
 	m := models.SubstitutionInfoDB{}
-	err := g.DB.Model(models.AccountDB{}).Select("accounts.auth_id", "accounts.auth_pw", "account_infos.phone_number", "accounts.id AS 'account_id'", "substitutions.id AS 'substitutions_id'", "substitutions.entries", "substitutions.not_set_yet").Joins("INNER JOIN substitutions ON substitutions.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Where("accounts.id = ?", accountId).Scan(&m).Error
+	err := g.DB.Model(models.AccountDB{}).Select("account_infos.phone_number", "accounts.id AS 'account_id'", "substitutions.auth_id", "substitutions.auth_pw", "substitutions.id AS 'substitutions_id'", "substitutions.entries", "substitutions.not_set_yet").Joins("INNER JOIN substitutions ON substitutions.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Where("accounts.id = ?", accountId).Scan(&m).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return app_models.SubstitutionInfo{}, &db_errors.ErrRecordNotFound

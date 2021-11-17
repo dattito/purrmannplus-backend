@@ -12,11 +12,35 @@ import (
 	"github.com/dattito/purrmannplus-backend/config"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
 	"github.com/dattito/purrmannplus-backend/services/signal_message_sender"
+	"github.com/dattito/purrmannplus-backend/services/substitutions"
 	"github.com/dattito/purrmannplus-backend/utils"
 	"github.com/dattito/purrmannplus-backend/utils/logging"
 	"github.com/gofiber/fiber/v2"
 	"github.com/nyaruka/phonenumbers"
 )
+
+func SaveCustomSubstitutionCredentials(c *fiber.Ctx, customSubstitutionAuthId, customSubstitutionAuthPw string) error {
+	session, err := session.SessionStore.Get(c)
+	if err != nil {
+		return err
+	}
+
+	session.Set("custom_substitution_auth_id", customSubstitutionAuthId)
+	session.Set("custom_substitution_auth_pw", customSubstitutionAuthPw)
+
+	return session.Save()
+}
+
+func SaveNeedsCustomSubstitutionCredentials(c *fiber.Ctx) error {
+	session, err := session.SessionStore.Get(c)
+	if err != nil {
+		return err
+	}
+
+	session.Set("needs_custom_substitution_credentials", true)
+
+	return session.Save()
+}
 
 func SaveRequestInSession(c *fiber.Ctx, username, password, phoneNumber, code string) error {
 	session, err := session.SessionStore.Get(c)
@@ -30,6 +54,21 @@ func SaveRequestInSession(c *fiber.Ctx, username, password, phoneNumber, code st
 	session.Set("code", code)
 
 	return session.Save()
+}
+
+func sendConfirmationCode(c *fiber.Ctx) error {
+	session, err := session.SessionStore.Get(c)
+	if err != nil {
+		return err
+	}
+
+	phoneNumber := session.Get("phone_number")
+	code := session.Get("code")
+
+	return signal_message_sender.SignalMessageSender.Send(
+		fmt.Sprintf("Willkommen bei PurrmannPlus! Dein Bestätigungscode lautet: %s", code),
+		phoneNumber.(string),
+	)
 }
 
 func RegistrationSpeedForm(c *fiber.Ctx) error {
@@ -56,15 +95,6 @@ func RegistrationSpeedForm(c *fiber.Ctx) error {
 		}
 
 		pr.Username = strings.ToLower(pr.Username)
-		if len(pr.Username) < 4 && utils.NumberInString(pr.Username) {
-			return c.Status(fiber.StatusBadRequest).Render("registration_speed_form", fiber.Map{
-				"InfoRoute":        routes.RegistrationSpeedFormInfoRoute,
-				"FormPostRoute":    routes.RegistrationSpeedFormRoute,
-				"ErrorMessage":     "Momentan können sich nur Schüler der Oberstufe anmelden...",
-				"ContactEmail":     config.CONTACT_EMAIL,
-				"ContactInstagram": config.CONTACT_INSTAGRAM,
-			}, "layouts/main")
-		}
 
 		correct, err := commands.CheckCredentials(pr.Username, pr.Password)
 		if err != nil {
@@ -83,13 +113,12 @@ func RegistrationSpeedForm(c *fiber.Ctx) error {
 		}
 
 		// Check if accounts already exist
-		account, err := commands.GetAccountByCredentials(pr.Username, pr.Password)
-		if err != &db_errors.ErrRecordNotFound && err != nil {
-			logging.Errorf("Error getting account by credentials: %v", err)
-			return internalServerErrorResponse
-		}
-
-		if account.Username != "" {
+		if _, err := commands.GetAccountByCredentials(pr.Username, pr.Password); err != nil {
+			if !errors.Is(err, &db_errors.ErrRecordNotFound) {
+				logging.Errorf("Error getting account by credentials: %v", err)
+				return internalServerErrorResponse
+			}
+		} else {
 			return c.Status(fiber.StatusUnauthorized).Render("registration_speed_form", fiber.Map{
 				"InfoRoute":        routes.RegistrationSpeedFormInfoRoute,
 				"FormPostRoute":    routes.RegistrationSpeedFormRoute,
@@ -116,16 +145,34 @@ func RegistrationSpeedForm(c *fiber.Ctx) error {
 
 		code := utils.GenerateValidationCode(6)
 
-		if err := signal_message_sender.SignalMessageSender.Send(
-			fmt.Sprintf("Willkommen bei PurrmannPlus! Dein Bestätigungscode lautet: %s", code),
-			validNumber,
-		); err != nil {
-			return internalServerErrorResponse
-		}
-
 		err = SaveRequestInSession(c, pr.Username, pr.Password, validNumber, code)
 		if err != nil {
 			logging.Errorf("Error saving request in session: %v", err)
+			return internalServerErrorResponse
+		}
+
+		ok, err := substitutions.CheckCredentials(pr.Username, pr.Password)
+		if err != nil {
+			logging.Errorf("Error checking credentials: %v", err)
+			return internalServerErrorResponse
+		}
+
+		if !ok {
+			if err := SaveNeedsCustomSubstitutionCredentials(c); err != nil {
+				logging.Errorf("Error saving needs custom substitution credentials: %v", err)
+				return internalServerErrorResponse
+			}
+
+			return c.Redirect(routes.RegistrationSpeedFormSubstitutionCredentialsRoute)
+		}
+
+		if err := sendConfirmationCode(c); err != nil {
+			logging.Errorf("Error sending confirmation code: %v", err)
+			session, err := session.SessionStore.Get(c)
+			if err != nil {
+				return internalServerErrorResponse
+			}
+			session.Destroy()
 			return internalServerErrorResponse
 		}
 
@@ -135,21 +182,77 @@ func RegistrationSpeedForm(c *fiber.Ctx) error {
 	}
 }
 
-func ValidateRegistrationSpeedForm(c *fiber.Ctx) error {
+func SubstitutionCredentialsSpeedForm(c *fiber.Ctx) error {
+	internalServerErrorResponse := c.Status(fiber.StatusInternalServerError).Render("registration_speed_form_substitution_credentials", fiber.Map{
+		"FormPostRoute": routes.RegistrationSpeedFormSubstitutionCredentialsRoute,
+		"ErrorMessage":  "Etwas ist schiefgelaufen...",
+	}, "layouts/main")
 
+	session, err := session.SessionStore.Get(c)
+	if err != nil {
+		session.Destroy()
+		logging.Errorf("Error getting session: %v", err)
+		return internalServerErrorResponse
+	}
+
+	if c.Method() == fiber.MethodGet {
+		needsCustomSubstitutionCredentials := session.Get("needs_custom_substitution_credentials")
+		if needsCustomSubstitutionCredentials == nil || needsCustomSubstitutionCredentials == false {
+			return c.Redirect(routes.RegistrationSpeedFormRoute)
+		}
+		return c.Render("registration_speed_form_substitution_credentials", fiber.Map{
+			"FormPostRoute": routes.RegistrationSpeedFormSubstitutionCredentialsRoute,
+		}, "layouts/main")
+	} else if c.Method() == fiber.MethodPost {
+		var pr models.PostCustomSubsitutionCredentialsRequest
+		if err := c.BodyParser(&pr); err != nil {
+			session.Destroy()
+			logging.Errorf("Error parsing body: %v", err)
+			return internalServerErrorResponse
+		}
+
+		pr.AuthId = strings.ToLower(pr.AuthId)
+		ok, err := substitutions.CheckCredentials(pr.AuthId, pr.AuthPw)
+		if err != nil {
+			session.Destroy()
+			logging.Errorf("Error checking substitution credentials: %v", err)
+			return internalServerErrorResponse
+		}
+		if !ok {
+			return c.Status(fiber.StatusUnauthorized).Render("registration_speed_form_substitution_credentials", fiber.Map{
+				"FormPostRoute": routes.RegistrationSpeedFormSubstitutionCredentialsRoute,
+				"ErrorMessage":  "Falsche Anmeldedaten",
+			}, "layouts/main")
+		}
+		if err := SaveCustomSubstitutionCredentials(c, pr.AuthId, pr.AuthPw); err != nil {
+			logging.Errorf("Error saving custom substitution credentials: %v", err)
+			session.Destroy()
+			return internalServerErrorResponse
+		}
+
+		if err := sendConfirmationCode(c); err != nil {
+			logging.Errorf("Error sending confirmation code: %v", err)
+			session.Destroy()
+			return internalServerErrorResponse
+		}
+
+		return c.Redirect(routes.RegistrationSpeedFormValidationRoute)
+	}
+	return fiber.ErrMethodNotAllowed
+}
+
+func ValidateRegistrationSpeedForm(c *fiber.Ctx) error {
 	internalServerErrorResponse := c.Status(fiber.StatusInternalServerError).Render("registration_speed_form_pn_validate", fiber.Map{
 		"FormPostRoute": routes.RegistrationSpeedFormValidationRoute,
 		"ErrorMessage":  "Etwas ist schiefgelaufen...",
 	}, "layouts/main")
 
-	if c.Method() == fiber.MethodGet {
-		session, err := session.SessionStore.Get(c)
-		if err != nil {
-			return c.Render("registration_speed_form_pn_validate", fiber.Map{
-				"FormPostRoute": routes.RegistrationSpeedFormValidationRoute,
-			}, "layouts/main")
-		}
+	session, err := session.SessionStore.Get(c)
+	if err != nil {
+		return internalServerErrorResponse
+	}
 
+	if c.Method() == fiber.MethodGet {
 		username := session.Get("username")
 		if username == nil {
 			return c.Redirect(routes.RegistrationSpeedFormRoute)
@@ -161,14 +264,17 @@ func ValidateRegistrationSpeedForm(c *fiber.Ctx) error {
 	}
 
 	if c.Method() == fiber.MethodPost {
-		session, err := session.SessionStore.Get(c)
-		if err != nil {
-			return internalServerErrorResponse
-		}
-
 		username := session.Get("username")
 		if username == nil {
 			return c.Redirect(routes.RegistrationSpeedFormRoute)
+		}
+		needsCustomSubstitutionCredentials := session.Get("needs_custom_substitution_credentials")
+		customSubstitionAuthId := session.Get("custom_substitution_auth_id")
+		customSubstitionAuthPw := session.Get("custom_substitution_auth_pw")
+		if needsCustomSubstitutionCredentials != nil &&
+			needsCustomSubstitutionCredentials == true &&
+			(customSubstitionAuthId == nil || customSubstitionAuthPw == nil) {
+			return c.Redirect(routes.RegistrationSpeedFormSubstitutionCredentialsRoute)
 		}
 
 		var pr models.PostValidateRegistrationSpeedFormRequest
@@ -204,14 +310,21 @@ func ValidateRegistrationSpeedForm(c *fiber.Ctx) error {
 			return internalServerErrorResponse
 		}
 
-		if _, err := commands.AddAccountToSubstitutionUpdater(acc.Id); err != nil {
+		if _, err := commands.AddAccountToMoodleAssignmentUpdater(acc.Id); err != nil {
 			session.Destroy()
 			return internalServerErrorResponse
 		}
 
-		if _, err := commands.AddAccountToMoodleAssignmentUpdater(acc.Id); err != nil {
-			session.Destroy()
-			return internalServerErrorResponse
+		if needsCustomSubstitutionCredentials != nil && needsCustomSubstitutionCredentials == true {
+			if _, err := commands.AddAccountToSubstitutionUpdaterWithCustomCredentials(acc.Id, session.Get("custom_substitution_auth_id").(string), session.Get("custom_substitution_auth_pw").(string)); err != nil {
+				session.Destroy()
+				return internalServerErrorResponse
+			}
+		} else {
+			if _, err := commands.AddAccountToSubstitutionUpdater(acc.Id); err != nil {
+				session.Destroy()
+				return internalServerErrorResponse
+			}
 		}
 
 		if err := signal_message_sender.SignalMessageSender.Send(

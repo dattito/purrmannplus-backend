@@ -53,6 +53,15 @@ func substituationToTextMessage(substitution map[string][]string) string {
 
 // Returns error produced by user; error not produced by user
 func AddAccountToSubstitutionUpdater(accountId string) (error, error) {
+	a, err := database.DB.GetAccount(accountId)
+	if err != nil {
+		return nil, err
+	}
+
+	return AddAccountToSubstitutionUpdaterWithCustomCredentials(accountId, a.Username, a.Password)
+}
+
+func AddAccountToSubstitutionUpdaterWithCustomCredentials(accountId, authId, authPw string) (error, error) {
 	if _, err := database.DB.GetSubstitutions(accountId); err != nil {
 		if !errors.Is(err, &db_errors.ErrRecordNotFound) {
 			return nil, err
@@ -73,12 +82,14 @@ func AddAccountToSubstitutionUpdater(accountId string) (error, error) {
 		return errors.New("phone number has to be added first"), nil
 	}
 
-	a, err := database.DB.GetAccount(accountId)
-	if err != nil {
+	if _, err := database.DB.GetAccount(accountId); err != nil {
+		if errors.Is(err, &db_errors.ErrRecordNotFound) {
+			return errors.New("account does not exist"), nil
+		}
 		return nil, err
 	}
 
-	correct, err := substitutions.CheckCredentials(a.Username, a.Password)
+	correct, err := substitutions.CheckCredentials(authId, authPw)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +98,7 @@ func AddAccountToSubstitutionUpdater(accountId string) (error, error) {
 		return errors.New("credentials are incorrect for the substitution updater"), nil
 	}
 
-	if err = database.DB.SetSubstitutions(accountId, map[string][]string{}, true); err != nil {
+	if err = database.DB.AddAccountToSubstitution(accountId, authId, authPw); err != nil {
 		return nil, err
 	}
 

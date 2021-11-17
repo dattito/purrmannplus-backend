@@ -6,6 +6,11 @@ type PostRegistrationSpeedFormRequest struct {
 	PhoneNumber string `form:"phoneNumber"`
 }
 
+type PostCustomSubsitutionCredentialsRequest struct {
+	AuthId    string `form:"authId"`
+	AuthPw string `form:"authPw"`
+}
+
 type PostValidateRegistrationSpeedFormRequest struct {
 	Code string `form:"code"`
 }

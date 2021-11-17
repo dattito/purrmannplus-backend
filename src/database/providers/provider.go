@@ -17,6 +17,7 @@ type Provider interface {
 	AddAccountInfo(accountId, phoneNumber string) (models.AccountInfo, error)
 	GetAccountInfo(accountId string) (models.AccountInfo, error)
 
+	AddAccountToSubstitution(accountId, authId, authPw string) error
 	SetSubstitutions(accountId string, substitutions map[string][]string, notSetYet bool) error
 	RemoveAccountFromSubstitutionUpdater(accountId string) error
 	GetSubstitutions(accountId string) (models.Substitutions, error)

@@ -18,8 +18,9 @@ const (
 	AddAccountToMoodleAssignmentUpdaterRoute      = "/moodle_assignment_updater"
 	RemoveAccountFromMoodleAssignmentUpdaterRoute = "/moodle_assignment_updater"
 
-	RegistrationSpeedFormRoute           = "/registration_speed_form"
-	RegistrationSpeedFormValidationRoute = "/registration_speed_form/validate"
-	RegistrationSpeedFormFinishRoute     = "/registration_speed_form/finish"
-	RegistrationSpeedFormInfoRoute       = "/registration_speed_form/info"
+	RegistrationSpeedFormRoute                        = "/registration_speed_form"
+	RegistrationSpeedFormSubstitutionCredentialsRoute = "/registration_speed_form/substitution-credentials"
+	RegistrationSpeedFormValidationRoute              = "/registration_speed_form/validate"
+	RegistrationSpeedFormFinishRoute                  = "/registration_speed_form/finish"
+	RegistrationSpeedFormInfoRoute                    = "/registration_speed_form/info"
 )
