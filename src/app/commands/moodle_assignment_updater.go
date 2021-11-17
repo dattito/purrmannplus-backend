@@ -86,8 +86,7 @@ func AddAccountToMoodleAssignmentUpdater(accountId string) (error, error) {
 		return errors.New("credentials are incorrect for moodle"), nil
 	}
 
-	_, err = database.DB.SetMoodleAssignments(accountId, []int{}, true)
-	if err != nil {
+	if err := database.DB.SetMoodleAssignments(accountId, []int{}, true); err != nil {
 		return nil, err
 	}
 
@@ -98,7 +97,7 @@ func RemoveAccountFromMoodleAssignmentUpdater(accountId string) error {
 	return database.DB.RemoveAccountFromMoodleAssignmentUpdater(accountId)
 }
 
-func UpdateMoodleAssignments(m models.MoodleAssignmentUpdateInfos) error {
+func UpdateMoodleAssignments(m models.MoodleAssignmentInfo) error {
 	logging.Debugf("Updating moodle assignments of account %s (id: %s)", m.AuthId, m.AccountId)
 
 	rawAssignments, err := moodle.GetRawAssignmentsByCredentials(m.AuthId, m.AuthPw)
@@ -116,8 +115,7 @@ func UpdateMoodleAssignments(m models.MoodleAssignmentUpdateInfos) error {
 		return nil
 	}
 
-	_, err = database.DB.SetMoodleAssignments(m.AccountId, newAssignments, false)
-	if err != nil {
+	if err = database.DB.SetMoodleAssignments(m.AccountId, newAssignments, false); err != nil {
 		return err
 	}
 
@@ -131,25 +129,23 @@ func UpdateMoodleAssignments(m models.MoodleAssignmentUpdateInfos) error {
 }
 
 func UpdateMoodleAssignmentsByAccountId(accountId string) error {
-	mdb, err := database.DB.GetAccountCredentialsAndPhoneNumberAndSMoodleAssignments(accountId)
+	m, err := database.DB.GetMoodleAssignmentInfos(accountId)
 	if err != nil {
 		return err
 	}
-	m := models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModelToMoodleAssignmentUpdateInfos(&mdb)
 
 	return UpdateMoodleAssignments(m)
 }
 
 func UpdateAllMoodleAssignments() error {
-	mdbs, err := database.DB.GetAllAccountCredentialsAndPhoneNumberAndSMoodleAssignments()
+	ms, err := database.DB.GetAllMoodleAssignmentInfos()
 	if err != nil {
 		return err
 	}
 
 	errCount := 0
 
-	for _, mdb := range mdbs {
-		m := models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModelToMoodleAssignmentUpdateInfos(&mdb)
+	for _, m := range ms {
 		err = UpdateMoodleAssignments(m)
 		if err != nil {
 			logging.Errorf("Error while updating moodle assignments of %s: %s", m.AuthId, err.Error())

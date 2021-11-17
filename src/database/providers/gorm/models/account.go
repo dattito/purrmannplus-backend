@@ -1,7 +1,7 @@
 package models
 
 import (
-	provider_models "github.com/dattito/purrmannplus-backend/database/models"
+	app_models "github.com/dattito/purrmannplus-backend/app/models"
 	"gorm.io/gorm"
 )
 
@@ -23,8 +23,8 @@ func (a *AccountDB) BeforeDelete(tx *gorm.DB) error {
 	return tx.Where("account_id = ?", a.Id).Delete(&AccountInfoDB{}).Error
 }
 
-func AccountDBToAccountDBModel(a AccountDB) provider_models.AccountDBModel {
-	return provider_models.AccountDBModel{
+func (a AccountDB) ToAccount() app_models.Account {
+	return app_models.Account{
 		Id:       a.Id,
 		Username: a.Username,
 		Password: a.Password,

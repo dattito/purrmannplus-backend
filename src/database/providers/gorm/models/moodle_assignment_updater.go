@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	provider_models "github.com/dattito/purrmannplus-backend/database/models"
+	app_models "github.com/dattito/purrmannplus-backend/app/models"
 )
 
 type AssignmentIds []int
@@ -60,17 +60,15 @@ func (s *MoodleUserAssignmentsDB) Value() (driver.Value, error) {
 	return json.Marshal(s)
 }
 
-func MoodleUserAssignmentsDBTMoodleUserAssignmentsDBModel(s MoodleUserAssignmentsDB) provider_models.MoodleUserAssignmentsDBModel {
+func (s MoodleUserAssignmentsDB) ToMoodleAssignments() app_models.MoodleAssignments {
 	// thats a really long method name, but everybody knows what if means ...
-	return provider_models.MoodleUserAssignmentsDBModel{
-		Id:            s.Id,
-		AccountId:     s.AccountId,
-		AssignmentIds: *s.AssignmentIds,
-		NotSetYet:     s.NotSetYet,
+	return app_models.MoodleAssignments{
+		AccountId:   s.AccountId,
+		Assignments: *s.AssignmentIds,
 	}
 }
 
-type AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDB struct {
+type MoodleAssignmentInfoDB struct {
 	AuthId                  string         `gorm:"column:auth_id"`
 	AuthPw                  string         `gorm:"column:auth_pw"`
 	PhoneNumber             string         `gorm:"column:phone_number"`
@@ -80,14 +78,13 @@ type AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDB struct {
 	NotSetYet               bool           `gorm:"column:not_set_yet"`
 }
 
-func ACPADBtoACPADBM(s AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDB) provider_models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel {
-	return provider_models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel{
-		AuthId:                  s.AuthId,
-		AuthPw:                  s.AuthPw,
-		PhoneNumber:             s.PhoneNumber,
-		AccountId:               s.AccountId,
-		MoodleUserAssignmentsId: s.MoodleUserAssignmentsId,
-		AssignmentIds:           *s.AssignmentIds,
-		NotSetYet:               s.NotSetYet,
+func (a MoodleAssignmentInfoDB) ToMoodleAssignmentInfo() app_models.MoodleAssignmentInfo {
+	return app_models.MoodleAssignmentInfo{
+		AuthId:                  a.AuthId,
+		AuthPw:                  a.AuthPw,
+		PhoneNumber:             a.PhoneNumber,
+		AccountId:               a.AccountId,
+		MoodleUserAssignmentsId: a.MoodleUserAssignmentsId,
+		AssignmentIds:           *a.AssignmentIds,
 	}
 }

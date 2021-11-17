@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	provider_models "github.com/dattito/purrmannplus-backend/database/models"
+	app_models "github.com/dattito/purrmannplus-backend/app/models"
 )
 
 type Entries map[string][]string
@@ -60,16 +60,14 @@ func (s *SubstitutionDB) Value() (driver.Value, error) {
 	return json.Marshal(s)
 }
 
-func SubstitutionDBToSubstitutionDBModel(s SubstitutionDB) provider_models.SubstitutionDBModel {
-	return provider_models.SubstitutionDBModel{
-		Id:        s.Id,
+func (s SubstitutionDB) ToSubstitutions() app_models.Substitutions {
+	return app_models.Substitutions{
 		AccountId: s.AccountId,
 		Entries:   *s.Entries,
-		NotSetYet: s.NotSetYet,
 	}
 }
 
-type AccountCredentialsAndPhoneNumberAndSubstitutionsDB struct {
+type SubstitutionInfoDB struct {
 	AuthId          string   `gorm:"column:auth_id"`
 	AuthPw          string   `gorm:"column:auth_pw"`
 	PhoneNumber     string   `gorm:"column:phone_number"`
@@ -79,14 +77,14 @@ type AccountCredentialsAndPhoneNumberAndSubstitutionsDB struct {
 	NotSetYet       bool     `gorm:"column:not_set_yet"`
 }
 
-func ACPSDBtoACPDSDBM(s AccountCredentialsAndPhoneNumberAndSubstitutionsDB) provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel {
-	return provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel{
-		AuthId:          s.AuthId,
-		AuthPw:          s.AuthPw,
-		PhoneNumber:     s.PhoneNumber,
-		AccountId:       s.AccountId,
-		SubstitutionsId: s.SubstitutionsId,
-		Entries:         *s.Entries,
-		NotSetYet:       s.NotSetYet,
+func (a SubstitutionInfoDB) ToSubstitutionInfo() app_models.SubstitutionInfo {
+	return app_models.SubstitutionInfo{
+		AuthId:          a.AuthId,
+		AuthPw:          a.AuthPw,
+		PhoneNumber:     a.PhoneNumber,
+		AccountId:       a.AccountId,
+		SubstitutionsId: a.SubstitutionsId,
+		Entries:         *a.Entries,
+		NotSetYet:       a.NotSetYet,
 	}
 }

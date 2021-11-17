@@ -87,8 +87,7 @@ func AddAccountToSubstitutionUpdater(accountId string) (error, error) {
 		return errors.New("credentials are incorrect for the substitution updater"), nil
 	}
 
-	_, err = database.DB.SetSubstitutions(accountId, map[string][]string{}, true)
-	if err != nil {
+	if err = database.DB.SetSubstitutions(accountId, map[string][]string{}, true); err != nil {
 		return nil, err
 	}
 
@@ -100,7 +99,7 @@ func RemoveAccountFromSubstitutionUpdater(accountId string) error {
 }
 
 // Updates the substitutions for a given account and sends a message via signal
-func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
+func UpdateSubstitutions(m models.SubstitutionInfo) error {
 	logging.Debugf("Updating substitutions of account %s (id: %s)", m.AuthId, m.AccountId)
 	mayNewSubstitutions, err := substitutions.GetSubstituationOfStudent(m.AuthId, m.AuthPw)
 	if err != nil {
@@ -116,8 +115,7 @@ func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 		return nil
 	}
 
-	_, err = database.DB.SetSubstitutions(m.AccountId, mayNewSubstitutions, false)
-	if err != nil {
+	if err = database.DB.SetSubstitutions(m.AccountId, mayNewSubstitutions, false); err != nil {
 		return err
 	}
 
@@ -134,30 +132,27 @@ func UpdateSubstitutions(m models.SubstitutionUpdateInfos) error {
 
 // Updates the substitutions for a given account and sends a message via signal
 func UpdateSubstitutionsByAccountId(accountId string) error {
-	mdb, err := database.DB.GetAccountCredentialsAndPhoneNumberAndSubstitutions(accountId)
+	m, err := database.DB.GetSubstitutionInfos(accountId)
 	if err != nil {
 		return err
 	}
-
-	m := models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModelToSubstitutionUpdateInfos(&mdb)
 
 	return UpdateSubstitutions(m)
 }
 
 // Updates all substitutions and sends a message via signal
 func UpdateAllSubstitutions() error {
-	mdbs, err := database.DB.GetAllAccountCredentialsAndPhoneNumberAndSubstitutions()
+	ms, err := database.DB.GetAllSubstitutionInfos()
 	if err != nil {
 		return err
 	}
 
 	errCount := 0
 
-	for _, mdb := range mdbs {
-		m := models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModelToSubstitutionUpdateInfos(&mdb)
+	for _, m := range ms {
 		err := UpdateSubstitutions(m)
 		if err != nil {
-			logging.Errorf("Error updating substitutions for account %s: %s", mdb.AccountId, err.Error())
+			logging.Errorf("Error updating substitutions for account %s: %s", m.AccountId, err.Error())
 			errCount++
 			if errCount > config.MAX_ERROS_TO_STOP_UPDATING_SUBSTITUTIONS {
 				return errors.New("got too many errors updating substitutions, stopping")

@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/dattito/purrmannplus-backend/database/models"
 	"github.com/dattito/purrmannplus-backend/utils"
 )
 
@@ -21,16 +20,5 @@ func NewAccountInfo(account Account, phoneNumber string) (*AccountInfo, error) {
 	return &AccountInfo{
 		Account:     account,
 		PhoneNumber: formattedPhoneNumber,
-	}, nil
-}
-
-func AccountInfoDBModelToAccount(accountInfoDBModel models.AccountInfoDBModel) (AccountInfo, error) {
-
-	return AccountInfo{
-		Id: accountInfoDBModel.Id,
-		Account: Account{
-			Id: accountInfoDBModel.AccountId,
-		},
-		PhoneNumber: accountInfoDBModel.PhoneNumber,
 	}, nil
 }

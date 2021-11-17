@@ -30,23 +30,13 @@ func CreateAccount(username, password string) (models.Account, error, error) {
 		logging.Infof("Created account %s", a.Username)
 	}
 
-	return models.AcccountDBModelToAccount(a), nil, err
+	return a, nil, err
 }
 
 // Returns the id and the credentials of all accounts
 func GetAllAccounts() ([]models.Account, error) {
 
-	accounts, err := database.DB.GetAccounts()
-	if err != nil {
-		return nil, err
-	}
-
-	var accs []models.Account
-	for _, a := range accounts {
-		accs = append(accs, models.AcccountDBModelToAccount(a))
-	}
-
-	return accs, nil
+	return database.DB.GetAccounts()
 }
 
 // Returns the accountId and the credentials of the account
@@ -56,7 +46,7 @@ func GetAccount(accountId string) (models.Account, error) {
 		return models.Account{}, err
 	}
 
-	return models.AcccountDBModelToAccount(a), nil
+	return a, nil
 }
 
 // Returns true if the accountId was found in the database
@@ -73,21 +63,21 @@ func ValidAccountId(accountId string) (bool, error) {
 }
 
 // Returns the accountId and the credentials of the account matching the credentials
-func GetAccountByCredentials(authId, authPw string) (models.Account, error) {
-	if authId == "" {
+func GetAccountByCredentials(username, password string) (models.Account, error) {
+	if username == "" {
 		return models.Account{}, errors.New("missing authId")
 	}
 
-	if authPw == "" {
+	if password == "" {
 		return models.Account{}, errors.New("missing authPw")
 	}
 
-	a, err := database.DB.GetAccountByCredentials(authId, authPw)
+	a, err := database.DB.GetAccountByCredentials(username, password)
 	if err != nil {
 		return models.Account{}, err
 	}
 
-	return models.AcccountDBModelToAccount(a), nil
+	return a, nil
 }
 
 // Deleting an account

@@ -78,41 +78,41 @@ func CheckCredentials(username, password string) (bool, error) {
 	return token != "", nil
 }
 
-func GetRawAssignments(token string) (models.Assignments, error) {
+func GetRawAssignments(token string) (models.MoodleCourse, error) {
 	if config.MOODLE_URL == "" {
-		return models.Assignments{}, fmt.Errorf("moodle URL not set")
+		return models.MoodleCourse{}, fmt.Errorf("moodle URL not set")
 	}
 
 	if token == "" {
-		return models.Assignments{}, fmt.Errorf("token is empty")
+		return models.MoodleCourse{}, fmt.Errorf("token is empty")
 	}
 
 	resp, err := http.Get(fmt.Sprintf("%s/webservice/rest/server.php?wstoken=%s&wsfunction=mod_assign_get_assignments&moodlewsrestformat=json", config.MOODLE_URL, token))
 	if err != nil {
 		logging.Errorf("Error while getting moodle assignments: %s", err)
-		return models.Assignments{}, err
+		return models.MoodleCourse{}, err
 	}
 
 	defer resp.Body.Close()
 
-	var r models.Assignments
+	var r models.MoodleCourse
 	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
-		return models.Assignments{}, err
+		return models.MoodleCourse{}, err
 	}
 
 	return r, nil
 }
 
-func GetRawAssignmentsByCredentials(username, password string) (models.Assignments, error) {
+func GetRawAssignmentsByCredentials(username, password string) (models.MoodleCourse, error) {
 	token, err := GetToken(username, password)
 	if err != nil {
-		return models.Assignments{}, err
+		return models.MoodleCourse{}, err
 	}
 
 	return GetRawAssignments(token)
 }
 
-func GetAssignmentIDs(assingments models.Assignments) []int {
+func GetAssignmentIDs(assingments models.MoodleCourse) []int {
 	var ids []int
 	for _, course := range assingments.Courses {
 		for _, assignment := range course.Assignments {
@@ -137,7 +137,7 @@ func GetAssignmentIDsByCredentials(username, password string) ([]int, error) {
 	return GetAssignmentIDs(assingments), nil
 }
 
-func GetAssignmentIdToCourseNameMap(assingments models.Assignments) map[int]string {
+func GetAssignmentIdToCourseNameMap(assingments models.MoodleCourse) map[int]string {
 	var idsToCourses map[int]string = make(map[int]string)
 	for _, course := range assingments.Courses {
 		for _, assignment := range course.Assignments {

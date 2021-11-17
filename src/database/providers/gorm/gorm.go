@@ -3,9 +3,9 @@ package gorm
 import (
 	"errors"
 
+	app_models "github.com/dattito/purrmannplus-backend/app/models"
 	"github.com/dattito/purrmannplus-backend/config"
 	db_errors "github.com/dattito/purrmannplus-backend/database/errors"
-	provider_models "github.com/dattito/purrmannplus-backend/database/models"
 	"github.com/dattito/purrmannplus-backend/database/providers/gorm/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
@@ -82,33 +82,33 @@ func (g *GormProvider) CloseDB() error {
 }
 
 // Adds an account with it's credendials (username=authId, password=authPw) to the database
-func (g *GormProvider) AddAccount(username, password string) (provider_models.AccountDBModel, error) {
+func (g *GormProvider) AddAccount(username, password string) (app_models.Account, error) {
 
 	accdb := models.AccountDB{
 		Username: username,
 		Password: password,
 	}
 	err := g.DB.Create(&accdb).Error
-	return models.AccountDBToAccountDBModel(accdb), err
+	return accdb.ToAccount(), err
 }
 
 // Returns account object of given accountId
-func (g *GormProvider) GetAccount(id string) (provider_models.AccountDBModel, error) {
+func (g *GormProvider) GetAccount(id string) (app_models.Account, error) {
 
 	accdb := models.AccountDB{}
 
 	if err := g.DB.First(&accdb, "id = ?", id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return provider_models.AccountDBModel{}, &db_errors.ErrRecordNotFound
+			return app_models.Account{}, &db_errors.ErrRecordNotFound
 		}
-		return provider_models.AccountDBModel{}, err
+		return app_models.Account{}, err
 	}
 
-	return models.AccountDBToAccountDBModel(accdb), nil
+	return accdb.ToAccount(), nil
 }
 
 // Gets account using username (authId) and password (authPw)
-func (g *GormProvider) GetAccountByCredentials(username, password string) (provider_models.AccountDBModel, error) {
+func (g *GormProvider) GetAccountByCredentials(username, password string) (app_models.Account, error) {
 
 	accdb := models.AccountDB{}
 
@@ -116,16 +116,16 @@ func (g *GormProvider) GetAccountByCredentials(username, password string) (provi
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return provider_models.AccountDBModel{}, &db_errors.ErrRecordNotFound
+			return app_models.Account{}, &db_errors.ErrRecordNotFound
 		}
-		return provider_models.AccountDBModel{}, err
+		return app_models.Account{}, err
 	}
 
-	return models.AccountDBToAccountDBModel(accdb), nil
+	return accdb.ToAccount(), nil
 }
 
 // what do think it does?
-func (g *GormProvider) GetAccounts() ([]provider_models.AccountDBModel, error) {
+func (g *GormProvider) GetAccounts() ([]app_models.Account, error) {
 
 	accdb := []models.AccountDB{}
 
@@ -133,14 +133,14 @@ func (g *GormProvider) GetAccounts() ([]provider_models.AccountDBModel, error) {
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return []provider_models.AccountDBModel{}, &db_errors.ErrRecordNotFound
+			return []app_models.Account{}, &db_errors.ErrRecordNotFound
 		}
-		return []provider_models.AccountDBModel{}, err
+		return []app_models.Account{}, err
 	}
 
-	var accs []provider_models.AccountDBModel
+	var accs []app_models.Account
 	for _, v := range accdb {
-		accs = append(accs, models.AccountDBToAccountDBModel(v))
+		accs = append(accs, v.ToAccount())
 	}
 
 	return accs, nil
@@ -154,27 +154,27 @@ func (g *GormProvider) DeleteAccount(id string) error {
 }
 
 // Adds a new account_info entry of an account to the database
-func (g *GormProvider) AddAccountInfo(accountId, phoneNumber string) (provider_models.AccountInfoDBModel, error) {
+func (g *GormProvider) AddAccountInfo(accountId, phoneNumber string) (app_models.AccountInfo, error) {
 
 	accInfo := models.AccountInfoDB{
 		AccountId:   accountId,
 		PhoneNumber: phoneNumber,
 	}
 	err := g.DB.Create(&accInfo).Error
-	return models.AccountInfoDBToAccountInfoDBModel(accInfo), err
+	return accInfo.ToAccountInfo(), err
 }
 
 // Gets the account_info from a given accountId
-func (g *GormProvider) GetAccountInfo(accountId string) (provider_models.AccountInfoDBModel, error) {
+func (g *GormProvider) GetAccountInfo(accountId string) (app_models.AccountInfo, error) {
 	accInfo := models.AccountInfoDB{}
 	err := g.DB.First(&accInfo, "account_id = ?", accountId).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return provider_models.AccountInfoDBModel{}, &db_errors.ErrRecordNotFound
+			return app_models.AccountInfo{}, &db_errors.ErrRecordNotFound
 		}
-		return provider_models.AccountInfoDBModel{}, err
+		return app_models.AccountInfo{}, err
 	}
-	return models.AccountInfoDBToAccountInfoDBModel(accInfo), err
+	return accInfo.ToAccountInfo(), err
 }
 
 // Removes an account from the substitution_updater table if exists
@@ -190,7 +190,7 @@ func (g *GormProvider) RemoveAccountFromSubstitutionUpdater(accountId string) er
 }
 
 // Updates the substitution of a given account
-func (g *GormProvider) SetSubstitutions(accountId string, entries map[string][]string, NotSetYet bool) (provider_models.SubstitutionDBModel, error) {
+func (g *GormProvider) SetSubstitutions(accountId string, entries map[string][]string, NotSetYet bool) error {
 
 	var entriesE models.Entries = entries
 
@@ -200,9 +200,9 @@ func (g *GormProvider) SetSubstitutions(accountId string, entries map[string][]s
 
 	if err := g.DB.FirstOrCreate(&subdb, "account_id = ?", accountId).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return provider_models.SubstitutionDBModel{}, &db_errors.ErrRecordNotFound
+			return &db_errors.ErrRecordNotFound
 		}
-		return provider_models.SubstitutionDBModel{}, err
+		return err
 	}
 
 	subdb.Entries = &entriesE
@@ -210,56 +210,56 @@ func (g *GormProvider) SetSubstitutions(accountId string, entries map[string][]s
 
 	err := g.DB.Save(&subdb).Error
 	if err != nil {
-		return provider_models.SubstitutionDBModel{}, err
+		return err
 	}
 
-	return models.SubstitutionDBToSubstitutionDBModel(subdb), nil
+	return nil
 }
 
 //Returns the substitution of a given account
-func (g *GormProvider) GetSubstitutions(accountId string) (provider_models.SubstitutionDBModel, error) {
+func (g *GormProvider) GetSubstitutions(accountId string) (app_models.Substitutions, error) {
 	subdb := models.SubstitutionDB{}
 
 	err := g.DB.First(&subdb, "account_id = ?", accountId).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return provider_models.SubstitutionDBModel{}, &db_errors.ErrRecordNotFound
+			return app_models.Substitutions{}, &db_errors.ErrRecordNotFound
 		}
-		return provider_models.SubstitutionDBModel{}, err
+		return app_models.Substitutions{}, err
 	}
 
-	return models.SubstitutionDBToSubstitutionDBModel(subdb), nil
+	return subdb.ToSubstitutions(), nil
 }
 
 // Returns all information needed to update the substitution of a given account in one list of models
-func (g *GormProvider) GetAllAccountCredentialsAndPhoneNumberAndSubstitutions() ([]provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel, error) {
-	m := []models.AccountCredentialsAndPhoneNumberAndSubstitutionsDB{}
+func (g *GormProvider) GetAllSubstitutionInfos() ([]app_models.SubstitutionInfo, error) {
+	m := []models.SubstitutionInfoDB{}
 
 	g.DB.Model(models.AccountDB{}).Select("accounts.auth_id", "accounts.auth_pw", "account_infos.phone_number", "accounts.id AS 'account_id'", "substitutions.id AS 'substitutions_id'", "substitutions.entries", "substitutions.not_set_yet").Joins("INNER JOIN substitutions ON substitutions.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Scan(&m)
 
-	var mm []provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel
+	var mm []app_models.SubstitutionInfo
 	for _, v := range m {
-		mm = append(mm, models.ACPSDBtoACPDSDBM(v))
+		mm = append(mm, v.ToSubstitutionInfo())
 	}
 
 	return mm, nil
 }
 
 // Returns the accountId, auth_id, auth_pw, phone_number, substitutions_id and the substitutions of a given account
-func (g *GormProvider) GetAccountCredentialsAndPhoneNumberAndSubstitutions(accountId string) (provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel, error) {
-	m := models.AccountCredentialsAndPhoneNumberAndSubstitutionsDB{}
+func (g *GormProvider) GetSubstitutionInfos(accountId string) (app_models.SubstitutionInfo, error) {
+	m := models.SubstitutionInfoDB{}
 	err := g.DB.Model(models.AccountDB{}).Select("accounts.auth_id", "accounts.auth_pw", "account_infos.phone_number", "accounts.id AS 'account_id'", "substitutions.id AS 'substitutions_id'", "substitutions.entries", "substitutions.not_set_yet").Joins("INNER JOIN substitutions ON substitutions.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Where("accounts.id = ?", accountId).Scan(&m).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel{}, &db_errors.ErrRecordNotFound
+			return app_models.SubstitutionInfo{}, &db_errors.ErrRecordNotFound
 		}
-		return provider_models.AccountCredentialsAndPhoneNumberAndSubstitutionsDBModel{}, err
+		return app_models.SubstitutionInfo{}, err
 	}
-	return models.ACPSDBtoACPDSDBM(m), nil
+	return m.ToSubstitutionInfo(), nil
 }
 
-func (g *GormProvider) SetMoodleAssignments(accountId string, assignmentIds []int, notSetYet bool) (provider_models.MoodleUserAssignmentsDBModel, error) {
+func (g *GormProvider) SetMoodleAssignments(accountId string, assignmentIds []int, notSetYet bool) error {
 
 	var assignmentIdsE models.AssignmentIds = assignmentIds
 
@@ -269,9 +269,9 @@ func (g *GormProvider) SetMoodleAssignments(accountId string, assignmentIds []in
 
 	if err := g.DB.FirstOrCreate(&m, "account_id = ?", accountId).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return provider_models.MoodleUserAssignmentsDBModel{}, &db_errors.ErrRecordNotFound
+			return &db_errors.ErrRecordNotFound
 		}
-		return provider_models.MoodleUserAssignmentsDBModel{}, err
+		return err
 	}
 
 	m.AssignmentIds = &assignmentIdsE
@@ -279,10 +279,10 @@ func (g *GormProvider) SetMoodleAssignments(accountId string, assignmentIds []in
 
 	err := g.DB.Save(&m).Error
 	if err != nil {
-		return provider_models.MoodleUserAssignmentsDBModel{}, err
+		return err
 	}
 
-	return models.MoodleUserAssignmentsDBTMoodleUserAssignmentsDBModel(m), nil
+	return nil
 }
 
 func (g *GormProvider) RemoveAccountFromMoodleAssignmentUpdater(accountId string) error {
@@ -296,42 +296,42 @@ func (g *GormProvider) RemoveAccountFromMoodleAssignmentUpdater(accountId string
 	return nil
 }
 
-func (g *GormProvider) GetMoodleAssignments(accountId string) (provider_models.MoodleUserAssignmentsDBModel, error) {
+func (g *GormProvider) GetMoodleAssignments(accountId string) (app_models.MoodleAssignments, error) {
 	m := models.MoodleUserAssignmentsDB{}
 
 	err := g.DB.First(&m, "account_id = ?", accountId).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return provider_models.MoodleUserAssignmentsDBModel{}, &db_errors.ErrRecordNotFound
+			return app_models.MoodleAssignments{}, &db_errors.ErrRecordNotFound
 		}
-		return provider_models.MoodleUserAssignmentsDBModel{}, err
+		return app_models.MoodleAssignments{}, err
 	}
 
-	return models.MoodleUserAssignmentsDBTMoodleUserAssignmentsDBModel(m), nil
+	return m.ToMoodleAssignments(), nil
 }
 
-func (g *GormProvider) GetAllAccountCredentialsAndPhoneNumberAndSMoodleAssignments() ([]provider_models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel, error) {
-	m := []models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDB{}
+func (g *GormProvider) GetAllMoodleAssignmentInfos() ([]app_models.MoodleAssignmentInfo, error) {
+	m := []models.MoodleAssignmentInfoDB{}
 
 	g.DB.Model(models.AccountDB{}).Select("accounts.auth_id", "accounts.auth_pw", "account_infos.phone_number", "accounts.id AS 'account_id'", "moodle_user_assignments.assignment_ids", "moodle_user_assignments.not_set_yet").Joins("INNER JOIN moodle_user_assignments ON moodle_user_assignments.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Scan(&m)
 
-	var mm []provider_models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel
+	var mm []app_models.MoodleAssignmentInfo
 	for _, v := range m {
-		mm = append(mm, models.ACPADBtoACPADBM(v))
+		mm = append(mm, v.ToMoodleAssignmentInfo())
 	}
 
 	return mm, nil
 }
 
-func (g *GormProvider) GetAccountCredentialsAndPhoneNumberAndSMoodleAssignments(accountId string) (provider_models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel, error) {
-	m := models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDB{}
+func (g *GormProvider) GetMoodleAssignmentInfos(accountId string) (app_models.MoodleAssignmentInfo, error) {
+	m := models.MoodleAssignmentInfoDB{}
 	err := g.DB.Model(models.AccountDB{}).Select("accounts.auth_id", "accounts.auth_pw", "account_infos.phone_number", "accounts.id AS 'account_id'", "moodle_user_assignments.assignment_ids", "moodle_user_assignments.not_set_yet").Joins("INNER JOIN moodle_user_assignments ON moodle_user_assignments.account_id = accounts.id").Joins("INNER JOIN account_infos ON account_infos.account_id = accounts.id").Where("accounts.id = ?", accountId).Scan(&m).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return provider_models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel{}, &db_errors.ErrRecordNotFound
+			return app_models.MoodleAssignmentInfo{}, &db_errors.ErrRecordNotFound
 		}
-		return provider_models.AccountCredentialsAndPhoneNumberAndMoodleUserAssignmentsDBModel{}, err
+		return app_models.MoodleAssignmentInfo{}, err
 	}
-	return models.ACPADBtoACPADBM(m), nil
+	return m.ToMoodleAssignmentInfo(), nil
 }

@@ -1,7 +1,7 @@
 package models
 
 import (
-	provider_models "github.com/dattito/purrmannplus-backend/database/models"
+	app_models "github.com/dattito/purrmannplus-backend/app/models"
 )
 
 type AccountInfoDB struct {
@@ -15,9 +15,11 @@ func (AccountInfoDB) TableName() string {
 	return "account_infos"
 }
 
-func AccountInfoDBToAccountInfoDBModel(a AccountInfoDB) provider_models.AccountInfoDBModel {
-	return provider_models.AccountInfoDBModel{
-		AccountId:   a.AccountId,
+func (a AccountInfoDB) ToAccountInfo() app_models.AccountInfo {
+	return app_models.AccountInfo{
+		Account: app_models.Account{
+			Id: a.AccountId,
+		},
 		PhoneNumber: a.PhoneNumber,
 	}
 }
