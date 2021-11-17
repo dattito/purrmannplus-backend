@@ -65,6 +65,10 @@ func sendConfirmationCode(c *fiber.Ctx) error {
 	phoneNumber := session.Get("phone_number")
 	code := session.Get("code")
 
+	if phoneNumber == nil || code == nil {
+		return errors.New("phone number or code not found in session")
+	}
+
 	return signal_message_sender.SignalMessageSender.Send(
 		fmt.Sprintf("Willkommen bei PurrmannPlus! Dein Bestätigungscode lautet: %s", code),
 		phoneNumber.(string),
