@@ -115,7 +115,7 @@ func UpdateMoodleAssignments(m models.MoodleAssignmentInfo) error {
 		return nil
 	}
 
-	if err = database.DB.SetMoodleAssignments(m.AccountId, newAssignments, false); err != nil {
+	if err = database.DB.SetMoodleAssignments(m.AccountId, mayNewAssignments, false); err != nil {
 		return err
 	}
 
