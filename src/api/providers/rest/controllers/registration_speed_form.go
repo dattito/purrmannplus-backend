@@ -100,6 +100,16 @@ func RegistrationSpeedForm(c *fiber.Ctx) error {
 
 		pr.Username = strings.ToLower(pr.Username)
 
+		if len(pr.Username) <= 3 && utils.NumberInString(pr.Username) {
+			return c.Status(fiber.StatusBadRequest).Render("registration_speed_form", fiber.Map{
+				"InfoRoute":        routes.RegistrationSpeedFormInfoRoute,
+				"FormPostRoute":    routes.RegistrationSpeedFormRoute,
+				"ErrorMessage":     "Bitte benutzen hier die Anmeldedaten von MOODLE. Die Anmeldedaten für den VERTRETUNGSPLAN kannst du ggf. im nächsten Schritt eingeben, sofern diese unterschiedlich sind.",
+				"ContactEmail":     config.CONTACT_EMAIL,
+				"ContactInstagram": config.CONTACT_INSTAGRAM,
+			}, "layouts/main")
+		}
+
 		correct, err := commands.CheckCredentials(pr.Username, pr.Password)
 		if err != nil {
 			logging.Errorf("Error checking credentials: %v", err)
