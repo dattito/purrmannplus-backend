@@ -86,7 +86,7 @@ func AddAccountToMoodleAssignmentUpdater(accountId string) (error, error) {
 		return errors.New("credentials are incorrect for moodle"), nil
 	}
 
-	if err := database.DB.SetMoodleAssignments(accountId, []int{}, true); err != nil {
+	if err := database.DB.AddAccountToMoodleAssignmentUpdater(accountId); err != nil {
 		return nil, err
 	}
 

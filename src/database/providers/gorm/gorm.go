@@ -190,9 +190,12 @@ func (g *GormProvider) RemoveAccountFromSubstitutionUpdater(accountId string) er
 }
 
 func (g *GormProvider) AddAccountToSubstitution(accountId, authId, authPw string) error {
-
-	if _, err := g.GetSubstitutions(accountId); err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return err
+	if _, err := g.GetSubstitutions(accountId); err != nil {
+		if !errors.Is(err, &db_errors.ErrRecordNotFound) {
+			return err
+		}
+	} else {
+		return errors.New("account already registered in substitution updater")
 	}
 
 	substitution := models.SubstitutionDB{
@@ -274,6 +277,24 @@ func (g *GormProvider) GetSubstitutionInfos(accountId string) (app_models.Substi
 		return app_models.SubstitutionInfo{}, err
 	}
 	return m.ToSubstitutionInfo(), nil
+}
+
+func (g *GormProvider) AddAccountToMoodleAssignmentUpdater(accountId string) error {
+	if _, err := g.GetMoodleAssignments(accountId); err != nil {
+		if !errors.Is(err, &db_errors.ErrRecordNotFound) {
+			return err
+		}
+	} else {
+		return errors.New("account already exists in MoodleAssignmentUpdater")
+	}
+
+	moodleAssignmentUpdater := models.MoodleUserAssignmentsDB{
+		AccountId:     accountId,
+		AssignmentIds: &models.AssignmentIds{},
+		NotSetYet:     true,
+	}
+
+	return g.DB.Create(&moodleAssignmentUpdater).Error
 }
 
 func (g *GormProvider) SetMoodleAssignments(accountId string, assignmentIds []int, notSetYet bool) error {

@@ -86,5 +86,6 @@ func (a MoodleAssignmentInfoDB) ToMoodleAssignmentInfo() app_models.MoodleAssign
 		AccountId:               a.AccountId,
 		MoodleUserAssignmentsId: a.MoodleUserAssignmentsId,
 		AssignmentIds:           *a.AssignmentIds,
+		NotSetYet:               a.NotSetYet,
 	}
 }

@@ -24,6 +24,7 @@ type Provider interface {
 	GetAllSubstitutionInfos() ([]models.SubstitutionInfo, error)
 	GetSubstitutionInfos(accountId string) (models.SubstitutionInfo, error)
 
+	AddAccountToMoodleAssignmentUpdater(accountId string) error
 	SetMoodleAssignments(accountId string, assignmentIds []int, notSetYet bool) error
 	RemoveAccountFromMoodleAssignmentUpdater(accountId string) error
 	GetMoodleAssignments(accountId string) (models.MoodleAssignments, error)
