@@ -19,8 +19,6 @@ div.container
                             img[src="/static/SignalIcon.svg"][alt="Signal"]
                         |! Über den Messenger bekommst du deine Benachrichtigungen zugesendet.
                     hr
-                    p.form-text.text-info
-                        | Momentan können sich nur Schüler der Oberstufe anmelden
                     div.form-floating.mb-3
                         input.form-control
                             [name="username"]
