@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/dattito/purrmannplus-backend/api/providers/rest/models"
 	"github.com/dattito/purrmannplus-backend/app/commands"
 	"github.com/dattito/purrmannplus-backend/utils/logging"
 	"github.com/gofiber/fiber/v2"
@@ -12,7 +13,6 @@ func AddAccountToSubstitutionUpdater(c *fiber.Ctx) error {
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	accountId := claims["account_id"].(string)
-
 	ok, err := commands.ValidAccountId(accountId)
 	if err != nil {
 		logging.Errorf("Error validating account id: %s", err.Error())
@@ -20,28 +20,42 @@ func AddAccountToSubstitutionUpdater(c *fiber.Ctx) error {
 			"error": "Something went wrong",
 		})
 	}
-
 	if !ok {
 		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 			"error": "account not found",
 		})
 	}
 
-	user_err, db_err := commands.AddAccountToSubstitutionUpdater(accountId)
+	m := models.PostAddAccountToSubstitutionRequest{}
+	c.BodyParser(&m)
 
-	if db_err != nil {
-		logging.Errorf("Error while adding account to substitution updater: %v", db_err)
-		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-			"error": "Something went wrong",
-		})
+	if m.Username != "" && m.Password != "" {
+		user_err, db_err := commands.AddAccountToSubstitutionUpdaterWithCustomCredentials(accountId, m.Username, m.Password)
+		if user_err != nil {
+			return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
+				"error": user_err.Error(),
+			})
+		}
+		if db_err != nil {
+			logging.Errorf("Error while adding account to substitution updater with custom credentials: %v", db_err)
+			return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+				"error": "Something went wrong",
+			})
+		}
+	} else {
+		user_err, db_err := commands.AddAccountToSubstitutionUpdater(accountId)
+		if db_err != nil {
+			logging.Errorf("Error while adding account to substitution updater: %v", db_err)
+			return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+				"error": "Something went wrong",
+			})
+		}
+		if user_err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+				"error": user_err.Error(),
+			})
+		}
 	}
-
-	if user_err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
-			"error": user_err.Error(),
-		})
-	}
-
 	return c.SendStatus(fiber.StatusCreated)
 }
 

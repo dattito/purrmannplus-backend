@@ -181,3 +181,7 @@ func EnableSubstitutionUpdater() {
 		}
 	})
 }
+
+func CheckSubstitutionCredentials(username, password string) (bool, error) {
+	return substitutions.CheckCredentials(username, password)
+}
