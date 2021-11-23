@@ -7,7 +7,7 @@ type PostRegistrationSpeedFormRequest struct {
 }
 
 type PostCustomSubsitutionCredentialsRequest struct {
-	AuthId    string `form:"authId"`
+	AuthId string `form:"authId"`
 	AuthPw string `form:"authPw"`
 }
 
