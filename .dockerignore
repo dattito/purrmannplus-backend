@@ -2,3 +2,4 @@ purrmannplus-backend
 .vscode
 .env
 db.sqlite
+.devcontainer

@@ -6,6 +6,12 @@ h1.text-center.mt-2
     | Vertretungsplan- und Moodle-Notifier
     span.badge.bg-secondary Neu
 
+h3.text-center.font-italic[style="color: #003366;"]
+    | Für Schüler des Hans-Purrmann-Gymnasiums
+
+h5.text-center[style="color: #f0b042;"]
+    | Bekomme Mitteilungen über neue Vertretungen und Moodle-Aufgaben direkt auf dein Handy!
+
 div.container
     div.col-sm-9.col-md-7.col-lg-6.m-auto
         div.card.border-0.shadow.rounded-3.mt-3
