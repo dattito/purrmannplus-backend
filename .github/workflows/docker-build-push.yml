@@ -20,7 +20,7 @@ jobs:
           echo 'LATEST=true' >> "$GITHUB_ENV"
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: dattito/purrmannplus-backend,ghcr.io/dattito/purrmannplus-backend
           tags: |
